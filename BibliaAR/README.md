@@ -4,6 +4,17 @@ BibliaAR es una aplicacion movil de realidad aumentada hecha en Unity para prese
 
 El proyecto esta pensado para Android con ARCore. Para probar la experiencia AR real se debe usar un celular compatible con ARCore; el emulador no es una prueba confiable para camara y tracking AR.
 
+
+## Guia de instalacion interactiva (BIAR-15)
+
+<!-- kguanoluisa, Documentacion del modulo de guia de instalacion BIAR-15, sin nuevas variables, 2026-06-24 -->
+
+- Menu Unity: Tools > AR Samaritano > Guia de Instalacion.
+- Script InstallGuideController.cs: recorre los pasos de configuracion del entorno.
+- Script EnvironmentConfigValidator.cs: valida requisitos basicos antes de compilar.
+- Recurso Assets/Resources/InstallGuide/install_steps.json: pasos de la guia.
+
+
 ## Requisitos
 
 <!-- BIAR-14 | Desarrollador: Tnte Bayas Cristian | Subtarea: Documentar pasos de instalacion -->
