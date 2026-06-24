@@ -1,3 +1,8 @@
 {
-  "v_pasos": []
+  "v_pasos": [
+    { "v_titulo": "Unity Hub", "v_descripcion": "Instalar Unity 6000.5.0f1 con Android Build Support.", "v_completado": false },
+    { "v_titulo": "Git LFS", "v_descripcion": "Ejecutar git lfs install y clonar el repositorio.", "v_completado": false },
+    { "v_titulo": "Abrir proyecto", "v_descripcion": "Abrir la carpeta BibliaAR en Unity Hub.", "v_completado": false },
+    { "v_titulo": "Android SDK", "v_descripcion": "Verificar SDK, NDK y OpenJDK en Unity Hub.", "v_completado": false }
+  ]
 }
