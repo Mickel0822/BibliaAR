@@ -28,6 +28,12 @@ public class ARSceneSetupTool : EditorWindow
     private XRReferenceImageLibrary referenceLibrary;
     private GameObject arContentPrefab;
 
+    [MenuItem("Tools/AR Samaritano/Guia de Instalacion")]
+    public static void OpenInstallGuide()
+    {
+        InstallGuideWindow.ShowWindow();
+    }
+
     [MenuItem("Tools/AR Samaritano/Configurar Escena AR")]
     public static void ShowWindow()
     {
