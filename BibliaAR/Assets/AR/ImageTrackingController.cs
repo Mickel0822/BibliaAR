@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+// Sal-B: crear estructura base de la detección de marcador ARCore y activación 3D - 25/06/2026
 [RequireComponent(typeof(ARTrackedImageManager))]
 public class ImageTrackingController : MonoBehaviour
 {
