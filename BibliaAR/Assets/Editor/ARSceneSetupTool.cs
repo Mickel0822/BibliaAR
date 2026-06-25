@@ -35,6 +35,13 @@ public class ARSceneSetupTool : EditorWindow
         InstallGuideWindow.ShowWindow();
     }
 
+    // Amb-AS: Integrar la optimización de modelos 3D (poly-count 2GB RAM) con el resto del módulo - 25/06/2026
+    [MenuItem("Tools/AR Samaritano/Optimizar Assets")]
+    public static void OptimizeProjectAssets()
+    {
+        ProjectOptimizer.OptimizeAssets();
+    }
+
     [MenuItem("Tools/AR Samaritano/Configurar Escena AR")]
     public static void ShowWindow()
     {

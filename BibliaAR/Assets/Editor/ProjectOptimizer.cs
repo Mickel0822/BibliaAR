@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-// Amb-AS: Implementar lógica principal de la optimización de modelos 3D (poly-count 2GB RAM) - 25/06/2026
+// Amb-AS: Integrar la optimización de modelos 3D (poly-count 2GB RAM) con el resto del módulo - 25/06/2026
 public class ProjectOptimizer
 {
     [MenuItem("Tools/AR Samaritano/Optimizar Assets")]
@@ -30,6 +30,25 @@ public class ProjectOptimizer
             }
         }
         AssetDatabase.SaveAssets();
+    }
+
+    [MenuItem("Tools/AR Samaritano/Optimizar y Compilar APK")]
+    public static void BuildAndroid()
+    {
+        OptimizeAssets();
+        
+        string buildDirectory = "Builds";
+        if (!Directory.Exists(buildDirectory)) Directory.CreateDirectory(buildDirectory);
+
+        string apkPath = Path.Combine(buildDirectory, "BibliaAR_v1.0.apk");
+        
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+        buildPlayerOptions.scenes = new string[] { "Assets/Scenes/SampleScene.unity" };
+        buildPlayerOptions.locationPathName = apkPath;
+        buildPlayerOptions.target = BuildTarget.Android;
+        buildPlayerOptions.options = BuildOptions.None;
+
+        BuildPipeline.BuildPlayer(buildPlayerOptions);
     }
 }
 #endif
