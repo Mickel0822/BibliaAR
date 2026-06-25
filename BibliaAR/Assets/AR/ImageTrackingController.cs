@@ -23,6 +23,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void Awake()
     {
+        // Sal-B: implementar lógica principal de la detección de marcador ARCore y activación 3D - 25/06/2026
         trackedImageManager = GetComponent<ARTrackedImageManager>();
 
         if (arContentPrefab == null && trackedImageManager.trackedImagePrefab != null)
