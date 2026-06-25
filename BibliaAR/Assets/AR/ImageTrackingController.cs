@@ -35,6 +35,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void OnEnable()
     {
+        // Sal-B: integrar la detección de marcador ARCore y activación 3D con el resto del módulo - 25/06/2026
         trackedImageManager.trackablesChanged.AddListener(OnTrackedImagesChanged);
     }
 
