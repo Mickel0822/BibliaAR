@@ -12,6 +12,7 @@ public class StoryFlowController : MonoBehaviour
     [SerializeField] private QuizManager quizManager;
     [SerializeField] private AudioSource narrationAudio;
     [SerializeField] private SessionManager sessionManager;
+    [SerializeField] private LSEWindowController lseWindowController;
     [SerializeField] private BiblicalSceneAnimationController sceneAnimationController;
 
     [Header("AR Flow")]
@@ -278,6 +279,12 @@ public class StoryFlowController : MonoBehaviour
             }
 
             // Sincronizar animación de la escena con la fase narrativa actual
+            if (lseWindowController != null)
+            {
+                string v_tituloLse = subtitles != null && i < subtitles.Length ? subtitles[i] : "Fragmento narrativo";
+                lseWindowController.Mostrar(v_tituloLse, v_tituloLse);
+            }
+
             if (sceneAnimationController != null)
             {
                 sceneAnimationController.PlayNarrativePhase(i, lineDuration);
@@ -295,7 +302,12 @@ public class StoryFlowController : MonoBehaviour
             }
         }
 
-        SetSubtitleVisible(false);
+        if (lseWindowController != null)
+        {
+            lseWindowController.Ocultar();
+        }
+
+                SetSubtitleVisible(false);
         StartQuiz();
         storyRoutine = null;
     }
@@ -387,6 +399,7 @@ public class StoryFlowController : MonoBehaviour
         BuildSuccessPanel(canvasGo.transform);
         BuildControlsPanel(canvasGo.transform);
         BuildSubtitlePanel(canvasGo.transform);
+        BuildLseWindow(canvasGo.transform);
     }
 
     private void BuildScanPanel(Transform parent)
@@ -459,6 +472,25 @@ public class StoryFlowController : MonoBehaviour
         subtitlesButton = CreateButton("SubtitlesButton", "Subtitulos: ON", controlsPanel.transform, new Vector2(0.54f, 0f), new Vector2(1f, 1f));
         subtitlesButton.onClick.AddListener(ToggleSubtitles);
         subtitlesButtonText = subtitlesButton.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    // kguanoluisa, Integracion de ventana flotante LSE con StoryFlow BIAR-25, variable lseWindowController, 2026-06-26
+    private void BuildLseWindow(Transform parent)
+    {
+        GameObject lseGo = new GameObject("LSEFloatingWindow", typeof(RectTransform));
+        lseGo.transform.SetParent(parent, false);
+
+        RectTransform panel = lseGo.GetComponent<RectTransform>();
+        panel.anchorMin = new Vector2(0.75f, 0.70f);
+        panel.anchorMax = new Vector2(1f, 0.98f);
+        panel.offsetMin = Vector2.zero;
+        panel.offsetMax = Vector2.zero;
+
+        Image bg = lseGo.AddComponent<Image>();
+        bg.color = new Color32(45, 55, 72, 240);
+
+        lseWindowController = lseGo.AddComponent<LSEWindowController>();
+        lseGo.SetActive(false);
     }
 
     private void BuildSubtitlePanel(Transform parent)
