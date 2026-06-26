@@ -87,6 +87,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void ShowContentFor(ARTrackedImage trackedImage)
     {
+        // Sal-B: ajustar UI/UX de la detección de marcador ARCore y activación 3D - 26/06/2026
         if (trackedImage == null)
         {
             return;
