@@ -46,6 +46,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void OnTrackedImagesChanged(ARTrackablesChangedEventArgs<ARTrackedImage> args)
     {
+        // Sal-B: agregar validaciones y manejo de errores en la detección de marcador ARCore y activación 3D - 26/06/2026
         foreach (ARTrackedImage trackedImage in args.added)
         {
             ShowContentFor(trackedImage);
