@@ -3,24 +3,33 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-// Amb-AS: Agregar validaciones y manejo de errores en la optimización de modelos 3D (poly-count 2GB RAM) - 26/06/2026
+// Amb-AS: Ajustar UI/UX de la optimización de modelos 3D (poly-count 2GB RAM) - 26/06/2026
 public class ProjectOptimizer
 {
     [MenuItem("Tools/AR Samaritano/Optimizar Assets")]
     public static void OptimizeAssets()
     {
+        if (!EditorUtility.DisplayDialog("Optimizar Assets", "¿Desea iniciar la optimización de modelos 3D y texturas para Android (poly-count 2GB RAM)?", "Sí", "No"))
+        {
+            return;
+        }
+
         string targetDir = Path.Combine(Application.dataPath, "Models/Scena1_Parabola");
         if (!Directory.Exists(targetDir))
         {
-            Debug.LogError($"[ProjectOptimizer] El directorio no existe: {targetDir}");
+            EditorUtility.DisplayDialog("Error", $"Directorio no encontrado: {targetDir}", "OK");
             return;
         }
 
         try
         {
             string[] files = Directory.GetFiles(targetDir, "*.*", SearchOption.AllDirectories);
-            foreach (string file in files)
+            int total = files.Length;
+            for (int i = 0; i < total; i++)
             {
+                string file = files[i];
+                EditorUtility.DisplayProgressBar("Optimizando Assets", $"Procesando {Path.GetFileName(file)}...", (float)i / total);
+
                 string relativePath = "Assets" + file.Substring(Application.dataPath.Length).Replace('\\', '/');
                 string ext = Path.GetExtension(file).ToLower();
 
@@ -36,10 +45,15 @@ public class ProjectOptimizer
                 }
             }
             AssetDatabase.SaveAssets();
+            EditorUtility.DisplayDialog("Éxito", "Optimización completada correctamente.", "OK");
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"[ProjectOptimizer] Error al optimizar assets: {ex.Message}");
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
         }
     }
 
@@ -64,11 +78,11 @@ public class ProjectOptimizer
             var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
             if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
             {
-                Debug.Log("[ProjectOptimizer] Compilación exitosa.");
+                EditorUtility.DisplayDialog("Build Completado", "Compilación exitosa.", "OK");
             }
             else
             {
-                Debug.LogError("[ProjectOptimizer] Compilación fallida.");
+                EditorUtility.DisplayDialog("Build Fallido", "La compilación no tuvo éxito.", "OK");
             }
         }
         catch (System.Exception ex)
