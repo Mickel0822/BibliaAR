@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.Video;
 
-// kguanoluisa, Reproductor de video LSE BIAR-25, variables v_videoPlayer y v_clip, 2026-06-26
+// kguanoluisa, Validaciones del reproductor LSE BIAR-25, variables v_videoPlayer v_clip y v_mensajeError, 2026-06-29
 [RequireComponent(typeof(VideoPlayer))]
 public class LSEVideoPlayer : MonoBehaviour
 {
     private VideoPlayer v_videoPlayer;
     [SerializeField] private VideoClip v_clip;
+    private string v_mensajeError;
+
+    public string MensajeError => v_mensajeError;
 
     private void Awake()
     {
@@ -15,16 +18,21 @@ public class LSEVideoPlayer : MonoBehaviour
         v_videoPlayer.isLooping = true;
     }
 
-    public void Reproducir(VideoClip v_clipEntrada)
+    public bool Reproducir(VideoClip v_clipEntrada)
     {
+        v_mensajeError = string.Empty;
         v_clip = v_clipEntrada != null ? v_clipEntrada : v_clip;
+
         if (v_clip == null)
         {
-            return;
+            v_mensajeError = "Clip LSE no asignado.";
+            Debug.LogWarning("[LSEVideoPlayer] Clip LSE no asignado.");
+            return false;
         }
 
         v_videoPlayer.clip = v_clip;
         v_videoPlayer.Play();
+        return true;
     }
 
     public void Detener()
