@@ -155,6 +155,7 @@ public class ImageTrackingController : MonoBehaviour
     /// </summary>
     private void StopSceneAnimation()
     {
+        // Sal-B: aplicar comentarios de revisión cruzada en la detección de marcador ARCore y activación 3D - 29/06/2026
         if (sceneAnimationController != null)
         {
             sceneAnimationController.StopSceneAnimation();
