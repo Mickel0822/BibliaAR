@@ -143,6 +143,7 @@ public class ImageTrackingController : MonoBehaviour
     /// </summary>
     private void PlaySceneAnimation()
     {
+        // Sal-B: optimizar rendimiento de la detección de marcador ARCore y activación 3D - 29/06/2026
         if (sceneAnimationController != null)
         {
             sceneAnimationController.PlayFromStart();
