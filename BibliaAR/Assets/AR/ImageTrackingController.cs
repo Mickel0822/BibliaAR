@@ -128,6 +128,7 @@ public class ImageTrackingController : MonoBehaviour
     /// </summary>
     private BiblicalSceneAnimationController EnsureSceneAnimationController(GameObject content)
     {
+        // Sal-B: corregir bug detectado en pruebas de la detección de marcador ARCore y activación 3D - 29/06/2026
         BiblicalSceneAnimationController controller = content.GetComponent<BiblicalSceneAnimationController>();
         if (controller == null)
         {
