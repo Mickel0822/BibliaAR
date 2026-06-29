@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-// Amb-AS: Corregir bug detectado en pruebas de la optimización de modelos 3D (poly-count 2GB RAM) - 29/06/2026
+// Amb-AS: Optimizar rendimiento de la optimización de modelos 3D (poly-count 2GB RAM) - 29/06/2026
 public class ProjectOptimizer
 {
     [MenuItem("Tools/AR Samaritano/Optimizar Assets")]
@@ -38,9 +38,22 @@ public class ProjectOptimizer
                     ModelImporter importer = AssetImporter.GetAtPath(relativePath) as ModelImporter;
                     if (importer != null)
                     {
-                        importer.meshCompression = ModelImporterMeshCompression.High;
-                        importer.optimizeGameObjects = true;
-                        importer.SaveAndReimport();
+                        bool changed = false;
+                        if (importer.meshCompression != ModelImporterMeshCompression.High)
+                        {
+                            importer.meshCompression = ModelImporterMeshCompression.High;
+                            changed = true;
+                        }
+                        if (!importer.optimizeGameObjects)
+                        {
+                            importer.optimizeGameObjects = true;
+                            changed = true;
+                        }
+
+                        if (changed)
+                        {
+                            importer.SaveAndReimport();
+                        }
                     }
                 }
                 else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
@@ -48,23 +61,33 @@ public class ProjectOptimizer
                     TextureImporter importer = AssetImporter.GetAtPath(relativePath) as TextureImporter;
                     if (importer != null)
                     {
-                        // Corrección de bug: configurar tipo correcto de textura según nombre
-                        if (relativePath.ToLower().Contains("normal"))
+                        bool changed = false;
+                        TextureImporterType targetType = relativePath.ToLower().Contains("normal") ? TextureImporterType.NormalMap : TextureImporterType.Default;
+                        if (importer.textureType != targetType)
                         {
-                            importer.textureType = TextureImporterType.NormalMap;
-                        }
-                        else
-                        {
-                            importer.textureType = TextureImporterType.Default;
+                            importer.textureType = targetType;
+                            changed = true;
                         }
 
-                        TextureImporterPlatformSettings androidSettings = new TextureImporterPlatformSettings();
-                        androidSettings.name = "Android";
-                        androidSettings.overridden = true;
-                        androidSettings.maxTextureSize = 1024;
-                        androidSettings.textureCompression = TextureImporterCompression.Compressed;
-                        importer.SetPlatformTextureSettings(androidSettings);
-                        importer.SaveAndReimport();
+                        TextureImporterPlatformSettings androidSettings = importer.GetPlatformTextureSettings("Android");
+                        if (androidSettings == null || !androidSettings.overridden || androidSettings.maxTextureSize != 1024 || androidSettings.textureCompression != TextureImporterCompression.Compressed)
+                        {
+                            androidSettings = new TextureImporterPlatformSettings
+                            {
+                                name = "Android",
+                                overridden = true,
+                                maxTextureSize = 1024,
+                                textureCompression = TextureImporterCompression.Compressed,
+                                compressionQuality = (int)TextureCompressionQuality.Normal
+                            };
+                            importer.SetPlatformTextureSettings(androidSettings);
+                            changed = true;
+                        }
+
+                        if (changed)
+                        {
+                            importer.SaveAndReimport();
+                        }
                     }
                 }
             }
