@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-// Amb-AS: Ajustar UI/UX de la optimización de modelos 3D (poly-count 2GB RAM) - 26/06/2026
+// Amb-AS: Corregir bug detectado en pruebas de la optimización de modelos 3D (poly-count 2GB RAM) - 29/06/2026
 public class ProjectOptimizer
 {
     [MenuItem("Tools/AR Samaritano/Optimizar Assets")]
@@ -40,6 +40,30 @@ public class ProjectOptimizer
                     {
                         importer.meshCompression = ModelImporterMeshCompression.High;
                         importer.optimizeGameObjects = true;
+                        importer.SaveAndReimport();
+                    }
+                }
+                else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                {
+                    TextureImporter importer = AssetImporter.GetAtPath(relativePath) as TextureImporter;
+                    if (importer != null)
+                    {
+                        // Corrección de bug: configurar tipo correcto de textura según nombre
+                        if (relativePath.ToLower().Contains("normal"))
+                        {
+                            importer.textureType = TextureImporterType.NormalMap;
+                        }
+                        else
+                        {
+                            importer.textureType = TextureImporterType.Default;
+                        }
+
+                        TextureImporterPlatformSettings androidSettings = new TextureImporterPlatformSettings();
+                        androidSettings.name = "Android";
+                        androidSettings.overridden = true;
+                        androidSettings.maxTextureSize = 1024;
+                        androidSettings.textureCompression = TextureImporterCompression.Compressed;
+                        importer.SetPlatformTextureSettings(androidSettings);
                         importer.SaveAndReimport();
                     }
                 }
