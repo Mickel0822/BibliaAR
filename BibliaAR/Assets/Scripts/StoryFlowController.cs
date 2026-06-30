@@ -285,6 +285,12 @@ public class StoryFlowController : MonoBehaviour
                 lseWindowController.Mostrar(v_tituloLse, v_tituloLse);
             }
 
+            // Amb-AS: Integrar el sistema de feedback multimodal (vibración, sonido, animación) con el resto del módulo - 30/06/2026
+            if (MultimodalFeedbackManager.Instance != null)
+            {
+                MultimodalFeedbackManager.Instance.TriggerAllFeedback("narrative_phase");
+            }
+
             if (sceneAnimationController != null)
             {
                 sceneAnimationController.PlayNarrativePhase(i, lineDuration);

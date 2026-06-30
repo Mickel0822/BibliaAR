@@ -686,6 +686,19 @@ public class QuizManager : MonoBehaviour
             StartCoroutine(SpawnConfettiBurstRoutine(clickedButton.GetComponent<RectTransform>()));
         }
 
+        // Amb-AS: Integrar el sistema de feedback multimodal (vibración, sonido, animación) con el resto del módulo - 30/06/2026
+        if (MultimodalFeedbackManager.Instance != null)
+        {
+            if (isCorrect)
+            {
+                MultimodalFeedbackManager.Instance.TriggerAllFeedback("success");
+            }
+            else
+            {
+                MultimodalFeedbackManager.Instance.TriggerVibration();
+            }
+        }
+
         // Disable interaction during feedback
         foreach (Button btn in optionButtons)
         {
