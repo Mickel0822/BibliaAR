@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// kguanoluisa, Correccion de bug al ocultar ventana LSE durante quiz BIAR-25, variables v_visibleDuranteNarracion, 2026-06-30
+// kguanoluisa, Optimizacion de rendimiento en ventana LSE BIAR-25, variables v_cacheAncho y v_requiereRepintado, 2026-06-30
 public class LSEWindowController : MonoBehaviour
 {
     [Header("Contenido LSE")]
@@ -27,6 +27,8 @@ public class LSEWindowController : MonoBehaviour
     private bool v_visibleDuranteNarracion;
     private float v_anchoReducido = 0.25f;
     private float v_anchoExpandido = 0.50f;
+    private float v_cacheAncho = -1f;
+    private bool v_requiereRepintado = true;
     private Coroutine v_rutinaAnimacion;
 
     public bool Expandido => v_expandido;
@@ -51,6 +53,7 @@ public class LSEWindowController : MonoBehaviour
     public void AlternarExpansion()
     {
         v_expandido = !v_expandido;
+        v_requiereRepintado = true;
         AplicarAncho();
         ActualizarDescripcionVisible();
     }
@@ -67,6 +70,7 @@ public class LSEWindowController : MonoBehaviour
         v_titulo = string.IsNullOrWhiteSpace(v_tituloFragmento) ? "Intérprete LSE" : v_tituloFragmento;
         v_descripcion = v_descripcionFragmento ?? string.Empty;
         v_visibleDuranteNarracion = true;
+        v_requiereRepintado = true;
         ActualizarTextos();
         gameObject.SetActive(true);
     }
@@ -108,12 +112,13 @@ public class LSEWindowController : MonoBehaviour
 
     private void ActualizarTextos()
     {
-        if (v_tituloTexto != null)
+        if (v_tituloTexto != null && v_requiereRepintado)
         {
             v_tituloTexto.text = v_titulo;
         }
 
         ActualizarDescripcionVisible();
+        v_requiereRepintado = false;
     }
 
     private void ActualizarDescripcionVisible()
@@ -133,6 +138,12 @@ public class LSEWindowController : MonoBehaviour
         }
 
         float v_ancho = v_expandido ? v_anchoExpandido : v_anchoReducido;
+        if (!instantaneo && Mathf.Approximately(v_cacheAncho, v_ancho))
+        {
+            return;
+        }
+
+        v_cacheAncho = v_ancho;
         Vector2 v_min = new Vector2(1f - v_ancho, 0.70f);
         Vector2 v_max = Vector2.one;
 
