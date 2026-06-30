@@ -188,6 +188,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void NotifyDetected(ARTrackedImage trackedImage)
     {
+        // Sal-B: ajustar configuración de la detección de marcador ARCore y activación 3D tras pruebas en dispositivo - 30/06/2026
         hasVisibleTrackedImage = true;
         ImageDetected?.Invoke(trackedImage);
     }
