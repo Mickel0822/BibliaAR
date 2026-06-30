@@ -164,6 +164,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void SetCurrentContentVisible(bool visible)
     {
+        // Sal-B: refactorizar código de la detección de marcador ARCore y activación 3D - 30/06/2026
         if (currentContent == null)
         {
             return;
