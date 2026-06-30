@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// kguanoluisa, Ajustes UI/UX de ventana flotante LSE BIAR-25, variables v_animacionDuracion y v_colorFondo, 2026-06-29
+// kguanoluisa, Correccion de bug al ocultar ventana LSE durante quiz BIAR-25, variables v_visibleDuranteNarracion, 2026-06-30
 public class LSEWindowController : MonoBehaviour
 {
     [Header("Contenido LSE")]
@@ -24,6 +24,7 @@ public class LSEWindowController : MonoBehaviour
     [SerializeField] private LSEVideoPlayer v_videoPlayer;
 
     private bool v_expandido;
+    private bool v_visibleDuranteNarracion;
     private float v_anchoReducido = 0.25f;
     private float v_anchoExpandido = 0.50f;
     private Coroutine v_rutinaAnimacion;
@@ -65,15 +66,25 @@ public class LSEWindowController : MonoBehaviour
         OcultarError();
         v_titulo = string.IsNullOrWhiteSpace(v_tituloFragmento) ? "Intérprete LSE" : v_tituloFragmento;
         v_descripcion = v_descripcionFragmento ?? string.Empty;
+        v_visibleDuranteNarracion = true;
         ActualizarTextos();
         gameObject.SetActive(true);
     }
 
     public void Ocultar()
     {
+        v_visibleDuranteNarracion = false;
         v_videoPlayer?.Detener();
         gameObject.SetActive(false);
         OcultarError();
+    }
+
+    private void OnDisable()
+    {
+        if (v_visibleDuranteNarracion)
+        {
+            v_videoPlayer?.Detener();
+        }
     }
 
     private void MostrarError(string v_mensaje)
