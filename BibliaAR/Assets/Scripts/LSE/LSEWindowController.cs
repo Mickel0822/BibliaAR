@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// kguanoluisa, Optimizacion de rendimiento en ventana LSE BIAR-25, variables v_cacheAncho y v_requiereRepintado, 2026-06-30
+// kguanoluisa, Comentarios de revision cruzada aplicados en ventana LSE BIAR-25, variables v_etiquetaExpandir, 2026-06-30
 public class LSEWindowController : MonoBehaviour
 {
     [Header("Contenido LSE")]
@@ -15,6 +15,7 @@ public class LSEWindowController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI v_tituloTexto;
     [SerializeField] private TextMeshProUGUI v_descripcionTexto;
     [SerializeField] private TextMeshProUGUI v_mensajeError;
+    [SerializeField] private TextMeshProUGUI v_etiquetaExpandir;
     [SerializeField] private Button v_botonExpandir;
     [SerializeField] private Image v_fondo;
     [SerializeField] private float v_animacionDuracion = 0.25f;
@@ -45,6 +46,7 @@ public class LSEWindowController : MonoBehaviour
             v_fondo.color = v_colorFondo;
         }
 
+        ActualizarEtiquetaExpansion();
         ActualizarTextos();
         AplicarAncho(instantaneo: true);
         OcultarError();
@@ -54,6 +56,7 @@ public class LSEWindowController : MonoBehaviour
     {
         v_expandido = !v_expandido;
         v_requiereRepintado = true;
+        ActualizarEtiquetaExpansion();
         AplicarAncho();
         ActualizarDescripcionVisible();
     }
@@ -88,6 +91,14 @@ public class LSEWindowController : MonoBehaviour
         if (v_visibleDuranteNarracion)
         {
             v_videoPlayer?.Detener();
+        }
+    }
+
+    private void ActualizarEtiquetaExpansion()
+    {
+        if (v_etiquetaExpandir != null)
+        {
+            v_etiquetaExpandir.text = v_expandido ? "Reducir" : "Ampliar";
         }
     }
 
