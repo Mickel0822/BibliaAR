@@ -207,6 +207,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void Log(string message)
     {
+        // Sal-B: integrar la detección de marcador ARCore y activación 3D con el resto del módulo - 01/07/2026
         if (logDebugInfo)
         {
             Debug.Log($"[ImageTrackingController] {message}");
