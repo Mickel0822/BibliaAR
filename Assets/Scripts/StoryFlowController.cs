@@ -45,6 +45,7 @@ public class StoryFlowController : MonoBehaviour
     private bool storyStarted;
     private bool quizStarted;
 
+    // kguanoluisa, Prepara referencias, UI y estado inicial del flujo narrativo AR, sin nuevas variables, 2026-07-01
     private void Awake()
     {
         if (quizManager == null)
@@ -80,6 +81,7 @@ public class StoryFlowController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Valida deteccion QR antes de iniciar la corrutina del relato biblico, sin nuevas variables, 2026-07-01
     public void PlayStory()
     {
         if (waitForQrDetection && !qrDetected)
