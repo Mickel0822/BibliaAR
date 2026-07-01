@@ -1,9 +1,14 @@
 using UnityEngine;
 
-// Amb-AS: Agregar validaciones y manejo de errores en el sistema de feedback multimodal (vibración, sonido, animación) - 01/07/2026
+// Amb-AS: Ajustar UI/UX del sistema de feedback multimodal (vibración, sonido, animación) - 01/07/2026
 public class MultimodalFeedbackManager : MonoBehaviour
 {
     public static MultimodalFeedbackManager Instance { get; private set; }
+
+    [Header("Configuración Feedback")]
+    public bool isVibrationEnabled = true;
+    public bool isSoundEnabled = true;
+    public bool isAnimationEnabled = true;
 
     [Header("Componentes de Audio")]
     public AudioSource audioSource;
@@ -27,6 +32,8 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
     public void TriggerVibration()
     {
+        if (!isVibrationEnabled) return;
+
         try
         {
             #if UNITY_ANDROID || UNITY_IOS
@@ -43,16 +50,8 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
     public void TriggerSound()
     {
-        if (audioSource == null)
-        {
-            Debug.LogWarning("[MultimodalFeedbackManager] AudioSource no está asignado.");
-            return;
-        }
-        if (feedbackClip == null)
-        {
-            Debug.LogWarning("[MultimodalFeedbackManager] AudioClip de feedback no está asignado.");
-            return;
-        }
+        if (!isSoundEnabled) return;
+        if (audioSource == null || feedbackClip == null) return;
 
         try
         {
@@ -66,11 +65,7 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
     public void TriggerAnimation(string triggerName)
     {
-        if (feedbackAnimator == null)
-        {
-            Debug.LogWarning("[MultimodalFeedbackManager] Animator no está asignado.");
-            return;
-        }
+        if (!isAnimationEnabled || feedbackAnimator == null) return;
 
         try
         {
