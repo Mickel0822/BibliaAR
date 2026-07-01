@@ -248,6 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ImageTrackingController
   logDebugInfo: 1
+  arContentPrefab: {fileID: 8969852357989777919, guid: 205f590e0b01ce446aa64c7a25f499fa, type: 3}
 --- !u!114 &151853172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +266,7 @@ MonoBehaviour:
       m_Calls: []
   m_SerializedLibrary: {fileID: 11400000, guid: 8b9217fd8fa6a1a4f812f57243dfc568, type: 2}
   m_MaxNumberOfMovingImages: 1
-  m_TrackedImagePrefab: {fileID: 8969852357989777919, guid: 205f590e0b01ce446aa64c7a25f499fa, type: 3}
+  m_TrackedImagePrefab: {fileID: 0}
 --- !u!1 &212114235
 GameObject:
   m_ObjectHideFlags: 0
@@ -2336,6 +2337,7 @@ MonoBehaviour:
   m_TrackedScrollDeltaMultiplier: 5
   m_NonTrackedScrollDeltaMultiplier: 6
   m_BypassUIToolkitEvents: 1
+  m_PrioritizeDistanceSorting: 0
   m_ActiveInputMode: 1
   m_EnableXRInput: 1
   m_EnableMouseInput: 1
@@ -3599,6 +3601,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1962116422}
   m_CullTransparentMesh: 1
+--- !u!1 &1967569623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1967569626}
+  - component: {fileID: 1967569625}
+  - component: {fileID: 1967569624}
+  m_Layer: 0
+  m_Name: Story Flow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1967569624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967569623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 718f06f6029e0f04780c17e957d71c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoryFlowController
+  quizManager: {fileID: 1967569625}
+  narrationAudio: {fileID: 0}
+  waitForQrDetection: 1
+  showSubtitles: 1
+  fallbackSecondsPerSubtitle: 4
+  subtitles:
+  - "Un viajero iba por el camino de Jerusal\xE9n a Jeric\xF3 cuando fue atacado
+    por ladrones."
+  - Lo dejaron herido y solo. Varias personas pasaron, pero no se detuvieron a ayudarlo.
+  - "Finalmente, un samaritano se acerc\xF3, cur\xF3 sus heridas y lo llev\xF3 a
+    un lugar seguro."
+  - "Esta historia nos ense\xF1a que debemos ayudar a quienes lo necesitan, sin importar
+    qui\xE9nes sean."
+--- !u!114 &1967569625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967569623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53e65b5149412554a97d5840903abcec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuizManager
+  startAutomatically: 0
+--- !u!4 &1967569626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967569623}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.04128, y: 0.07933, z: 1.98575}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1975205120
 GameObject:
   m_ObjectHideFlags: 0
@@ -4320,3 +4393,4 @@ SceneRoots:
   - {fileID: 1323550134}
   - {fileID: 2099970469}
   - {fileID: 331264285}
+  - {fileID: 1967569626}

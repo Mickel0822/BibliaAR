@@ -228,11 +228,6 @@ namespace UnityEngine.XR.Templates.AR
         /// </summary>
         void OnEnable()
         {
-            return;
-            m_CreateButton.onClick.AddListener(ShowMenu);
-            m_CancelButton.onClick.AddListener(HideMenu);
-            m_DeleteButton.onClick.AddListener(DeleteFocusedObject);
-            m_PlaneManager.trackablesChanged.AddListener(OnPlaneChanged);
         }
 
         /// <summary>
@@ -241,10 +236,6 @@ namespace UnityEngine.XR.Templates.AR
         void OnDisable()
         {
             m_ShowObjectMenu = false;
-            m_CreateButton.onClick.RemoveListener(ShowMenu);
-            m_CancelButton.onClick.RemoveListener(HideMenu);
-            m_DeleteButton.onClick.RemoveListener(DeleteFocusedObject);
-            m_PlaneManager.trackablesChanged.RemoveListener(OnPlaneChanged);
         }
 
         /// <summary>

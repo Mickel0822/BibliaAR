@@ -1,75 +1,154 @@
+using System;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-/// <summary>
-/// Responsable: Teniente.
-/// Controla la visualización de los personajes en Realidad Aumentada según el
-/// estado de seguimiento del código QR (ARTrackedImageManager).
-///
-/// Requiere que el GameObject que tiene este script también tenga el
-/// componente ARTrackedImageManager, con:
-///   - referenceLibrary = librería que contiene la imagen del QR.
-///   - trackedImagePrefab = prefab "EscenaSamaritano" (Samaritano, HombreHerido, Asno).
-/// </summary>
 [RequireComponent(typeof(ARTrackedImageManager))]
 public class ImageTrackingController : MonoBehaviour
 {
-    [Tooltip("Si es true, se imprime en consola cada cambio de estado del QR (útil para depurar en el equipo de Teniente).")]
+    public static event Action<ARTrackedImage> ImageDetected;
+    public static event Action ImageLost;
+
+    [Tooltip("If true, QR tracking state changes are printed in the console.")]
     [SerializeField] private bool logDebugInfo = true;
 
+    [Tooltip("Prefab with the biblical AR scene. If empty, the ARTrackedImageManager tracked image prefab is reused as visual content.")]
+    [SerializeField] private GameObject arContentPrefab;
+
     private ARTrackedImageManager trackedImageManager;
+    private bool hasVisibleTrackedImage;
+    private GameObject currentContent;
 
     private void Awake()
     {
         trackedImageManager = GetComponent<ARTrackedImageManager>();
+
+        if (arContentPrefab == null && trackedImageManager.trackedImagePrefab != null)
+        {
+            arContentPrefab = trackedImageManager.trackedImagePrefab;
+            trackedImageManager.trackedImagePrefab = null;
+        }
     }
 
     private void OnEnable()
     {
-        trackedImageManager.trackedImagesChanged += OnTrackedImagesChanged;
+        trackedImageManager.trackablesChanged.AddListener(OnTrackedImagesChanged);
     }
 
     private void OnDisable()
     {
-        trackedImageManager.trackedImagesChanged -= OnTrackedImagesChanged;
+        trackedImageManager.trackablesChanged.RemoveListener(OnTrackedImagesChanged);
     }
 
-    private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs args)
+    private void OnTrackedImagesChanged(ARTrackablesChangedEventArgs<ARTrackedImage> args)
     {
-        // QR detectado por primera vez: AR Foundation ya instanció el prefab
-        // (trackedImagePrefab) como hijo de este ARTrackedImage.
         foreach (ARTrackedImage trackedImage in args.added)
         {
-            trackedImage.gameObject.SetActive(true);
-            Log($"QR detectado: '{trackedImage.referenceImage.name}'. Mostrando escena.");
+            ShowContentFor(trackedImage);
+            NotifyDetected(trackedImage);
+            Log($"QR detected: '{trackedImage.referenceImage.name}'. Showing AR scene.");
         }
 
-        // QR sigue siendo trackeado en este frame: mostrar/ocultar según calidad del tracking.
         foreach (ARTrackedImage trackedImage in args.updated)
         {
-            bool esVisible = trackedImage.trackingState == TrackingState.Tracking;
-            trackedImage.gameObject.SetActive(esVisible);
+            bool isVisible = trackedImage.trackingState == TrackingState.Tracking;
 
-            if (!esVisible)
+            if (isVisible)
             {
-                Log($"QR '{trackedImage.referenceImage.name}' con tracking limitado/perdido. Ocultando escena.");
+                ShowContentFor(trackedImage);
+                NotifyDetected(trackedImage);
+            }
+            else
+            {
+                SetCurrentContentVisible(false);
+                NotifyLost();
+                Log($"QR '{trackedImage.referenceImage.name}' tracking is limited or lost. Hiding AR scene.");
             }
         }
 
-        // QR removido de la sesión AR.
-        foreach (ARTrackedImage trackedImage in args.removed)
+        foreach (var removedImage in args.removed)
         {
-            trackedImage.gameObject.SetActive(false);
-            Log($"QR '{trackedImage.referenceImage.name}' removido. Escena ocultada.");
+            ARTrackedImage trackedImage = removedImage.Value;
+            if (trackedImage == null)
+            {
+                continue;
+            }
+
+            SetCurrentContentVisible(false);
+            NotifyLost();
+            Log($"QR '{trackedImage.referenceImage.name}' removed. AR scene hidden.");
         }
     }
 
-    private void Log(string mensaje)
+    private void ShowContentFor(ARTrackedImage trackedImage)
+    {
+        if (trackedImage == null)
+        {
+            return;
+        }
+
+        if (currentContent == null)
+        {
+            if (arContentPrefab == null)
+            {
+                Log("No AR content prefab is assigned.");
+                return;
+            }
+
+            currentContent = Instantiate(arContentPrefab);
+            currentContent.name = $"{arContentPrefab.name}_Runtime";
+            Log($"Instantiated AR content '{currentContent.name}'.");
+        }
+
+        Transform contentTransform = currentContent.transform;
+        contentTransform.SetParent(trackedImage.transform, false);
+        contentTransform.localPosition = Vector3.zero;
+        contentTransform.localRotation = Quaternion.identity;
+        contentTransform.localScale = arContentPrefab.transform.localScale;
+
+        SetCurrentContentVisible(true);
+    }
+
+    private void SetCurrentContentVisible(bool visible)
+    {
+        if (currentContent == null)
+        {
+            return;
+        }
+
+        currentContent.SetActive(visible);
+
+        Renderer[] renderers = currentContent.GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = visible;
+        }
+
+        Log($"AR content visible: {visible}. Renderers found: {renderers.Length}.");
+    }
+
+    private void NotifyDetected(ARTrackedImage trackedImage)
+    {
+        hasVisibleTrackedImage = true;
+        ImageDetected?.Invoke(trackedImage);
+    }
+
+    private void NotifyLost()
+    {
+        if (!hasVisibleTrackedImage)
+        {
+            return;
+        }
+
+        hasVisibleTrackedImage = false;
+        ImageLost?.Invoke();
+    }
+
+    private void Log(string message)
     {
         if (logDebugInfo)
         {
-            Debug.Log($"[ImageTrackingController] {mensaje}");
+            Debug.Log($"[ImageTrackingController] {message}");
         }
     }
 }

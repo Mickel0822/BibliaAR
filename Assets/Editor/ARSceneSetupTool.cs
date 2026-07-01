@@ -26,7 +26,7 @@ using UnityEngine.XR.ARSubsystems;
 public class ARSceneSetupTool : EditorWindow
 {
     private XRReferenceImageLibrary referenceLibrary;
-    private GameObject trackedPrefab;
+    private GameObject arContentPrefab;
 
     [MenuItem("Tools/AR Samaritano/Configurar Escena AR")]
     public static void ShowWindow()
@@ -47,8 +47,8 @@ public class ARSceneSetupTool : EditorWindow
         referenceLibrary = (XRReferenceImageLibrary)EditorGUILayout.ObjectField(
             "Reference Image Library (QR)", referenceLibrary, typeof(XRReferenceImageLibrary), false);
 
-        trackedPrefab = (GameObject)EditorGUILayout.ObjectField(
-            "Prefab escena (personajes)", trackedPrefab, typeof(GameObject), false);
+        arContentPrefab = (GameObject)EditorGUILayout.ObjectField(
+            "Prefab escena (personajes)", arContentPrefab, typeof(GameObject), false);
 
         EditorGUILayout.Space();
 
@@ -66,7 +66,7 @@ public class ARSceneSetupTool : EditorWindow
     private void Apply(GameObject target)
     {
         // 1) Asegurar AR Session.
-        ARSession session = FindObjectOfType<ARSession>();
+        ARSession session = FindAnyObjectByType<ARSession>();
         if (session == null)
         {
             GameObject sessionGO = new GameObject("AR Session");
@@ -91,9 +91,10 @@ public class ARSceneSetupTool : EditorWindow
             Debug.Log($"[ARSceneSetupTool] ARTrackedImageManager agregado en '{target.name}'.");
         }
 
-        if (target.GetComponent<ImageTrackingController>() == null)
+        ImageTrackingController imageTrackingController = target.GetComponent<ImageTrackingController>();
+        if (imageTrackingController == null)
         {
-            target.AddComponent<ImageTrackingController>();
+            imageTrackingController = target.AddComponent<ImageTrackingController>();
             Debug.Log($"[ARSceneSetupTool] ImageTrackingController agregado en '{target.name}'.");
         }
 
@@ -102,12 +103,17 @@ public class ARSceneSetupTool : EditorWindow
         {
             manager.referenceLibrary = referenceLibrary;
         }
-        if (trackedPrefab != null)
+        if (arContentPrefab != null)
         {
-            manager.trackedImagePrefab = trackedPrefab;
+            SerializedObject controllerObject = new SerializedObject(imageTrackingController);
+            controllerObject.FindProperty("arContentPrefab").objectReferenceValue = arContentPrefab;
+            controllerObject.ApplyModifiedProperties();
         }
+        manager.trackedImagePrefab = null;
         manager.requestedMaxNumberOfMovingImages = 1;
 
+        EditorUtility.SetDirty(imageTrackingController);
+        EditorUtility.SetDirty(manager);
         EditorUtility.SetDirty(target);
         EditorUtility.DisplayDialog("Listo", $"ARTrackedImageManager configurado en '{target.name}'.", "OK");
     }
