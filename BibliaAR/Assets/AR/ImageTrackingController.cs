@@ -195,6 +195,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void NotifyLost()
     {
+        // Sal-B: implementar lógica principal de la detección de marcador ARCore y activación 3D - 01/07/2026
         if (!hasVisibleTrackedImage)
         {
             return;
