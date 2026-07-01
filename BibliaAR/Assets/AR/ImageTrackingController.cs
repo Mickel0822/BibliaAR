@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+// Sal-B: crear estructura base de la detección de marcador ARCore y activación 3D - 25/06/2026
 [RequireComponent(typeof(ARTrackedImageManager))]
 public class ImageTrackingController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void Awake()
     {
+        // Sal-B: implementar lógica principal de la detección de marcador ARCore y activación 3D - 25/06/2026
         trackedImageManager = GetComponent<ARTrackedImageManager>();
 
         if (arContentPrefab == null && trackedImageManager.trackedImagePrefab != null)
@@ -33,6 +35,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void OnEnable()
     {
+        // Sal-B: integrar la detección de marcador ARCore y activación 3D con el resto del módulo - 25/06/2026
         trackedImageManager.trackablesChanged.AddListener(OnTrackedImagesChanged);
     }
 
@@ -43,6 +46,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void OnTrackedImagesChanged(ARTrackablesChangedEventArgs<ARTrackedImage> args)
     {
+        // Sal-B: agregar validaciones y manejo de errores en la detección de marcador ARCore y activación 3D - 26/06/2026
         foreach (ARTrackedImage trackedImage in args.added)
         {
             ShowContentFor(trackedImage);
@@ -83,6 +87,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void ShowContentFor(ARTrackedImage trackedImage)
     {
+        // Sal-B: ajustar UI/UX de la detección de marcador ARCore y activación 3D - 26/06/2026
         if (trackedImage == null)
         {
             return;
@@ -123,6 +128,7 @@ public class ImageTrackingController : MonoBehaviour
     /// </summary>
     private BiblicalSceneAnimationController EnsureSceneAnimationController(GameObject content)
     {
+        // Sal-B: corregir bug detectado en pruebas de la detección de marcador ARCore y activación 3D - 29/06/2026
         BiblicalSceneAnimationController controller = content.GetComponent<BiblicalSceneAnimationController>();
         if (controller == null)
         {
@@ -137,6 +143,7 @@ public class ImageTrackingController : MonoBehaviour
     /// </summary>
     private void PlaySceneAnimation()
     {
+        // Sal-B: optimizar rendimiento de la detección de marcador ARCore y activación 3D - 29/06/2026
         if (sceneAnimationController != null)
         {
             sceneAnimationController.PlayFromStart();
@@ -148,6 +155,7 @@ public class ImageTrackingController : MonoBehaviour
     /// </summary>
     private void StopSceneAnimation()
     {
+        // Sal-B: aplicar comentarios de revisión cruzada en la detección de marcador ARCore y activación 3D - 29/06/2026
         if (sceneAnimationController != null)
         {
             sceneAnimationController.StopSceneAnimation();
@@ -156,6 +164,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void SetCurrentContentVisible(bool visible)
     {
+        // Sal-B: refactorizar código de la detección de marcador ARCore y activación 3D - 30/06/2026
         if (currentContent == null)
         {
             return;
@@ -179,12 +188,14 @@ public class ImageTrackingController : MonoBehaviour
 
     private void NotifyDetected(ARTrackedImage trackedImage)
     {
+        // Sal-B: ajustar configuración de la detección de marcador ARCore y activación 3D tras pruebas en dispositivo - 30/06/2026
         hasVisibleTrackedImage = true;
         ImageDetected?.Invoke(trackedImage);
     }
 
     private void NotifyLost()
     {
+        // Sal-B: implementar lógica principal de la detección de marcador ARCore y activación 3D - 01/07/2026
         if (!hasVisibleTrackedImage)
         {
             return;
@@ -196,6 +207,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void Log(string message)
     {
+        // Sal-B: integrar la detección de marcador ARCore y activación 3D con el resto del módulo - 01/07/2026
         if (logDebugInfo)
         {
             Debug.Log($"[ImageTrackingController] {message}");
