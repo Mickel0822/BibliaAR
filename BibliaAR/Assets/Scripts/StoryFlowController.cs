@@ -490,7 +490,7 @@ public class StoryFlowController : MonoBehaviour
         bg.color = new Color32(45, 55, 72, 240);
 
         lseWindowController = lseGo.AddComponent<LSEWindowController>();
-                // kguanoluisa, Correccion: ventana LSE visible solo durante narracion activa BIAR-25, sin nuevas variables, 2026-06-30
+        // kguanoluisa, Correccion: ventana LSE visible solo durante narracion activa BIAR-25, sin nuevas variables, 2026-06-30
         lseGo.SetActive(false);
     }
 

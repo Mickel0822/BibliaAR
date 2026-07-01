@@ -28,6 +28,7 @@ public class ARSceneSetupTool : EditorWindow
     private XRReferenceImageLibrary referenceLibrary;
     private GameObject arContentPrefab;
 
+    // kguanoluisa, Acceso directo a la guia de instalacion BIAR-15 desde herramientas AR, sin nuevas variables, 2026-06-24
     [MenuItem("Tools/AR Samaritano/Guia de Instalacion")]
     public static void OpenInstallGuide()
     {
