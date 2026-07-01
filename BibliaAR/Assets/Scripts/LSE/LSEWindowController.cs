@@ -3,9 +3,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// kguanoluisa, Comentarios de revision cruzada aplicados en ventana LSE BIAR-25, variables v_etiquetaExpandir, 2026-06-30
+// kguanoluisa, Refactor de ventana flotante LSE BIAR-25, clase auxiliar LSEWindowUiState, 2026-07-01
 public class LSEWindowController : MonoBehaviour
 {
+    [System.Serializable]
+    private class LSEWindowUiState
+    {
+        public float v_anchoReducido = 0.25f;
+        public float v_anchoExpandido = 0.50f;
+        public float v_animacionDuracion = 0.25f;
+        public Color32 v_colorFondo = new Color32(45, 55, 72, 240);
+    }
+
     [Header("Contenido LSE")]
     [SerializeField] private string v_titulo = "Intérprete LSE";
     [SerializeField] private string v_descripcion = "Traducción en lengua de señas";
@@ -18,16 +27,13 @@ public class LSEWindowController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI v_etiquetaExpandir;
     [SerializeField] private Button v_botonExpandir;
     [SerializeField] private Image v_fondo;
-    [SerializeField] private float v_animacionDuracion = 0.25f;
-    [SerializeField] private Color32 v_colorFondo = new Color32(45, 55, 72, 240);
+    [SerializeField] private LSEWindowUiState v_estadoUi = new LSEWindowUiState();
 
     [Header("Video")]
     [SerializeField] private LSEVideoPlayer v_videoPlayer;
 
     private bool v_expandido;
     private bool v_visibleDuranteNarracion;
-    private float v_anchoReducido = 0.25f;
-    private float v_anchoExpandido = 0.50f;
     private float v_cacheAncho = -1f;
     private bool v_requiereRepintado = true;
     private Coroutine v_rutinaAnimacion;
@@ -43,7 +49,7 @@ public class LSEWindowController : MonoBehaviour
 
         if (v_fondo != null)
         {
-            v_fondo.color = v_colorFondo;
+            v_fondo.color = v_estadoUi.v_colorFondo;
         }
 
         ActualizarEtiquetaExpansion();
@@ -148,7 +154,7 @@ public class LSEWindowController : MonoBehaviour
             return;
         }
 
-        float v_ancho = v_expandido ? v_anchoExpandido : v_anchoReducido;
+        float v_ancho = v_expandido ? v_estadoUi.v_anchoExpandido : v_estadoUi.v_anchoReducido;
         if (!instantaneo && Mathf.Approximately(v_cacheAncho, v_ancho))
         {
             return;
@@ -158,7 +164,7 @@ public class LSEWindowController : MonoBehaviour
         Vector2 v_min = new Vector2(1f - v_ancho, 0.70f);
         Vector2 v_max = Vector2.one;
 
-        if (instantaneo || v_animacionDuracion <= 0f)
+        if (instantaneo || v_estadoUi.v_animacionDuracion <= 0f)
         {
             v_panel.anchorMin = v_min;
             v_panel.anchorMax = v_max;
@@ -181,10 +187,10 @@ public class LSEWindowController : MonoBehaviour
         Vector2 v_inicioMax = v_panel.anchorMax;
         float v_tiempo = 0f;
 
-        while (v_tiempo < v_animacionDuracion)
+        while (v_tiempo < v_estadoUi.v_animacionDuracion)
         {
             v_tiempo += Time.deltaTime;
-            float v_t = Mathf.Clamp01(v_tiempo / v_animacionDuracion);
+            float v_t = Mathf.Clamp01(v_tiempo / v_estadoUi.v_animacionDuracion);
             v_panel.anchorMin = Vector2.Lerp(v_inicioMin, v_destinoMin, v_t);
             v_panel.anchorMax = Vector2.Lerp(v_inicioMax, v_destinoMax, v_t);
             yield return null;
