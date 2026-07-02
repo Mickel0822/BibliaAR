@@ -6,6 +6,8 @@ El proyecto esta pensado para Android con ARCore. Para probar la experiencia AR 
 
 ## Requisitos
 
+<!-- BIAR-14 | Desarrollador: Tnte Bayas Cristian | Subtarea: Documentar pasos de instalacion -->
+
 - Unity `6000.5.0f1`.
 - Android Build Support instalado desde Unity Hub.
 - SDK, NDK y OpenJDK instalados desde Unity Hub.
