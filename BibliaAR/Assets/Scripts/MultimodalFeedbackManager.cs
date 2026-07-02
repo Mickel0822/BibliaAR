@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Amb-AS: Corregir bug detectado en pruebas del sistema de feedback multimodal (vibración, sonido, animación) - 02/07/2026
+// Amb-AS: Optimizar rendimiento del sistema de feedback multimodal (vibración, sonido, animación) - 02/07/2026
 public class MultimodalFeedbackManager : MonoBehaviour
 {
     public static MultimodalFeedbackManager Instance { get; private set; }
@@ -17,17 +17,28 @@ public class MultimodalFeedbackManager : MonoBehaviour
     [Header("Componentes de Animación")]
     public Animator feedbackAnimator;
 
+    // Optimización de rendimiento: cachear los IDs de los triggers del animator
+    private int successTriggerId;
+    private int narrativePhaseTriggerId;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeAnimatorHashes();
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void InitializeAnimatorHashes()
+    {
+        successTriggerId = Animator.StringToHash("success");
+        narrativePhaseTriggerId = Animator.StringToHash("narrative_phase");
     }
 
     public void TriggerVibration()
@@ -36,16 +47,11 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
         try
         {
-            // Corrección de bug: verificar explícitamente si estamos en plataforma móvil compatible antes de llamar
             if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 #if UNITY_ANDROID || UNITY_IOS
                 Handheld.Vibrate();
                 #endif
-            }
-            else
-            {
-                Debug.Log("[MultimodalFeedbackManager] Simulación de vibración en editor.");
             }
         }
         catch (System.Exception ex)
@@ -75,10 +81,10 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
         try
         {
-            // Corrección de bug: validar que el trigger existe en el controlador antes de dispararlo
             if (feedbackAnimator.runtimeAnimatorController != null)
             {
-                feedbackAnimator.SetTrigger(triggerName);
+                int triggerId = (triggerName == "success") ? successTriggerId : narrativePhaseTriggerId;
+                feedbackAnimator.SetTrigger(triggerId);
             }
         }
         catch (System.Exception ex)
