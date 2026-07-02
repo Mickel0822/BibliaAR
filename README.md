@@ -31,6 +31,8 @@ Despues de eso, abrir la carpeta `BibliaAR` desde Unity Hub con Unity `6000.5.0f
 
 ## Estructura importante
 
+<!-- BIAR-12 | Desarrollador: Tnte Bayas Cristian | Subtarea: Crear estructura de carpetas (Scenes, Scripts, Prefabs, Models, Audio, UI, Resources, AR, Editor) -->
+
 - `Assets/`: escenas, scripts, modelos, prefabs, texturas y recursos del proyecto.
 - `Assets/AR/`: scripts relacionados con tracking AR.
 - `Assets/Scripts/`: flujo de historia y quiz.
