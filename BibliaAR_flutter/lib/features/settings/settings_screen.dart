@@ -1,4 +1,5 @@
 import 'package:biblia_ar_flutter/core/accessibility/biar_design_tokens.dart';
+import 'package:biblia_ar_flutter/core/routing/route_names.dart';
 import 'package:biblia_ar_flutter/features/profiles/perfil_provider.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: const Icon(Icons.save),
               title: const Text('Los cambios se guardan automáticamente por perfil'),
               subtitle: const Text('Tu configuración se aplica en lecciones y trámites'),
+            ),
+          ),
+          const SizedBox(height: BiarSpacing.lg),
+          const BiarSectionHeader(
+            vTitulo: 'Desarrollo',
+            vSubtitulo: 'Herramientas técnicas del equipo',
+            vIcono: Icons.developer_mode,
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.storage),
+              title: const Text('Spike persistencia local'),
+              subtitle: const Text('Comparar sqflite vs Hive'),
+              onTap: () => Navigator.of(context).pushNamed(
+                RouteNames.persistenciaBenchmark,
+              ),
             ),
           ),
         ],
