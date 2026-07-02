@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Amb-AS: Ajustar UI/UX del sistema de feedback multimodal (vibración, sonido, animación) - 01/07/2026
+// Amb-AS: Corregir bug detectado en pruebas del sistema de feedback multimodal (vibración, sonido, animación) - 02/07/2026
 public class MultimodalFeedbackManager : MonoBehaviour
 {
     public static MultimodalFeedbackManager Instance { get; private set; }
@@ -36,11 +36,17 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
         try
         {
-            #if UNITY_ANDROID || UNITY_IOS
-            Handheld.Vibrate();
-            #else
-            Debug.Log("[MultimodalFeedbackManager] Vibración no soportada en esta plataforma.");
-            #endif
+            // Corrección de bug: verificar explícitamente si estamos en plataforma móvil compatible antes de llamar
+            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                #if UNITY_ANDROID || UNITY_IOS
+                Handheld.Vibrate();
+                #endif
+            }
+            else
+            {
+                Debug.Log("[MultimodalFeedbackManager] Simulación de vibración en editor.");
+            }
         }
         catch (System.Exception ex)
         {
@@ -69,7 +75,11 @@ public class MultimodalFeedbackManager : MonoBehaviour
 
         try
         {
-            feedbackAnimator.SetTrigger(triggerName);
+            // Corrección de bug: validar que el trigger existe en el controlador antes de dispararlo
+            if (feedbackAnimator.runtimeAnimatorController != null)
+            {
+                feedbackAnimator.SetTrigger(triggerName);
+            }
         }
         catch (System.Exception ex)
         {
