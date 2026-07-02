@@ -58,6 +58,7 @@ public class QuizManager : MonoBehaviour
     private Color colorError = new Color32(239, 68, 68, 255);           // Rose Red (#EF4444)
     private Color colorButtonNormal = new Color32(45, 45, 58, 255);     // Card Button Slate (#2D2D3A)
 
+    // kguanoluisa, Inicializa el banco de preguntas al cargar el componente del quiz, sin nuevas variables, 2026-07-02
     private void Awake()
     {
         InitializeQuestions();
@@ -92,6 +93,7 @@ public class QuizManager : MonoBehaviour
         ShowQuestion(0);
     }
 
+    // kguanoluisa, Oculta el canvas del quiz y limpia efectos visuales activos, sin nuevas variables, 2026-07-02
     public void HideQuiz()
     {
         ClearConfetti();
