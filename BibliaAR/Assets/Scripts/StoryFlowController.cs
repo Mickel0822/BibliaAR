@@ -13,6 +13,7 @@ public class StoryFlowController : MonoBehaviour
     [SerializeField] private AudioSource narrationAudio;
     [SerializeField] private SessionManager sessionManager;
     [SerializeField] private LSEWindowController lseWindowController;
+    [SerializeField] private AccessibilityPanelController accessibilityPanelController;
     [SerializeField] private BiblicalSceneAnimationController sceneAnimationController;
 
     [Header("AR Flow")]
@@ -56,10 +57,20 @@ public class StoryFlowController : MonoBehaviour
         }
 
         // Auto-detectar SessionManager si no fue asignado en el Inspector
+        if (accessibilityPanelController == null)
+        {
+            accessibilityPanelController = FindAnyObjectByType<AccessibilityPanelController>();
+        }
+
         if (sessionManager == null)
         {
             sessionManager = FindAnyObjectByType<SessionManager>();
-            if (sessionManager == null)
+            if (accessibilityPanelController == null)
+        {
+            accessibilityPanelController = FindAnyObjectByType<AccessibilityPanelController>();
+        }
+
+        if (sessionManager == null)
             {
                 sessionManager = gameObject.AddComponent<SessionManager>();
                 Debug.Log("[StoryFlowController] SessionManager creado autom\u00e1ticamente.");
@@ -400,6 +411,7 @@ public class StoryFlowController : MonoBehaviour
         BuildControlsPanel(canvasGo.transform);
         BuildSubtitlePanel(canvasGo.transform);
         BuildLseWindow(canvasGo.transform);
+        BuildAccessibilityPanel(canvasGo.transform);
     }
 
     private void BuildScanPanel(Transform parent)
@@ -472,6 +484,62 @@ public class StoryFlowController : MonoBehaviour
         subtitlesButton = CreateButton("SubtitlesButton", "Subtitulos: ON", controlsPanel.transform, new Vector2(0.54f, 0f), new Vector2(1f, 1f));
         subtitlesButton.onClick.AddListener(ToggleSubtitles);
         subtitlesButtonText = subtitlesButton.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    // kguanoluisa, Integracion del panel de accesibilidad con StoryFlow, variables accessibilityPanelController y v_panelAccesibilidad, 2026-07-02
+    private GameObject v_panelAccesibilidad;
+
+    private void BuildAccessibilityPanel(Transform parent)
+    {
+        v_panelAccesibilidad = new GameObject("AccessibilityPanel", typeof(RectTransform));
+        v_panelAccesibilidad.transform.SetParent(parent, false);
+
+        RectTransform v_rect = v_panelAccesibilidad.GetComponent<RectTransform>();
+        v_rect.anchorMin = new Vector2(0.02f, 0.82f);
+        v_rect.anchorMax = new Vector2(0.35f, 0.98f);
+        v_rect.offsetMin = Vector2.zero;
+        v_rect.offsetMax = Vector2.zero;
+
+        if (accessibilityPanelController == null)
+        {
+            accessibilityPanelController = v_panelAccesibilidad.AddComponent<AccessibilityPanelController>();
+        }
+
+        accessibilityPanelController.OnConfiguracionCambiada += AplicarConfiguracionAccesibilidad;
+        v_panelAccesibilidad.SetActive(true);
+    }
+
+    private void AplicarConfiguracionAccesibilidad(AccessibilitySettings v_configuracion)
+    {
+        if (v_configuracion == null)
+        {
+            return;
+        }
+
+        showSubtitles = v_configuracion.v_subtitulosActivos;
+        if (subtitlesButtonText != null)
+        {
+            subtitlesButtonText.text = showSubtitles ? "Subtitulos: ON" : "Subtitulos: OFF";
+        }
+
+        if (narrationAudio != null)
+        {
+            narrationAudio.mute = !v_configuracion.v_audioActivo;
+            narrationAudio.volume = v_configuracion.v_volumenAudio;
+            narrationAudio.pitch = v_configuracion.v_velocidadAudio;
+        }
+
+        if (lseWindowController != null)
+        {
+            if (v_configuracion.v_lseActivo)
+            {
+                lseWindowController.Mostrar("Accesibilidad", "Intérprete LSE activo");
+            }
+            else
+            {
+                lseWindowController.Ocultar();
+            }
+        }
     }
 
     // kguanoluisa, Integracion de ventana flotante LSE con StoryFlow BIAR-25, variable lseWindowController, 2026-06-26
