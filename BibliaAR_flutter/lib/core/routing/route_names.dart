@@ -13,4 +13,5 @@ class RouteNames {
   static const String progress = '/progress';
   static const String teacher = '/teacher';
   static const String teacherNewLesson = '/teacher/lesson/new';
+  static const String doctrinalApproval = '/teacher/doctrinal-approval';
 }

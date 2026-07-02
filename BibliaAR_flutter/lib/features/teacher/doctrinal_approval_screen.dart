@@ -13,11 +13,17 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
   // Sal-B: implementar lógica principal de la estructura inicial del flujo de aprobación doctrinal - 02/07/2026
   bool _isApproved = false;
 
-  void _showApprovalDialog() {
-    showDialog(
+  // Sal-B: integrar la estructura inicial del flujo de aprobación doctrinal con el resto del módulo - 02/07/2026
+  Future<void> _showApprovalDialog() async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (_) => const DoctrinalApprovalDialog(),
     );
+    if (result != null) {
+      setState(() {
+        _isApproved = result;
+      });
+    }
   }
 
   @override

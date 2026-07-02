@@ -12,6 +12,7 @@ import 'package:biblia_ar_flutter/features/settings/settings_screen.dart';
 import 'package:biblia_ar_flutter/features/splash/splash_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/new_lesson_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/teacher_screen.dart';
+import 'package:biblia_ar_flutter/features/teacher/doctrinal_approval_screen.dart';
 import 'package:flutter/material.dart';
 
 // kguanoluisa, Enrutador central con ruta de tramites simplificada a subida de documentos, sin nuevas variables, 2026-07-23
@@ -49,6 +50,8 @@ class AppRouter {
         return RouteTransitions.fadeSlide(const ProgressScreen(), settings);
       case RouteNames.teacher:
         return RouteTransitions.fadeSlide(const TeacherScreen(), settings);
+      case RouteNames.doctrinalApproval:
+        return RouteTransitions.fadeSlide(const DoctrinalApprovalScreen(), settings);
       case RouteNames.teacherNewLesson:
         return RouteTransitions.fadeSlide(const NewLessonScreen(), settings);
       default:
