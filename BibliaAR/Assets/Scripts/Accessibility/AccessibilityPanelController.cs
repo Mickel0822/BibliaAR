@@ -1,52 +1,72 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-// kguanoluisa, Panel de accesibilidad con validacion previa al aplicar cambios, variable v_validador, 2026-07-03
+// kguanoluisa, Ajustes UI/UX del panel de accesibilidad, variables v_fondo v_tituloTexto y v_animacionDuracion, 2026-07-03
 public class AccessibilityPanelController : MonoBehaviour
 {
     [SerializeField] private AccessibilitySettings v_configuracion = new AccessibilitySettings();
+    [SerializeField] private Image v_fondo;
+    [SerializeField] private TextMeshProUGUI v_tituloTexto;
+    [SerializeField] private float v_animacionDuracion = 0.2f;
+    [SerializeField] private Color32 v_colorFondo = new Color32(30, 41, 59, 230);
+
     private readonly AccessibilitySettingsValidator v_validador = new AccessibilitySettingsValidator();
+    private CanvasGroup v_canvasGroup;
+    private Coroutine v_rutinaFade;
 
     public event Action<AccessibilitySettings> OnConfiguracionCambiada;
     public event Action<string> OnErrorValidacion;
 
     public AccessibilitySettings Configuracion => v_configuracion;
 
-    public void EstablecerLse(bool v_activo)
+    private void Awake()
     {
-        v_configuracion.v_lseActivo = v_activo;
-        AplicarSiValido();
+        v_canvasGroup = GetComponent<CanvasGroup>();
+        if (v_canvasGroup == null)
+        {
+            v_canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+
+        if (v_fondo != null)
+        {
+            v_fondo.color = v_colorFondo;
+        }
+
+        if (v_tituloTexto != null)
+        {
+            v_tituloTexto.text = "Accesibilidad";
+        }
     }
 
-    public void EstablecerSubtitulos(bool v_activo)
+    public void MostrarPanel()
     {
-        v_configuracion.v_subtitulosActivos = v_activo;
-        AplicarSiValido();
+        gameObject.SetActive(true);
+        if (v_rutinaFade != null)
+        {
+            StopCoroutine(v_rutinaFade);
+        }
+
+        v_rutinaFade = StartCoroutine(FadePanel(1f));
     }
 
-    public void EstablecerAudio(bool v_activo)
+    public void OcultarPanel()
     {
-        v_configuracion.v_audioActivo = v_activo;
-        AplicarSiValido();
+        if (v_rutinaFade != null)
+        {
+            StopCoroutine(v_rutinaFade);
+        }
+
+        v_rutinaFade = StartCoroutine(FadePanel(0f, true));
     }
 
-    public void EstablecerPictogramas(bool v_activo)
-    {
-        v_configuracion.v_pictogramasActivos = v_activo;
-        AplicarSiValido();
-    }
-
-    public void EstablecerVelocidadAudio(float v_velocidad)
-    {
-        v_configuracion.v_velocidadAudio = Mathf.Clamp(v_velocidad, 0.5f, 2f);
-        AplicarSiValido();
-    }
-
-    public void EstablecerVolumenAudio(float v_volumen)
-    {
-        v_configuracion.v_volumenAudio = Mathf.Clamp01(v_volumen);
-        AplicarSiValido();
-    }
+    public void EstablecerLse(bool v_activo) { v_configuracion.v_lseActivo = v_activo; AplicarSiValido(); }
+    public void EstablecerSubtitulos(bool v_activo) { v_configuracion.v_subtitulosActivos = v_activo; AplicarSiValido(); }
+    public void EstablecerAudio(bool v_activo) { v_configuracion.v_audioActivo = v_activo; AplicarSiValido(); }
+    public void EstablecerPictogramas(bool v_activo) { v_configuracion.v_pictogramasActivos = v_activo; AplicarSiValido(); }
+    public void EstablecerVelocidadAudio(float v_velocidad) { v_configuracion.v_velocidadAudio = Mathf.Clamp(v_velocidad, 0.5f, 2f); AplicarSiValido(); }
+    public void EstablecerVolumenAudio(float v_volumen) { v_configuracion.v_volumenAudio = Mathf.Clamp01(v_volumen); AplicarSiValido(); }
 
     private void AplicarSiValido()
     {
@@ -59,5 +79,26 @@ public class AccessibilityPanelController : MonoBehaviour
         }
 
         OnConfiguracionCambiada?.Invoke(v_configuracion.Clone());
+    }
+
+    private System.Collections.IEnumerator FadePanel(float v_objetivo, bool v_ocultarAlFinal = false)
+    {
+        float v_inicio = v_canvasGroup.alpha;
+        float v_tiempo = 0f;
+
+        while (v_tiempo < v_animacionDuracion)
+        {
+            v_tiempo += Time.deltaTime;
+            v_canvasGroup.alpha = Mathf.Lerp(v_inicio, v_objetivo, v_tiempo / v_animacionDuracion);
+            yield return null;
+        }
+
+        v_canvasGroup.alpha = v_objetivo;
+        if (v_ocultarAlFinal)
+        {
+            gameObject.SetActive(false);
+        }
+
+        v_rutinaFade = null;
     }
 }
