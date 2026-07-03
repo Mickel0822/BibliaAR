@@ -28,21 +28,46 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Sal-B: ajustar UI/UX de la estructura inicial del flujo de aprobación doctrinal - 03/07/2026
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Aprobación Doctrinal'),
+        title: const Text('Panel de Aprobación Doctrinal'),
+        centerTitle: true,
+        elevation: 2,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Estado de Aprobación: ${_isApproved ? "Aprobado" : "Pendiente"}'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _showApprovalDialog,
-              child: const Text('Evaluar Lección'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.verified_user, size: 64, color: Colors.blue),
+                const SizedBox(height: 16),
+                Text(
+                  'Estado de Aprobación: ${_isApproved ? "APROBADO" : "PENDIENTE"}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: _isApproved ? Colors.green : Colors.orange,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: _showApprovalDialog,
+                  icon: const Icon(Icons.rate_review),
+                  label: const Text('Iniciar Evaluación'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
