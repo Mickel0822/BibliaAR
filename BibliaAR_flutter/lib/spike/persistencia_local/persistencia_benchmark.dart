@@ -20,32 +20,53 @@ class PersistenciaBenchmark {
   final List<LocalStorageAdapter> _adapters;
   final int recordCount;
 
+  /// Valida parámetros antes de ejecutar el benchmark.
+  void validate() {
+    if (recordCount <= 0) {
+      throw ArgumentError.value(recordCount, 'recordCount', 'Debe ser mayor a cero');
+    }
+    if (_adapters.isEmpty) {
+      throw StateError('Se requiere al menos un adaptador de almacenamiento');
+    }
+  }
+
   /// Ejecuta el ciclo completo: escritura, lectura y limpieza por adaptador.
   Future<List<BenchmarkResult>> run() async {
+    validate();
     final results = <BenchmarkResult>[];
 
     for (final adapter in _adapters) {
-      await adapter.initialize();
+      try {
+        await adapter.initialize();
 
-      results.add(await _measure(
-        adapter: adapter,
-        operation: 'write',
-        action: () => adapter.writeBatch(recordCount),
-      ));
+        results.add(await _measure(
+          adapter: adapter,
+          operation: 'write',
+          action: () => adapter.writeBatch(recordCount),
+        ));
 
-      results.add(await _measure(
-        adapter: adapter,
-        operation: 'read',
-        action: () => adapter.readAll(),
-      ));
+        results.add(await _measure(
+          adapter: adapter,
+          operation: 'read',
+          action: () => adapter.readAll(),
+        ));
 
-      results.add(await _measure(
-        adapter: adapter,
-        operation: 'delete',
-        action: () => adapter.clear(),
-      ));
-
-      await adapter.dispose();
+        results.add(await _measure(
+          adapter: adapter,
+          operation: 'delete',
+          action: () => adapter.clear(),
+        ));
+      } catch (error) {
+        results.add(BenchmarkResult(
+          storageName: adapter.name,
+          operation: 'error',
+          durationMs: 0,
+          recordCount: recordCount,
+          errorMessage: error.toString(),
+        ));
+      } finally {
+        await adapter.dispose();
+      }
     }
 
     return results;
@@ -57,14 +78,24 @@ class PersistenciaBenchmark {
     required Future<void> Function() action,
   }) async {
     final stopwatch = Stopwatch()..start();
-    await action();
-    stopwatch.stop();
-
-    return BenchmarkResult(
-      storageName: adapter.name,
-      operation: operation,
-      durationMs: stopwatch.elapsedMilliseconds,
-      recordCount: recordCount,
-    );
+    try {
+      await action();
+      stopwatch.stop();
+      return BenchmarkResult(
+        storageName: adapter.name,
+        operation: operation,
+        durationMs: stopwatch.elapsedMilliseconds,
+        recordCount: recordCount,
+      );
+    } catch (error) {
+      stopwatch.stop();
+      return BenchmarkResult(
+        storageName: adapter.name,
+        operation: operation,
+        durationMs: stopwatch.elapsedMilliseconds,
+        recordCount: recordCount,
+        errorMessage: error.toString(),
+      );
+    }
   }
 }

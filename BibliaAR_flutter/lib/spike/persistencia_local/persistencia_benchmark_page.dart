@@ -24,14 +24,19 @@ class _PersistenciaBenchmarkPageState extends State<PersistenciaBenchmarkPage> {
       _results = [];
     });
 
-    final benchmark = PersistenciaBenchmark(recordCount: 50);
-    final results = await benchmark.run();
-
-    if (!mounted) return;
-    setState(() {
-      _results = results;
-      _running = false;
-    });
+    try {
+      final benchmark = PersistenciaBenchmark(recordCount: 50);
+      final results = await benchmark.run();
+      if (!mounted) return;
+      setState(() => _results = results);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error en benchmark: $error')),
+      );
+    } finally {
+      if (mounted) setState(() => _running = false);
+    }
   }
 
   @override

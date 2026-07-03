@@ -17,8 +17,17 @@ class SqfliteStorageAdapter implements LocalStorageAdapter {
   @override
   String get name => 'sqflite';
 
+  Database get _db {
+    final db = _database;
+    if (db == null) {
+      throw StateError('SqfliteStorageAdapter no inicializado. Llame a initialize() primero.');
+    }
+    return db;
+  }
+
   @override
   Future<void> initialize() async {
+    if (_database != null) return;
     final dbPath = await getDatabasesPath();
     final path = p.join(dbPath, databaseName);
     _database = await openDatabase(
@@ -40,7 +49,10 @@ class SqfliteStorageAdapter implements LocalStorageAdapter {
 
   @override
   Future<void> writeBatch(int count) async {
-    final db = _database!;
+    if (count <= 0) {
+      throw ArgumentError.value(count, 'count', 'El lote debe contener al menos un registro');
+    }
+    final db = _db;
     final batch = db.batch();
     final now = DateTime.now().toIso8601String();
     for (var i = 0; i < count; i++) {
@@ -56,12 +68,12 @@ class SqfliteStorageAdapter implements LocalStorageAdapter {
 
   @override
   Future<List<Map<String, dynamic>>> readAll() async {
-    return _database!.query(_table, orderBy: 'id ASC');
+    return _db.query(_table, orderBy: 'id ASC');
   }
 
   @override
   Future<void> clear() async {
-    await _database!.delete(_table);
+    await _db.delete(_table);
   }
 
   @override

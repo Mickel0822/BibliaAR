@@ -19,27 +19,46 @@ class HiveStorageAdapter implements LocalStorageAdapter {
   @override
   String get name => 'hive';
 
+  File get _file {
+    final file = _boxFile;
+    if (file == null) {
+      throw StateError('HiveStorageAdapter no inicializado. Llame a initialize() primero.');
+    }
+    return file;
+  }
+
   @override
   Future<void> initialize() async {
+    if (_boxFile != null) return;
     final dir = await getApplicationDocumentsDirectory();
     _boxFile = File(p.join(dir.path, '$boxName.json'));
-    if (await _boxFile!.exists()) {
-      final content = await _boxFile!.readAsString();
-      if (content.isNotEmpty) {
-        final decoded = jsonDecode(content) as List<dynamic>;
-        _records
-          ..clear()
-          ..addAll(decoded.cast<Map<String, dynamic>>());
+    if (await _file.exists()) {
+      try {
+        final content = await _file.readAsString();
+        if (content.isNotEmpty) {
+          final decoded = jsonDecode(content);
+          if (decoded is! List) {
+            throw FormatException('Formato de caja Hive inválido: se esperaba una lista');
+          }
+          _records
+            ..clear()
+            ..addAll(decoded.cast<Map<String, dynamic>>());
+        }
+      } on FormatException catch (error) {
+        throw FormatException('No se pudo leer la caja $boxName: ${error.message}');
       }
     }
   }
 
   Future<void> _persist() async {
-    await _boxFile!.writeAsString(jsonEncode(_records));
+    await _file.writeAsString(jsonEncode(_records));
   }
 
   @override
   Future<void> writeBatch(int count) async {
+    if (count <= 0) {
+      throw ArgumentError.value(count, 'count', 'El lote debe contener al menos un registro');
+    }
     final now = DateTime.now().toIso8601String();
     for (var i = 0; i < count; i++) {
       _records.add({
