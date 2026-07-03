@@ -34,11 +34,13 @@ public class ImageTrackingController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Registra el listener de cambios en imagenes rastreadas al activarse el componente, sin nuevas variables, 2026-07-03
     private void OnEnable()
     {
         trackedImageManager.trackablesChanged.AddListener(OnTrackedImagesChanged);
     }
 
+    // kguanoluisa, Elimina el listener de tracking al desactivarse el componente, sin nuevas variables, 2026-07-03
     private void OnDisable()
     {
         trackedImageManager.trackablesChanged.RemoveListener(OnTrackedImagesChanged);
