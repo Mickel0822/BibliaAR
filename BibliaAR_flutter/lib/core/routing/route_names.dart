@@ -13,4 +13,6 @@ class RouteNames {
   static const String progress = '/progress';
   static const String teacher = '/teacher';
   static const String teacherNewLesson = '/teacher/lesson/new';
+  /// Ruta del spike técnico sqflite vs Hive (Sprint 2).
+  static const String persistenciaBenchmark = '/dev/persistencia-benchmark';
 }
