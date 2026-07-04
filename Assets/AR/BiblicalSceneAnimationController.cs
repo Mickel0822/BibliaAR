@@ -23,6 +23,7 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     private Vector3 initialLocalPosition;
     private Quaternion initialLocalRotation;
 
+    // kguanoluisa, Cachea referencias de personajes y guarda la pose inicial de la escena, sin nuevas variables, 2026-07-04
     private void Awake()
     {
         CacheSceneReferences();
@@ -38,6 +39,7 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     /// Starts the biblical scene from the beginning. If a previous pass is still running,
     /// it is stopped first so the marker can restart the same synchronized 10-second loop.
     /// </summary>
+    // kguanoluisa, Reinicia la animacion sincronizada al detectar nuevamente el marcador QR, sin nuevas variables, 2026-07-04
     public void PlayFromStart()
     {
         if (!isActiveAndEnabled)
@@ -55,6 +57,7 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     /// Stops the running sequence, returns the root content to its tracked-image pose,
     /// and places every character back into its idle state.
     /// </summary>
+    // kguanoluisa, Detiene corrutinas y restaura pose al perder visibilidad del marcador, sin nuevas variables, 2026-07-16
     public void StopSceneAnimation()
     {
         if (animationRoutine != null)
@@ -85,6 +88,7 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         transform.localRotation = initialLocalRotation;
     }
 
+    // kguanoluisa, Ejecuta el bucle principal de la animacion de escena con duracion minima configurable, sin nuevas variables, 2026-07-16
     private IEnumerator SceneAnimationRoutine()
     {
         do
