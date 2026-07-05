@@ -6,6 +6,8 @@ El proyecto esta pensado para Android con ARCore. Para probar la experiencia AR 
 
 ## Requisitos
 
+<!-- BIAR-14 | Desarrollador: Tnte Bayas Cristian | Subtarea: Documentar pasos de instalacion -->
+
 - Unity `6000.5.0f1`.
 - Android Build Support instalado desde Unity Hub.
 - SDK, NDK y OpenJDK instalados desde Unity Hub.
@@ -30,6 +32,8 @@ git lfs pull
 Despues de eso, abrir la carpeta `BibliaAR` desde Unity Hub con Unity `6000.5.0f1`.
 
 ## Estructura importante
+
+<!-- BIAR-12 | Desarrollador: Tnte Bayas Cristian | Subtarea: Crear estructura de carpetas (Scenes, Scripts, Prefabs, Models, Audio, UI, Resources, AR, Editor) -->
 
 - `Assets/`: escenas, scripts, modelos, prefabs, texturas y recursos del proyecto.
 - `Assets/AR/`: scripts relacionados con tracking AR.
