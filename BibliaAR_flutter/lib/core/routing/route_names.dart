@@ -15,4 +15,6 @@ class RouteNames {
   static const String teacherNewLesson = '/teacher/lesson/new';
   /// Ruta del spike técnico sqflite vs Hive (Sprint 2).
   static const String persistenciaBenchmark = '/dev/persistencia-benchmark';
+  /// Historial de actividades del perfil activo (BIAR-44).
+  static const String historialActividades = '/profiles/historial';
 }

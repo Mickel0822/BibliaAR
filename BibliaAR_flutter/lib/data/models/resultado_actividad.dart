@@ -1,3 +1,7 @@
+/// Resultado de un intento sobre una actividad educativa (BIAR-44).
+///
+/// Modelo persistido en `resultados_actividad`; el historial del perfil
+/// lo proyecta como [HistorialActividadEntry] con título legible.
 class ResultadoActividad {
   const ResultadoActividad({
     this.id,
