@@ -19,6 +19,8 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
       context: context,
       builder: (_) => const DoctrinalApprovalDialog(),
     );
+    // Sal-B: corregir bug detectado en pruebas de la estructura inicial del flujo de aprobación doctrinal - 06/07/2026
+    if (!mounted) return;
     if (result != null) {
       setState(() {
         _isApproved = result;
