@@ -14,6 +14,7 @@ class _DoctrinalApprovalDialogState extends State<DoctrinalApprovalDialog> {
 
   @override
   void dispose() {
+    // Sal-B: optimizar rendimiento de la estructura inicial del flujo de aprobación doctrinal - 06/07/2026
     _commentController.dispose();
     super.dispose();
   }
