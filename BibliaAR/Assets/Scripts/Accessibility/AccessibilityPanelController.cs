@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// kguanoluisa, Correccion de sincronizacion de toggles con StoryFlow, variable v_configuracionAplicada, 2026-07-06
+// kguanoluisa, Optimizacion de rendimiento del panel de accesibilidad, variables v_requiereNotificar y v_cacheHash, 2026-07-06
 public class AccessibilityPanelController : MonoBehaviour
 {
     [SerializeField] private AccessibilitySettings v_configuracion = new AccessibilitySettings();
@@ -16,6 +16,7 @@ public class AccessibilityPanelController : MonoBehaviour
     private AccessibilitySettings v_configuracionAplicada;
     private CanvasGroup v_canvasGroup;
     private Coroutine v_rutinaFade;
+    private int v_cacheHash;
 
     public event Action<AccessibilitySettings> OnConfiguracionCambiada;
     public event Action<string> OnErrorValidacion;
@@ -24,23 +25,12 @@ public class AccessibilityPanelController : MonoBehaviour
 
     private void Awake()
     {
-        v_canvasGroup = GetComponent<CanvasGroup>();
-        if (v_canvasGroup == null)
-        {
-            v_canvasGroup = gameObject.AddComponent<CanvasGroup>();
-        }
-
+        v_canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
         v_configuracionAplicada = v_configuracion.Clone();
+        v_cacheHash = CalcularHash(v_configuracionAplicada);
 
-        if (v_fondo != null)
-        {
-            v_fondo.color = v_colorFondo;
-        }
-
-        if (v_tituloTexto != null)
-        {
-            v_tituloTexto.text = "Accesibilidad";
-        }
+        if (v_fondo != null) v_fondo.color = v_colorFondo;
+        if (v_tituloTexto != null) v_tituloTexto.text = "Accesibilidad";
     }
 
     public void MostrarPanel()
@@ -68,14 +58,35 @@ public class AccessibilityPanelController : MonoBehaviour
         if (!v_validador.Validar(v_configuracion))
         {
             v_configuracion = v_configuracionAplicada.Clone();
-            string v_mensaje = string.Join("; ", v_validador.Errores);
-            OnErrorValidacion?.Invoke(v_mensaje);
-            Debug.LogWarning($"[AccessibilityPanelController] {v_mensaje}");
+            OnErrorValidacion?.Invoke(string.Join("; ", v_validador.Errores));
             return;
         }
 
+        int v_nuevoHash = CalcularHash(v_configuracion);
+        if (v_nuevoHash == v_cacheHash)
+        {
+            return;
+        }
+
+        v_cacheHash = v_nuevoHash;
         v_configuracionAplicada = v_configuracion.Clone();
         OnConfiguracionCambiada?.Invoke(v_configuracionAplicada.Clone());
+    }
+
+    private static int CalcularHash(AccessibilitySettings v_cfg)
+    {
+        if (v_cfg == null) return 0;
+        unchecked
+        {
+            int v_hash = 17;
+            v_hash = v_hash * 31 + v_cfg.v_lseActivo.GetHashCode();
+            v_hash = v_hash * 31 + v_cfg.v_subtitulosActivos.GetHashCode();
+            v_hash = v_hash * 31 + v_cfg.v_audioActivo.GetHashCode();
+            v_hash = v_hash * 31 + v_cfg.v_pictogramasActivos.GetHashCode();
+            v_hash = v_hash * 31 + v_cfg.v_velocidadAudio.GetHashCode();
+            v_hash = v_hash * 31 + v_cfg.v_volumenAudio.GetHashCode();
+            return v_hash;
+        }
     }
 
     private System.Collections.IEnumerator FadePanel(float v_objetivo, bool v_ocultarAlFinal = false)
