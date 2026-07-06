@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// kguanoluisa, Ajustes UI/UX del panel de accesibilidad, variables v_fondo v_tituloTexto y v_animacionDuracion, 2026-07-03
+// kguanoluisa, Correccion de sincronizacion de toggles con StoryFlow, variable v_configuracionAplicada, 2026-07-06
 public class AccessibilityPanelController : MonoBehaviour
 {
     [SerializeField] private AccessibilitySettings v_configuracion = new AccessibilitySettings();
@@ -13,6 +13,7 @@ public class AccessibilityPanelController : MonoBehaviour
     [SerializeField] private Color32 v_colorFondo = new Color32(30, 41, 59, 230);
 
     private readonly AccessibilitySettingsValidator v_validador = new AccessibilitySettingsValidator();
+    private AccessibilitySettings v_configuracionAplicada;
     private CanvasGroup v_canvasGroup;
     private Coroutine v_rutinaFade;
 
@@ -29,6 +30,8 @@ public class AccessibilityPanelController : MonoBehaviour
             v_canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 
+        v_configuracionAplicada = v_configuracion.Clone();
+
         if (v_fondo != null)
         {
             v_fondo.color = v_colorFondo;
@@ -43,21 +46,13 @@ public class AccessibilityPanelController : MonoBehaviour
     public void MostrarPanel()
     {
         gameObject.SetActive(true);
-        if (v_rutinaFade != null)
-        {
-            StopCoroutine(v_rutinaFade);
-        }
-
+        if (v_rutinaFade != null) StopCoroutine(v_rutinaFade);
         v_rutinaFade = StartCoroutine(FadePanel(1f));
     }
 
     public void OcultarPanel()
     {
-        if (v_rutinaFade != null)
-        {
-            StopCoroutine(v_rutinaFade);
-        }
-
+        if (v_rutinaFade != null) StopCoroutine(v_rutinaFade);
         v_rutinaFade = StartCoroutine(FadePanel(0f, true));
     }
 
@@ -72,13 +67,15 @@ public class AccessibilityPanelController : MonoBehaviour
     {
         if (!v_validador.Validar(v_configuracion))
         {
+            v_configuracion = v_configuracionAplicada.Clone();
             string v_mensaje = string.Join("; ", v_validador.Errores);
             OnErrorValidacion?.Invoke(v_mensaje);
             Debug.LogWarning($"[AccessibilityPanelController] {v_mensaje}");
             return;
         }
 
-        OnConfiguracionCambiada?.Invoke(v_configuracion.Clone());
+        v_configuracionAplicada = v_configuracion.Clone();
+        OnConfiguracionCambiada?.Invoke(v_configuracionAplicada.Clone());
     }
 
     private System.Collections.IEnumerator FadePanel(float v_objetivo, bool v_ocultarAlFinal = false)
@@ -94,11 +91,7 @@ public class AccessibilityPanelController : MonoBehaviour
         }
 
         v_canvasGroup.alpha = v_objetivo;
-        if (v_ocultarAlFinal)
-        {
-            gameObject.SetActive(false);
-        }
-
+        if (v_ocultarAlFinal) gameObject.SetActive(false);
         v_rutinaFade = null;
     }
 }
