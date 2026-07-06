@@ -75,3 +75,5 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
     );
   }
 }
+
+// Sal-B: aplicar comentarios de revisión cruzada en la estructura inicial del flujo de aprobación doctrinal - 06/07/2026
