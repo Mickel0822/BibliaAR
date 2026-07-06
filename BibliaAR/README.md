@@ -5,6 +5,15 @@ BibliaAR es una aplicacion movil de realidad aumentada hecha en Unity para prese
 El proyecto esta pensado para Android con ARCore. Para probar la experiencia AR real se debe usar un celular compatible con ARCore; el emulador no es una prueba confiable para camara y tracking AR.
 
 
+
+## Panel de accesibilidad
+
+<!-- kguanoluisa, Documentacion del panel de configuracion de accesibilidad, sin nuevas variables, 2026-07-02 -->
+
+- Script AccessibilityPanelController.cs: toggles de LSE, subtitulos, audio y pictogramas.
+- Script AccessibilitySettingsValidator.cs: valida rangos y estados del panel.
+- Recurso Assets/Resources/Accessibility/default_settings.json: valores por defecto.
+
 ## Guia de instalacion interactiva (BIAR-15)
 
 <!-- kguanoluisa, Documentacion del modulo de guia de instalacion BIAR-15, sin nuevas variables, 2026-06-24 -->
