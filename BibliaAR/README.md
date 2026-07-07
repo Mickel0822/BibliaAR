@@ -6,6 +6,16 @@ El proyecto esta pensado para Android con ARCore. Para probar la experiencia AR 
 
 
 
+
+## Empaquetado offline
+
+<!-- kguanoluisa, Documentacion del empaquetado offline de la aplicacion, sin nuevas variables, 2026-07-07 -->
+
+- Menu Unity: Tools > AR Samaritano > Empaquetado Offline.
+- Script OfflinePackager.cs: copia recursos a StreamingAssets/Offline.
+- Script OfflinePackageManifest.cs: manifiesto del paquete offline.
+- Recurso Assets/Resources/Offline/package_manifest.json: metadatos del paquete.
+
 ## Panel de accesibilidad
 
 <!-- kguanoluisa, Documentacion del panel de configuracion de accesibilidad, sin nuevas variables, 2026-07-02 -->
