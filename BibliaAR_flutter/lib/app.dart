@@ -3,6 +3,7 @@ import 'package:biblia_ar_flutter/core/constants/app_constants.dart';
 import 'package:biblia_ar_flutter/core/di/repository_provider.dart';
 import 'package:biblia_ar_flutter/core/routing/app_router.dart';
 import 'package:biblia_ar_flutter/core/routing/route_names.dart';
+import 'package:biblia_ar_flutter/core/session/usage_timer_service.dart';
 import 'package:biblia_ar_flutter/features/auth/auth_provider.dart';
 import 'package:biblia_ar_flutter/features/activities/actividad_provider.dart';
 import 'package:biblia_ar_flutter/features/lesson/leccion_provider.dart';
@@ -72,6 +73,7 @@ class BiarApp extends StatelessWidget {
           historialRepository: repos.historialActividadRepository,
         ),
       ),
+      ChangeNotifierProvider(create: (_) => UsageTimerService()),
     ];
   }
 }

@@ -3,6 +3,7 @@ import 'package:biblia_ar_flutter/core/accessibility/biar_pictogram_icons.dart';
 import 'package:biblia_ar_flutter/core/accessibility/biar_theme.dart';
 import 'package:biblia_ar_flutter/core/di/repository_provider.dart';
 import 'package:biblia_ar_flutter/core/routing/route_names.dart';
+import 'package:biblia_ar_flutter/core/session/usage_timer_service.dart';
 import 'package:biblia_ar_flutter/data/models/progreso.dart';
 import 'package:biblia_ar_flutter/data/models/tipo_usuario.dart';
 import 'package:biblia_ar_flutter/features/auth/auth_provider.dart';
@@ -12,6 +13,7 @@ import 'package:biblia_ar_flutter/features/profiles/perfil_provider.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_menu_card.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
 import 'package:biblia_ar_flutter/shared/widgets/lesson_card.dart';
+import 'package:biblia_ar_flutter/shared/widgets/usage_alert_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,12 +25,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   List<Progreso> vProgresos = [];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    context.read<UsageTimerService>().start();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final perfil = context.read<PerfilProvider>().vPerfilActivo;
       if (perfil?.id != null) {
@@ -49,7 +53,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final timer = context.read<UsageTimerService>();
+    if (state == AppLifecycleState.paused) {
+      timer.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      timer.resume();
+    }
   }
 
   Future<void> _cerrarSesion() async {
@@ -67,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final rolLabel = esDocente ? 'Docente' : 'Niño';
     final leccionProvider = context.watch<LeccionProvider>();
 
-    return Scaffold(
+    return UsageAlertListener(
+      child: Scaffold(
         appBar: AppBar(
           title: Text('Hola, ${perfil?.nombre ?? 'Usuario'}'),
           actions: [
@@ -197,6 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
+      ),
     );
   }
 }
