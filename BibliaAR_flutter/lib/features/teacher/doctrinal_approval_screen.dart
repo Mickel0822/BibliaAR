@@ -28,6 +28,15 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
     }
   }
 
+  // Sal-B: refactorizar código de la estructura inicial del flujo de aprobación doctrinal - 07/07/2026
+  Widget _buildStatusIcon() {
+    return Icon(
+      _isApproved ? Icons.verified : Icons.warning_amber_rounded,
+      size: 64,
+      color: _isApproved ? Colors.green : Colors.orange,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Sal-B: ajustar UI/UX de la estructura inicial del flujo de aprobación doctrinal - 03/07/2026
@@ -48,7 +57,7 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.verified_user, size: 64, color: Colors.blue),
+                _buildStatusIcon(),
                 const SizedBox(height: 16),
                 Text(
                   'Estado de Aprobación: ${_isApproved ? "APROBADO" : "PENDIENTE"}',
@@ -75,5 +84,4 @@ class _DoctrinalApprovalScreenState extends State<DoctrinalApprovalScreen> {
     );
   }
 }
-
 // Sal-B: aplicar comentarios de revisión cruzada en la estructura inicial del flujo de aprobación doctrinal - 06/07/2026
