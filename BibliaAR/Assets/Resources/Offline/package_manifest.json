@@ -1,0 +1,11 @@
+{
+  "v_version": "1.0.0",
+  "v_escenaPrincipal": "SampleScene",
+  "v_fechaGeneracion": "",
+  "v_recursos": [
+    "default_settings.json",
+    "install_steps.json",
+    "package_manifest.json"
+  ],
+  "v_tamanoBytes": 0
+}
