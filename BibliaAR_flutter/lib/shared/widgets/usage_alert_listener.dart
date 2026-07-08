@@ -48,11 +48,13 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
+          icon: const Icon(Icons.visibility_outlined, size: 40),
           title: const Text('Tiempo de descanso'),
           content: Text(
             'Has usado la app durante ${AppConstants.usageAlertMinutes} minutos. '
-            'Te recomendamos descansar la vista.',
+            'Te recomendamos descansar la vista y parpadear con frecuencia.',
           ),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
             TextButton(
               onPressed: () {
@@ -63,14 +65,15 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
                   (_) => false,
                 );
               },
-              child: const Text('Salir'),
+              child: const Text('Salir de la app'),
             ),
-            FilledButton(
+            FilledButton.icon(
               onPressed: () {
                 context.read<UsageTimerService>().reset();
                 Navigator.pop(context);
               },
-              child: const Text('Continuar'),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Seguir aprendiendo'),
             ),
           ],
         );
