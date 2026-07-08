@@ -16,6 +16,12 @@ public class AccessibilityManager : MonoBehaviour
         }
     }
 
+    // Sal-B: Integrar el refinamiento de controles WCAG 2.1 AA con el resto del módulo - 08/07/2026
+    private void Start()
+    {
+        ApplyAccessibilitySettings();
+    }
+
     private void SetHighContrastColors()
     {
         // Change colors to high contrast
