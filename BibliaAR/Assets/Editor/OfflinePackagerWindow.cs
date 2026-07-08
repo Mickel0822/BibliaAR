@@ -3,11 +3,12 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-// kguanoluisa, Ventana de editor para empaquetado offline integrada al modulo, variables v_packager y v_rutasRecursos, 2026-07-07
+// kguanoluisa, Ventana de empaquetado offline con validaciones y errores, variables v_packager y v_mensajeEstado, 2026-07-08
 public class OfflinePackagerWindow : EditorWindow
 {
     private OfflinePackager v_packager;
     private string v_rutasRecursos = "Assets/Resources/Accessibility/default_settings.json";
+    private string v_mensajeEstado = string.Empty;
 
     [MenuItem("Tools/AR Samaritano/Empaquetado Offline")]
     public static void ShowWindow()
@@ -25,6 +26,12 @@ public class OfflinePackagerWindow : EditorWindow
         if (GUILayout.Button("Generar paquete offline"))
         {
             GenerarPaquete();
+        }
+
+        if (!string.IsNullOrEmpty(v_mensajeEstado))
+        {
+            MessageType v_tipo = v_mensajeEstado.StartsWith("OK") ? MessageType.Info : MessageType.Warning;
+            EditorGUILayout.HelpBox(v_mensajeEstado, v_tipo);
         }
     }
 
@@ -47,9 +54,9 @@ public class OfflinePackagerWindow : EditorWindow
         }
 
         bool v_ok = v_packager.EmpaquetarRecursos(v_rutas);
-        v_packager.Manifiesto.MarcarGenerado();
+        v_mensajeEstado = v_ok ? "OK: paquete offline generado." : $"Error: {v_packager.UltimoError}";
 
-        EditorUtility.DisplayDialog("Empaquetado offline", v_ok ? "Paquete generado correctamente." : "No se empaquetaron recursos.", v_ok ? "OK" : "Advertencia");
+        EditorUtility.DisplayDialog("Empaquetado offline", v_mensajeEstado, "OK");
         AssetDatabase.Refresh();
     }
 }

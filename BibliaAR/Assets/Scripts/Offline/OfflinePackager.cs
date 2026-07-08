@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-// kguanoluisa, Logica principal del empaquetado offline, variables v_rutaDestino v_manifiesto y v_extensionesPermitidas, 2026-07-07
+// kguanoluisa, Empaquetador offline con validaciones previas, variables v_validador y v_manifiesto, 2026-07-08
 public class OfflinePackager : MonoBehaviour
 {
     [SerializeField] private OfflinePackageManifest v_manifiesto = new OfflinePackageManifest();
     [SerializeField] private string v_rutaDestino = "StreamingAssets/Offline";
     [SerializeField] private string[] v_extensionesPermitidas = { ".json", ".png", ".mp3", ".mp4", ".prefab" };
 
+    private readonly OfflinePackageValidator v_validador = new OfflinePackageValidator();
+
     public OfflinePackageManifest Manifiesto => v_manifiesto;
+    public string UltimoError { get; private set; } = string.Empty;
 
     public bool EmpaquetarRecursos(IEnumerable<string> v_rutasRecursos)
     {
+        UltimoError = string.Empty;
+
+        if (!v_validador.ValidarRutaDestino(v_rutaDestino))
+        {
+            UltimoError = string.Join("; ", v_validador.Errores);
+            Debug.LogError($"[OfflinePackager] {UltimoError}");
+            return false;
+        }
+
         v_manifiesto.v_recursos.Clear();
         v_manifiesto.v_tamanoBytes = 0;
 
@@ -22,8 +34,15 @@ public class OfflinePackager : MonoBehaviour
 
         foreach (string v_ruta in v_rutasRecursos)
         {
-            if (string.IsNullOrWhiteSpace(v_ruta) || !File.Exists(v_ruta))
+            if (string.IsNullOrWhiteSpace(v_ruta))
             {
+                continue;
+            }
+
+            if (!File.Exists(v_ruta))
+            {
+                UltimoError = $"Archivo no encontrado: {v_ruta}";
+                Debug.LogWarning($"[OfflinePackager] {UltimoError}");
                 continue;
             }
 
@@ -40,6 +59,15 @@ public class OfflinePackager : MonoBehaviour
             FileInfo v_info = new FileInfo(v_destinoArchivo);
             v_manifiesto.v_recursos.Add(v_nombreArchivo);
             v_manifiesto.v_tamanoBytes += v_info.Length;
+        }
+
+        v_manifiesto.MarcarGenerado();
+
+        if (!v_validador.ValidarManifiesto(v_manifiesto))
+        {
+            UltimoError = string.Join("; ", v_validador.Errores);
+            Debug.LogError($"[OfflinePackager] {UltimoError}");
+            return false;
         }
 
         return v_manifiesto.v_recursos.Count > 0;
