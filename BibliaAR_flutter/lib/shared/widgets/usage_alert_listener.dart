@@ -31,8 +31,9 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
   }
 
   void _evaluarAlerta() {
+    if (!mounted) return;
     final timer = context.read<UsageTimerService>();
-    if (!timer.shouldShowAlert || !mounted) {
+    if (!timer.shouldShowAlert) {
       return;
     }
     timer.markAlertShown();
@@ -40,7 +41,9 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
   }
 
   Future<void> _mostrarDialogo() async {
-    await showDialog<void>(
+    if (!mounted) return;
+    try {
+      await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) {
@@ -73,6 +76,9 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
         );
       },
     );
+    } catch (_) {
+      // Evita fallo silencioso si el contexto dejó de estar montado.
+    }
   }
 
   @override

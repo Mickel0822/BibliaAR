@@ -24,14 +24,18 @@ class UsageTimerService extends ChangeNotifier {
 
   /// Inicia el temporizador periódico de un segundo.
   void start() {
+    if (_timer != null && _timer!.isActive) {
+      return;
+    }
     _timer?.cancel();
     vIsPaused = false;
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (!vIsPaused) {
-        vElapsedSeconds++;
-        notifyListeners();
-      }
-    });
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
+  }
+
+  void _tick() {
+    if (vIsPaused) return;
+    vElapsedSeconds++;
+    notifyListeners();
   }
 
   /// Pausa el contador cuando la app pasa a segundo plano.
@@ -55,6 +59,9 @@ class UsageTimerService extends ChangeNotifier {
 
   /// Reinicia contador y estado de alerta para un nuevo ciclo de uso.
   void reset() {
+    if (vElapsedSeconds < 0) {
+      throw StateError('El contador de uso no puede ser negativo');
+    }
     vElapsedSeconds = 0;
     vAlertShown = false;
     vIsPaused = false;
