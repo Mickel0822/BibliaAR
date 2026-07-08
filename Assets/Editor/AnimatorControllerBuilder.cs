@@ -54,6 +54,7 @@ public class AnimatorControllerBuilder : EditorWindow
         }
     }
 
+    // kguanoluisa, Genera el Animator Controller Idle/Walk con transiciones por IsWalking, sin nuevas variables, 2026-07-08
     private void CreateController()
     {
         string path = AssetDatabase.GenerateUniqueAssetPath($"Assets/{controllerName}.controller");
