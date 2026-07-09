@@ -1,5 +1,6 @@
 // Sal-B: Crear estructura base del refinamiento de controles WCAG 2.1 AA - 08/07/2026
 using UnityEngine;
+using TMPro;
 
 public class AccessibilityManager : MonoBehaviour
 {
@@ -22,8 +23,20 @@ public class AccessibilityManager : MonoBehaviour
         ApplyAccessibilitySettings();
     }
 
+    // Sal-B: Agregar validaciones y manejo de errores en el refinamiento de controles WCAG 2.1 AA - 09/07/2026
     private void SetHighContrastColors()
     {
-        // Change colors to high contrast
+        try
+        {
+            var texts = FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var txt in texts)
+            {
+                if (txt != null) txt.color = Color.white;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[AccessibilityManager] Error applying contrast: {ex.Message}");
+        }
     }
 }
