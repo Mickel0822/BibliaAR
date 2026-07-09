@@ -1,18 +1,14 @@
 using UnityEngine;
 
 /// <summary>
-/// Responsable: Teniente.
-/// Controla las animaciones básicas (Idle / Walk) de un personaje de la escena AR
-/// (Samaritano, Hombre Herido o Asno).
+/// Exposes simple animation commands for each character in the AR biblical scene.
+/// The scene-level controller uses these commands to keep Samaritano, Hombre Herido
+/// and the companion props synchronized during the marker-triggered animation.
 ///
-/// Colocar este script en el GameObject raíz de cada personaje, que debe tener
-/// un componente Animator con un Animator Controller que contenga:
-///   - Estado "Idle" (por defecto)
-///   - Estado "Walk"
-///   - Parámetro bool "IsWalking" controlando la transición entre ambos.
-///
-/// El Animator Controller puede generarse automáticamente con la herramienta
-/// de editor: Tools > AR Samaritano > Crear Animator Idle-Walk.
+/// Expected Animator setup:
+/// - Default state: "Idle"
+/// - Motion state: "Walk"
+/// - Bool parameter: "IsWalking"
 /// </summary>
 [RequireComponent(typeof(Animator))]
 public class CharacterAnimationController : MonoBehaviour
@@ -20,23 +16,61 @@ public class CharacterAnimationController : MonoBehaviour
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
 
     private Animator animator;
+    private bool hasWalkingParameter;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        hasWalkingParameter = HasBoolParameter(animator, IsWalkingHash);
     }
 
-    /// <summary>Reproduce la animación de reposo (Idle). Estado por defecto del personaje.</summary>
+    /// <summary>
+    /// Returns the character to the idle pose used before and after the 10-second scene pass.
+    /// </summary>
     public void PlayIdle()
     {
-        if (animator == null) return;
-        animator.SetBool(IsWalkingHash, false);
+        if (animator == null)
+        {
+            return;
+        }
+
+        if (hasWalkingParameter)
+        {
+            animator.SetBool(IsWalkingHash, false);
+        }
     }
 
-    /// <summary>Reproduce la animación de caminar (Walk).</summary>
+    /// <summary>
+    /// Activates the movement state while the biblical scene animation is running.
+    /// </summary>
     public void PlayWalk()
     {
-        if (animator == null) return;
-        animator.SetBool(IsWalkingHash, true);
+        if (animator == null)
+        {
+            return;
+        }
+
+        if (hasWalkingParameter)
+        {
+            animator.SetBool(IsWalkingHash, true);
+        }
+    }
+
+    private static bool HasBoolParameter(Animator targetAnimator, int parameterHash)
+    {
+        if (targetAnimator == null)
+        {
+            return false;
+        }
+
+        foreach (AnimatorControllerParameter parameter in targetAnimator.parameters)
+        {
+            if (parameter.type == AnimatorControllerParameterType.Bool && parameter.nameHash == parameterHash)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
