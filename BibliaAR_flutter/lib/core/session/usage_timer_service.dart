@@ -35,7 +35,13 @@ class UsageTimerService extends ChangeNotifier {
   void _tick() {
     if (vIsPaused) return;
     vElapsedSeconds++;
-    notifyListeners();
+    final threshold = AppConstants.usageAlertMinutes * 60;
+    // Notifica solo cerca del umbral o cada 30 s para reducir rebuilds.
+    if (vElapsedSeconds >= threshold - 30 ||
+        vElapsedSeconds % 30 == 0 ||
+        vElapsedSeconds >= threshold) {
+      notifyListeners();
+    }
   }
 
   /// Pausa el contador cuando la app pasa a segundo plano.
