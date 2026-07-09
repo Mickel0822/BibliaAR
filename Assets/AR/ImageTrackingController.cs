@@ -135,6 +135,8 @@ public class ImageTrackingController : MonoBehaviour
     /// Ensures the runtime AR content has the BIAR-24 scene animator. The prefab can stay focused
     /// on visual assets while the tracking controller attaches the behavior needed for marker playback.
     /// </summary>
+    // kguanoluisa, Adjunta el controlador de animacion BIAR-24 al contenido instanciado en runtime, sin nuevas variables, 2026-07-09
+    // nayarbP, Adjunta el controlador de animacion BIAR-24 al contenido instanciado en runtime, sin nuevas variables, 2026-07-09
     private BiblicalSceneAnimationController EnsureSceneAnimationController(GameObject content)
     {
         BiblicalSceneAnimationController controller = content.GetComponent<BiblicalSceneAnimationController>();
@@ -168,6 +170,8 @@ public class ImageTrackingController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Detiene la animacion y oculta renderers cuando se pierde el tracking del QR, sin nuevas variables, 2026-07-09
+    // nayarbP, Detiene la animacion y oculta renderers cuando se pierde el tracking del QR, sin nuevas variables, 2026-07-09
     private void SetCurrentContentVisible(bool visible)
     {
         if (currentContent == null)
