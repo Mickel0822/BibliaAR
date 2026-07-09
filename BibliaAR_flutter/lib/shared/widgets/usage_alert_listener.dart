@@ -18,6 +18,8 @@ class UsageAlertListener extends StatefulWidget {
 }
 
 class _UsageAlertListenerState extends State<UsageAlertListener> {
+  bool _dialogVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,7 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
   }
 
   void _evaluarAlerta() {
-    if (!mounted) return;
+    if (!mounted || _dialogVisible) return;
     final timer = context.read<UsageTimerService>();
     if (!timer.shouldShowAlert) {
       return;
@@ -41,7 +43,8 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
   }
 
   Future<void> _mostrarDialogo() async {
-    if (!mounted) return;
+    if (!mounted || _dialogVisible) return;
+    _dialogVisible = true;
     try {
       await showDialog<void>(
       context: context,
@@ -81,6 +84,8 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
     );
     } catch (_) {
       // Evita fallo silencioso si el contexto dejó de estar montado.
+    } finally {
+      _dialogVisible = false;
     }
   }
 
