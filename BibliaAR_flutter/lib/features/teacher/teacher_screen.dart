@@ -13,6 +13,7 @@ import 'package:biblia_ar_flutter/shared/widgets/biar_loading_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/lesson_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:biblia_ar_flutter/features/teacher/providers/teacher_panel_provider.dart';
 
 // kguanoluisa, Panel docente con tabs de lecciones y seguimiento de ninos, sin nuevas variables, 2026-07-23
 class TeacherScreen extends StatefulWidget {
@@ -33,6 +34,11 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
   void initState() {
     super.initState();
     vTabController = TabController(length: 2, vsync: this);
+    vTabController.addListener(() {
+      if (!vTabController.indexIsChanging) {
+        context.read<TeacherPanelProvider>().cambiarTab(vTabController.index);
+      }
+    });
     vTabController.addListener(() => setState(() {}));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LeccionProvider>().cargarLeccionesBiblicas();
@@ -92,7 +98,7 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Panel docente'),
+        title: Text(context.watch<TeacherPanelProvider>().vTituloPanel),
         bottom: TabBar(
           controller: vTabController,
           tabs: const [
