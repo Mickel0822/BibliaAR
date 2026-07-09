@@ -39,4 +39,11 @@ public class AccessibilityManager : MonoBehaviour
             Debug.LogError($"[AccessibilityManager] Error applying contrast: {ex.Message}");
         }
     }
+
+    // Sal-B: Ajustar UI/UX del refinamiento de controles WCAG 2.1 AA - 09/07/2026
+    public void ToggleHighContrast(bool enabled)
+    {
+        highContrastEnabled = enabled;
+        ApplyAccessibilitySettings();
+    }
 }
