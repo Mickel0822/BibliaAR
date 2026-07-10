@@ -46,4 +46,11 @@ public class AccessibilityManager : MonoBehaviour
         highContrastEnabled = enabled;
         ApplyAccessibilitySettings();
     }
+
+    // Sal-B: Corregir bug detectado en pruebas del refinamiento de controles WCAG 2.1 AA - 10/07/2026
+    public void SafeToggleContrast(bool enabled)
+    {
+        if (this == null) return;
+        ToggleHighContrast(enabled);
+    }
 }
