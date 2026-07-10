@@ -10,6 +10,7 @@ import 'package:biblia_ar_flutter/features/lesson/leccion_provider.dart';
 import 'package:biblia_ar_flutter/features/teacher/lesson_detail_screen.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_empty_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_loading_view.dart';
+import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
 import 'package:biblia_ar_flutter/shared/widgets/lesson_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -139,7 +140,19 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
       );
     }
 
-    return ListView.separated(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(BiarSpacing.md, BiarSpacing.md, BiarSpacing.md, 0),
+          child: BiarSectionHeader(
+            vTitulo: 'Lecciones biblicas',
+            vSubtitulo: 'Contenido disponible para tus estudiantes',
+            vIcono: Icons.auto_stories,
+          ),
+        ),
+        Expanded(
+          child: ListView.separated(
       padding: const EdgeInsets.all(BiarSpacing.md),
       itemCount: leccionProvider.vLeccionesBiblicas.length,
       separatorBuilder: (_, __) => const SizedBox(height: BiarSpacing.sm),
@@ -151,7 +164,13 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
           vIcono: BiarPictogramIcons.iconoPara(leccion.pictograma),
           onTap: () => _abrirDetalleLeccion(leccion),
         );
-      },
+      },          ),
+        ),
+      ],
+    );
+  }
+
+
     );
   }
 
