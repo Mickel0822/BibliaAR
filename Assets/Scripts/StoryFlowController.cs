@@ -109,6 +109,7 @@ public class StoryFlowController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Reacciona al evento de deteccion QR para iniciar la transicion a controles, sin nuevas variables, 2026-07-10
     private void OnQrDetected(ARTrackedImage trackedImage)
     {
         if (qrDetected && !storyStarted && !quizStarted)
@@ -285,6 +286,7 @@ public class StoryFlowController : MonoBehaviour
         return Mathf.Max(lineCount * fallbackSecondsPerSubtitle, 1f);
     }
 
+    // kguanoluisa, Construye dinamicamente los paneles de escaneo, controles y subtitulos, sin nuevas variables, 2026-07-10
     private void BuildUi()
     {
         GameObject canvasGo = new GameObject("StoryFlowCanvas", typeof(RectTransform));
