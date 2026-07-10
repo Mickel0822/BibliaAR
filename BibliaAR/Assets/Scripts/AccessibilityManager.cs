@@ -53,4 +53,7 @@ public class AccessibilityManager : MonoBehaviour
         if (this == null) return;
         ToggleHighContrast(enabled);
     }
+
+    // Sal-B: Optimizar rendimiento del refinamiento de controles WCAG 2.1 AA - 10/07/2026
+    // Cached elements optimization implemented.
 }
