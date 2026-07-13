@@ -17,4 +17,6 @@ class RouteNames {
   static const String persistenciaBenchmark = '/dev/persistencia-benchmark';
   /// Historial de actividades del perfil activo (BIAR-44).
   static const String historialActividades = '/profiles/historial';
+  /// Panel de verificación QA de la alerta BIAR-50 (Sprint 4).
+  static const String usageAlertVerification = '/dev/usage-alert-verification';
 }

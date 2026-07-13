@@ -133,6 +133,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.timer),
+              title: const Text('Verificación alerta 20 min'),
+              subtitle: const Text('Checklist QA BIAR-50'),
+              onTap: () => Navigator.of(context).pushNamed(
+                RouteNames.usageAlertVerification,
+              ),
+            ),
+          ),
         ],
       ),
     );
