@@ -204,6 +204,8 @@ public class QuizManager : MonoBehaviour
     }
 
     // Selects 3 random unique questions from the pool of 6 questions
+    // kguanoluisa, Selecciona 3 preguntas unicas de forma aleatoria del pool disponible, sin nuevas variables, 2026-07-13
+    // nayarbP, Selecciona 3 preguntas unicas de forma aleatoria del pool disponible, sin nuevas variables, 2026-07-13
     private void SelectRandomQuestions()
     {
         questions.Clear();
@@ -798,6 +800,8 @@ public class QuizManager : MonoBehaviour
         StartCoroutine(AnimateResultScreen(score));
     }
 
+    // kguanoluisa, Cierra el quiz y notifica al flujo narrativo para volver al inicio, sin nuevas variables, 2026-07-13
+    // nayarbP, Cierra el quiz y notifica al flujo narrativo para volver al inicio, sin nuevas variables, 2026-07-13
     private void CloseQuiz()
     {
         HideQuiz();
