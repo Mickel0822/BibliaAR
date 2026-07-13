@@ -37,10 +37,10 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
     vTabController = TabController(length: 2, vsync: this);
     vTabController.addListener(() {
       if (!vTabController.indexIsChanging) {
-        context.read<TeacherPanelProvider>().cambiarTab(vTabController.index);
+        context.read<TeacherPanelProvider>().cambiarTab(vTabController.index, v_desdeController: true);
       }
     });
-    vTabController.addListener(() => setState(() {}));
+    // kguanoluisa, Correccion de listener duplicado del TabController BIAR-51, sin nuevas variables, 2026-07-13
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LeccionProvider>().cargarLeccionesBiblicas();
       _cargarPerfiles();
