@@ -18,11 +18,20 @@ class UsageAlertVerificationPage extends StatefulWidget {
 
 class _UsageAlertVerificationPageState extends State<UsageAlertVerificationPage> {
   UsageAlertVerificationResult? _resultado;
+  String? _error;
 
   void _ejecutarVerificacion() {
-    final timer = context.read<UsageTimerService>();
-    final verifier = UsageAlertVerifier(timer);
-    setState(() => _resultado = verifier.run());
+    setState(() {
+      _error = null;
+      _resultado = null;
+    });
+    try {
+      final timer = context.read<UsageTimerService>();
+      final verifier = UsageAlertVerifier(timer);
+      setState(() => _resultado = verifier.run());
+    } catch (error) {
+      setState(() => _error = error.toString());
+    }
   }
 
   @override
@@ -46,6 +55,8 @@ class _UsageAlertVerificationPageState extends State<UsageAlertVerificationPage>
               label: const Text('Ejecutar verificación'),
             ),
             const SizedBox(height: 24),
+            if (_error != null)
+              Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             if (_resultado != null) _buildResultado(_resultado!),
           ],
         ),

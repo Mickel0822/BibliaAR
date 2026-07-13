@@ -13,6 +13,9 @@ class UsageAlertVerifier {
 
   /// Ejecuta el checklist completo de verificación.
   UsageAlertVerificationResult run() {
+    if (_timer.vElapsedSeconds < 0) {
+      throw ArgumentError('El servicio de temporizador tiene un estado inválido');
+    }
     final items = <UsageAlertCheckItem>[
       _verificarUmbralConfigurado(),
       _verificarEstadoInicial(),
@@ -38,6 +41,14 @@ class UsageAlertVerifier {
   }
 
   UsageAlertCheckItem _verificarEstadoInicial() {
+    if (_timer.vIsPaused) {
+      return const UsageAlertCheckItem(
+        id: 'estado_inicial',
+        descripcion: 'Contador inicia sin alerta pendiente',
+        aprobado: false,
+        detalle: 'El temporizador no debe iniciar en pausa para esta prueba',
+      );
+    }
     final ok = !_timer.shouldShowAlert && !_timer.vAlertShown;
     return UsageAlertCheckItem(
       id: 'estado_inicial',
