@@ -1,3 +1,4 @@
+// Sal-B: crear estructura base del flujo de aprobación doctrinal - 13/07/2026
 // Sal-B: crear estructura base de la estructura inicial del flujo de aprobación doctrinal - 02/07/2026
 import 'package:flutter/material.dart';
 
