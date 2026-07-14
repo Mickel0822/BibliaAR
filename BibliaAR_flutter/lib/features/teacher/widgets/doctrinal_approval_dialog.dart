@@ -1,3 +1,4 @@
+// Sal-B: ajustar UI/UX del flujo de aprobación doctrinal - 14/07/2026
 // Sal-B: agregar validaciones y manejo de errores en el flujo de aprobación doctrinal - 14/07/2026
 // Sal-B: integrar el flujo de aprobación doctrinal con el resto del módulo - 13/07/2026
 // Sal-B: implementar lógica principal del flujo de aprobación doctrinal - 13/07/2026
