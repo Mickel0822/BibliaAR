@@ -8,6 +8,8 @@ import 'package:biblia_ar_flutter/data/models/resultado_actividad.dart';
 import 'package:biblia_ar_flutter/data/models/tipo_usuario.dart';
 import 'package:biblia_ar_flutter/features/lesson/leccion_provider.dart';
 import 'package:biblia_ar_flutter/features/teacher/lesson_detail_screen.dart';
+import 'package:biblia_ar_flutter/features/teacher/views/student_activity_view.dart';
+import 'package:biblia_ar_flutter/features/teacher/views/student_profile_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_empty_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_loading_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
@@ -248,7 +250,31 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
   Widget _buildDetalleResultados() {
     if (vPerfilSeleccionado == null) {
       return const Center(
-        child: Text('Selecciona un perfil de niño para ver resultados'),
+        child: Text('Selecciona un perfil de nino para ver resultados'),
+      );
+    }
+
+    // kguanoluisa, Integracion de vistas individuales de estudiantes BIAR-52/53, sin nuevas variables, 2026-07-14
+    final v_ancho = MediaQuery.sizeOf(context).width;
+    return Column(
+      children: [
+        StudentProfileView(
+          vPerfil: vPerfilSeleccionado!,
+          v_mostrarVolver: v_ancho < 720,
+          v_onVolver: () => setState(() {
+            vPerfilSeleccionado = null;
+            vResultados = [];
+          }),
+        ),
+        Expanded(child: StudentActivityView(vResultados: vResultados)),
+      ],
+    );
+  }
+
+  Widget _buildDetalleResultadosLegacy() {
+    if (vPerfilSeleccionado == null) {
+      return const Center(
+        child: Text('Selecciona un perfil de nino para ver resultados'),
       );
     }
 
