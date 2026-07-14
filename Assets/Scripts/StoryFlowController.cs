@@ -226,6 +226,8 @@ public class StoryFlowController : MonoBehaviour
         storyRoutine = null;
     }
 
+    // kguanoluisa, Transiciona del relato al quiz ocultando paneles de la experiencia AR, sin nuevas variables, 2026-07-14
+    // nayarbP, Transiciona del relato al quiz ocultando paneles de la experiencia AR, sin nuevas variables, 2026-07-14
     private void StartQuiz()
     {
         quizStarted = true;
@@ -284,6 +286,8 @@ public class StoryFlowController : MonoBehaviour
         SetSubtitleVisible(false);
     }
 
+    // kguanoluisa, Calcula la duracion total de narracion segun el audio o subtitulos configurados, sin nuevas variables, 2026-07-14
+    // nayarbP, Calcula la duracion total de narracion segun el audio o subtitulos configurados, sin nuevas variables, 2026-07-14
     private float GetNarrationDuration(int lineCount)
     {
         if (narrationAudio != null && narrationAudio.clip != null)
