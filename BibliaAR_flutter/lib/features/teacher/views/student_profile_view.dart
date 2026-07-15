@@ -1,9 +1,10 @@
 import 'package:biblia_ar_flutter/core/accessibility/biar_design_tokens.dart';
 import 'package:biblia_ar_flutter/core/accessibility/biar_pictogram_icons.dart';
 import 'package:biblia_ar_flutter/data/models/perfil.dart';
+import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Logica principal de vista de perfil estudiante BIAR-52/53, variables v_perfil y v_onVolver, 2026-07-14
+// kguanoluisa, Ajustes UI/UX de vista de perfil estudiante BIAR-52/53, sin nuevas variables, 2026-07-15
 class StudentProfileView extends StatelessWidget {
   const StudentProfileView({
     super.key,
@@ -26,19 +27,25 @@ class StudentProfileView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (v_mostrarVolver)
-              IconButton(onPressed: v_onVolver, icon: const Icon(Icons.arrow_back)),
-            Row(
-              children: [
-                Icon(BiarModuleIcons.historias, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: BiarSpacing.sm),
-                Expanded(
-                  child: Text(vPerfil.nombre, style: Theme.of(context).textTheme.titleLarge),
-                ),
-              ],
+            const BiarSectionHeader(
+              vTitulo: 'Estudiante',
+              vSubtitulo: 'Detalle individual',
+              vIcono: Icons.person,
             ),
-            const SizedBox(height: BiarSpacing.sm),
-            Text('Progreso individual del estudiante', style: Theme.of(context).textTheme.bodyMedium),
+            if (v_mostrarVolver)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: v_onVolver,
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Volver'),
+                ),
+              ),
+            ListTile(
+              leading: Icon(BiarModuleIcons.historias, color: Theme.of(context).colorScheme.primary),
+              title: Text(vPerfil.nombre, style: Theme.of(context).textTheme.titleLarge),
+              subtitle: const Text('Seguimiento de actividades y progreso'),
+            ),
           ],
         ),
       ),
