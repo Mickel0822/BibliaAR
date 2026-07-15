@@ -195,6 +195,8 @@ public class ImageTrackingController : MonoBehaviour
         Log($"AR content visible: {visible}. Renderers found: {renderers.Length}.");
     }
 
+    // kguanoluisa, Emite eventos estaticos cuando el marcador QR entra o sale del campo de vision, sin nuevas variables, 2026-07-15
+    // nayarbP, Emite eventos estaticos cuando el marcador QR entra o sale del campo de vision, sin nuevas variables, 2026-07-15
     private void NotifyDetected(ARTrackedImage trackedImage)
     {
         hasVisibleTrackedImage = true;
@@ -212,6 +214,8 @@ public class ImageTrackingController : MonoBehaviour
         ImageLost?.Invoke();
     }
 
+    // kguanoluisa, Registra mensajes de depuracion del tracking QR en consola Unity, sin nuevas variables, 2026-07-15
+    // nayarbP, Registra mensajes de depuracion del tracking QR en consola Unity, sin nuevas variables, 2026-07-15
     private void Log(string message)
     {
         if (logDebugInfo)
