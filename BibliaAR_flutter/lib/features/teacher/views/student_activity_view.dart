@@ -1,8 +1,9 @@
 import 'package:biblia_ar_flutter/core/accessibility/biar_design_tokens.dart';
 import 'package:biblia_ar_flutter/data/models/resultado_actividad.dart';
+import 'package:biblia_ar_flutter/features/teacher/validators/student_view_validator.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Logica principal de vista de actividades del estudiante BIAR-52/53, variables v_resultados y v_colorEstado, 2026-07-14
+// kguanoluisa, Vista de actividades con validacion previa BIAR-52/53, variable v_validador, 2026-07-15
 class StudentActivityView extends StatelessWidget {
   const StudentActivityView({super.key, required this.vResultados});
 
@@ -13,6 +14,10 @@ class StudentActivityView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final v_validador = StudentViewValidator();
+    if (!v_validador.validarResultados(vResultados)) {
+      return Center(child: Text(v_validador.errores.join('\n')));
+    }
     if (vResultados.isEmpty) {
       return const Center(child: Text('Sin actividades registradas'));
     }
