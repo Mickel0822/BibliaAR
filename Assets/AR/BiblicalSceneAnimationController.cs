@@ -74,6 +74,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         ResetScenePose();
     }
 
+    // kguanoluisa, Obtiene controladores de animacion y Animators de los hijos de la escena, sin nuevas variables, 2026-07-16
+    // nayarbP, Obtiene controladores de animacion y Animators de los hijos de la escena, sin nuevas variables, 2026-07-16
     private void CacheSceneReferences()
     {
         characters = GetComponentsInChildren<CharacterAnimationController>(true);
