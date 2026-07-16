@@ -1,3 +1,4 @@
+// Sal-B: crear estructura base del flujo de aprobación doctrinal en revisión de código - 16/07/2026
 // Sal-B: optimizar rendimiento del flujo de aprobación doctrinal - 15/07/2026
 // Sal-B: corregir bug detectado en pruebas del flujo de aprobación doctrinal - 15/07/2026
 // Sal-B: ajustar UI/UX del flujo de aprobación doctrinal - 14/07/2026
