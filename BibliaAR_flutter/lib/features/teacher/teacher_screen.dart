@@ -194,7 +194,8 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
                 onPressed: () => setState(() {
                   vPerfilSeleccionado = null;
                   vResultados = [];
-                }),
+            });
+          },
               ),
               title: Text(vPerfilSeleccionado!.nombre),
             ),
@@ -261,10 +262,13 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
         StudentProfileView(
           vPerfil: vPerfilSeleccionado!,
           v_mostrarVolver: v_ancho < 720,
-          v_onVolver: () => setState(() {
+          v_onVolver: () {
+            if (!mounted) return;
+            setState(() {
             vPerfilSeleccionado = null;
             vResultados = [];
-          }),
+            });
+          },
         ),
         Expanded(child: StudentActivityView(vResultados: vResultados)),
       ],
