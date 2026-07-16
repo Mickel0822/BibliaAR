@@ -1,3 +1,4 @@
+// Sal-B: integrar el flujo de aprobación doctrinal en revisión de código con el resto del módulo - 16/07/2026
 // Sal-B: implementar lógica principal del flujo de aprobación doctrinal en revisión de código - 16/07/2026
 // Sal-B: crear estructura base del flujo de aprobación doctrinal en revisión de código - 16/07/2026
 // Sal-B: optimizar rendimiento del flujo de aprobación doctrinal - 15/07/2026
