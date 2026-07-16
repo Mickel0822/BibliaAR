@@ -3,29 +3,47 @@ import 'package:biblia_ar_flutter/data/models/resultado_actividad.dart';
 import 'package:biblia_ar_flutter/features/teacher/validators/student_view_validator.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Vista de actividades con validacion previa BIAR-52/53, variable v_validador, 2026-07-15
-class StudentActivityView extends StatelessWidget {
+// kguanoluisa, Optimizacion de listado de actividades con cache de agrupacion BIAR-52/53, variable v_cacheAgrupados, 2026-07-16
+class StudentActivityView extends StatefulWidget {
   const StudentActivityView({super.key, required this.vResultados});
 
   final List<ResultadoActividad> vResultados;
 
+  @override
+  State<StudentActivityView> createState() => _StudentActivityViewState();
+}
+
+class _StudentActivityViewState extends State<StudentActivityView> {
+  final StudentViewValidator v_validador = StudentViewValidator();
+  Map<int, List<ResultadoActividad>>? v_cacheAgrupados;
+  int? v_cacheLength;
+
   Color _colorEstado(String v_resultado) =>
       v_resultado == 'correcto' ? Colors.green.shade100 : Colors.orange.shade100;
 
+  Map<int, List<ResultadoActividad>> _agrupar() {
+    if (v_cacheAgrupados != null && v_cacheLength == widget.vResultados.length) {
+      return v_cacheAgrupados!;
+    }
+    final v_agrupados = <int, List<ResultadoActividad>>{};
+    for (final v_item in widget.vResultados) {
+      v_agrupados.putIfAbsent(v_item.actividadId, () => []).add(v_item);
+    }
+    v_cacheAgrupados = v_agrupados;
+    v_cacheLength = widget.vResultados.length;
+    return v_agrupados;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final v_validador = StudentViewValidator();
-    if (!v_validador.validarResultados(vResultados)) {
+    if (!v_validador.validarResultados(widget.vResultados)) {
       return Center(child: Text(v_validador.errores.join('\n')));
     }
-    if (vResultados.isEmpty) {
+    if (widget.vResultados.isEmpty) {
       return const Center(child: Text('Sin actividades registradas'));
     }
 
-    final v_agrupados = <int, List<ResultadoActividad>>{};
-    for (final v_item in vResultados) {
-      v_agrupados.putIfAbsent(v_item.actividadId, () => []).add(v_item);
-    }
+    final v_agrupados = _agrupar();
 
     return ListView.builder(
       padding: const EdgeInsets.all(BiarSpacing.md),
