@@ -155,24 +155,21 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
         ),
         Expanded(
           child: ListView.separated(
-      padding: const EdgeInsets.all(BiarSpacing.md),
-      itemCount: leccionProvider.vLeccionesBiblicas.length,
-      separatorBuilder: (_, __) => const SizedBox(height: BiarSpacing.sm),
-      itemBuilder: (context, index) {
-        final leccion = leccionProvider.vLeccionesBiblicas[index];
-        return LessonCard(
-          vTitulo: leccion.titulo,
-          vVersiculoReferencia: leccion.versiculoDisplay,
-          vIcono: BiarPictogramIcons.iconoPara(leccion.pictograma),
-          onTap: () => _abrirDetalleLeccion(leccion),
-        );
-      },          ),
+            padding: const EdgeInsets.all(BiarSpacing.md),
+            itemCount: leccionProvider.vLeccionesBiblicas.length,
+            separatorBuilder: (_, __) => const SizedBox(height: BiarSpacing.sm),
+            itemBuilder: (context, index) {
+              final leccion = leccionProvider.vLeccionesBiblicas[index];
+              return LessonCard(
+                vTitulo: leccion.titulo,
+                vVersiculoReferencia: leccion.versiculoDisplay,
+                vIcono: BiarPictogramIcons.iconoPara(leccion.pictograma),
+                onTap: () => _abrirDetalleLeccion(leccion),
+              );
+            },
+          ),
         ),
       ],
-    );
-  }
-
-
     );
   }
 
@@ -272,44 +269,6 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
         ),
         Expanded(child: StudentActivityView(vResultados: vResultados)),
       ],
-    );
-  }
-
-  Widget _buildDetalleResultadosLegacy() {
-    if (vPerfilSeleccionado == null) {
-      return const Center(
-        child: Text('Selecciona un perfil de nino para ver resultados'),
-      );
-    }
-
-    if (vResultados.isEmpty) {
-      return BiarEmptyView(
-        vMensaje: 'Sin intentos registrados para ${vPerfilSeleccionado!.nombre}.',
-      );
-    }
-
-    final agrupados = _agruparPorActividad();
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(BiarSpacing.md),
-      itemCount: agrupados.length,
-      itemBuilder: (context, index) {
-        final actividadId = agrupados.keys.elementAt(index);
-        final intentos = agrupados[actividadId]!;
-        final ultimo = intentos.last;
-
-        return Card(
-          margin: const EdgeInsets.only(bottom: BiarSpacing.sm),
-          child: ListTile(
-            title: Text('Actividad #$actividadId'),
-            subtitle: Text('${intentos.length} intento(s) registrados'),
-            trailing: Chip(
-              label: Text(ultimo.resultado),
-              backgroundColor: _colorEstado(ultimo.resultado),
-            ),
-          ),
-        );
-      },
     );
   }
 }
