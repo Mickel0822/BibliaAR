@@ -1083,6 +1083,7 @@ public class QuizManager : MonoBehaviour
 }
 
 // Helper class for Premium UI interactions
+// kguanoluisa, Efectos visuales de hover y click para botones premium del quiz, sin nuevas variables, 2026-07-17
 public class QuizButtonEffects : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Color normalColor;
