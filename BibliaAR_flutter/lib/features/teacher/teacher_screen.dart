@@ -10,6 +10,9 @@ import 'package:biblia_ar_flutter/features/lesson/leccion_provider.dart';
 import 'package:biblia_ar_flutter/features/teacher/lesson_detail_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/views/student_activity_view.dart';
 import 'package:biblia_ar_flutter/features/teacher/views/student_profile_view.dart';
+import 'package:biblia_ar_flutter/features/teacher/models/teacher_summary_data.dart';
+import 'package:biblia_ar_flutter/features/teacher/widgets/teacher_subtask_panel.dart';
+import 'package:biblia_ar_flutter/features/teacher/widgets/teacher_summary_chart.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_empty_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_loading_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
@@ -36,7 +39,7 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    vTabController = TabController(length: 2, vsync: this);
+    vTabController = TabController(length: 3, vsync: this);
     vTabController.addListener(() {
       if (!vTabController.indexIsChanging) {
         context.read<TeacherPanelProvider>().cambiarTab(vTabController.index, v_desdeController: true);
@@ -107,6 +110,7 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
           tabs: const [
             Tab(text: 'Lecciones', icon: Icon(Icons.auto_stories)),
             Tab(text: 'Seguimiento', icon: Icon(Icons.people)),
+            const Tab(text: 'Resumen', icon: Icon(Icons.insights)),
           ],
         ),
       ),
@@ -115,9 +119,10 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
         children: [
           _buildTabLecciones(),
           _buildTabSeguimiento(),
+          _buildTabResumen(),
         ],
       ),
-      floatingActionButton: vTabController.index == 0
+      floatingActionButton: vTabController.index == 0 && vTabController.length > 0
           ? FloatingActionButton.extended(
               onPressed: () => Navigator.pushNamed(context, RouteNames.teacherNewLesson),
               icon: const Icon(Icons.add),
@@ -168,6 +173,36 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
               );
             },
           ),
+        ),
+      ],
+    );
+  }
+
+  TeacherSummaryData _buildResumenData() {
+    final v_correctos = vResultados.where((r) => r.resultado == 'correcto').length;
+    return TeacherSummaryData(
+      v_totalCorrectos: v_correctos,
+      v_totalIntentos: vResultados.length,
+      v_totalEstudiantes: vPerfilesNinos.length,
+    );
+  }
+
+  // kguanoluisa, Integracion de resumen y subtareas en panel docente BIAR-54/55, sin nuevas variables, 2026-07-17
+  Widget _buildTabResumen() {
+    final v_datos = _buildResumenData();
+    const v_subtareas = [
+      'Revisar lecciones activas',
+      'Verificar progreso de estudiantes',
+      'Actualizar contenido LSE',
+      'Exportar reporte semanal',
+    ];
+    return ListView(
+      padding: const EdgeInsets.all(BiarSpacing.md),
+      children: [
+        TeacherSummaryChart(v_datos: v_datos),
+        TeacherSubtaskPanel(
+          v_subtareas: v_subtareas,
+          v_completadas: const {0, 1},
         ),
       ],
     );

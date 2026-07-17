@@ -16,7 +16,7 @@ class TeacherPanelProvider extends ChangeNotifier {
 
   void cambiarTab(int v_indice, {bool v_desdeController = false}) {
     if (v_sincronizandoTab || v_ultimoIndice == v_indice) return;
-    if (v_indice < 0 || v_indice > 1) {
+    if (v_indice < 0 || v_indice > 2) {
       v_ultimoError = 'Indice de tab invalido.';
       notifyListeners();
       return;
@@ -25,7 +25,11 @@ class TeacherPanelProvider extends ChangeNotifier {
     v_indiceTab = v_indice;
     v_ultimoIndice = v_indice;
     final v_nuevo = TeacherPanelSchema(
-      vTabActiva: v_indice == 0 ? TeacherPanelTab.lecciones : TeacherPanelTab.seguimiento,
+      vTabActiva: v_indice == 0
+        ? TeacherPanelTab.lecciones
+        : v_indice == 1
+            ? TeacherPanelTab.seguimiento
+            : TeacherPanelTab.resumen,
       vTituloPanel: v_esquema.vTituloPanel,
     );
     if (!v_validador.validarEsquema(v_nuevo)) {

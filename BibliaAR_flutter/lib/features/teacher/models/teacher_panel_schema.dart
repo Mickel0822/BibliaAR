@@ -1,7 +1,8 @@
-// kguanoluisa, Estructura base del esquema del panel docente BIAR-51, enum TeacherPanelTab, 2026-07-09
+// kguanoluisa, Esquema del panel docente con tab de resumen BIAR-54/55, enum TeacherPanelTab resumen, 2026-07-17
 enum TeacherPanelTab {
   lecciones,
   seguimiento,
+  resumen,
 }
 
 class TeacherPanelSchema {
