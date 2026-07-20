@@ -1,3 +1,4 @@
+// Sal-B: corregir bug detectado en pruebas del flujo de aprobación doctrinal en revisión de código - 20/07/2026
 // Sal-B: ajustar UI/UX del flujo de aprobación doctrinal en revisión de código - 17/07/2026
 // Sal-B: agregar validaciones y manejo de errores en el flujo de aprobación doctrinal en revisión de código - 17/07/2026
 // Sal-B: integrar el flujo de aprobación doctrinal en revisión de código con el resto del módulo - 16/07/2026
