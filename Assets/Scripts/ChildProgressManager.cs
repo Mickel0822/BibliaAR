@@ -6,8 +6,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// Stores child profiles and completed activities locally, then exposes a small
-/// mobile-friendly UI for profile selection and history consultation.
+/// Centraliza el progreso local asociado a cada nino que usa la aplicacion.
+/// La informacion se serializa como JSON dentro de <see cref="PlayerPrefs"/>,
+/// por lo que no depende de una conexion a internet ni de un servicio remoto.
+/// Ademas de conservar los perfiles, este componente construye la interfaz que
+/// permite crearlos, seleccionarlos y consultar sus actividades finalizadas.
+/// Cada registro conserva el nombre de la actividad, la fecha en formato UTC,
+/// el resultado del cuestionario y el tiempo total empleado; de esta manera el
+/// historial puede seguir siendo util cuando se abre la aplicacion otro dia.
 /// </summary>
 public class ChildProgressManager : MonoBehaviour
 {
@@ -15,6 +21,8 @@ public class ChildProgressManager : MonoBehaviour
 
     [SerializeField] private string activityName = "El Buen Samaritano";
 
+    // La clave incluye una version para poder migrar los datos con seguridad si
+    // el formato del historial cambia en una futura actualizacion de la app.
     private const string StorageKey = "BibliAR.ChildProgress.v1";
 
     [Serializable]
@@ -69,7 +77,10 @@ public class ChildProgressManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the timer only when a valid child profile is selected.
+    /// Inicia la medicion de la actividad solamente cuando existe un perfil
+    /// activo. Si no se ha elegido un nino, abre el panel de perfiles y avisa al
+    /// controlador del relato que no debe continuar: asi se evita guardar una
+    /// actividad sin poder atribuirla a una persona concreta.
     /// </summary>
     public bool TryBeginActivity()
     {
@@ -85,7 +96,11 @@ public class ChildProgressManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Saves the completed activity and its final result for the active child.
+    /// Registra una actividad finalizada para el perfil seleccionado y persiste
+    /// de inmediato todo el historial local. La duracion se calcula desde
+    /// <see cref="TryBeginActivity"/> usando tiempo real, mientras que la fecha
+    /// se guarda en UTC con formato ISO 8601 para que sea independiente de la
+    /// configuracion regional del telefono y pueda mostrarse luego en hora local.
     /// </summary>
     public void CompleteActivity(int score, int totalQuestions)
     {
@@ -150,7 +165,10 @@ public class ChildProgressManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the selected profile name for the story flow status text.
+    /// Devuelve el nombre visible del perfil activo para que otros componentes
+    /// puedan mostrarlo sin conocer la estructura interna de los datos. Cuando
+    /// no existe seleccion se devuelve una cadena vacia, evitando referencias
+    /// nulas en los textos de estado del flujo narrativo.
     /// </summary>
     public string GetSelectedProfileName()
     {
@@ -160,6 +178,9 @@ public class ChildProgressManager : MonoBehaviour
 
     private void LoadProgress()
     {
+        // PlayerPrefs puede no contener datos en la primera ejecucion o tras
+        // borrar los datos de la aplicacion. En ambos casos se crea una coleccion
+        // valida para que el resto de la interfaz pueda funcionar normalmente.
         string json = PlayerPrefs.GetString(StorageKey, string.Empty);
         progressData = string.IsNullOrEmpty(json)
             ? new ProgressData()
@@ -178,6 +199,8 @@ public class ChildProgressManager : MonoBehaviour
 
     private void SaveProgress()
     {
+        // Save fuerza la escritura antes de que el usuario cierre la app; esto
+        // es importante porque el historial representa el avance ya completado.
         PlayerPrefs.SetString(StorageKey, JsonUtility.ToJson(progressData));
         PlayerPrefs.Save();
     }

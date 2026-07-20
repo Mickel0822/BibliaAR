@@ -6,9 +6,20 @@ using UnityEngine.EventSystems;
 using TMPro;
 using Action = System.Action;
 
+/// <summary>
+/// Controla el cuestionario de cierre del relato y comunica su resultado a los
+/// componentes interesados. Cuando termina, publica puntaje y numero total de
+/// preguntas mediante <see cref="QuizCompleted"/>; el gestor de progreso usa
+/// ese evento para guardar una actividad completa en el perfil infantil activo.
+/// Mantener esta comunicacion por eventos evita que el cuestionario conozca los
+/// detalles de almacenamiento o la interfaz del historial.
+/// </summary>
 public class QuizManager : MonoBehaviour
 {
     public event Action QuizClosed;
+    // Los dos enteros representan, en orden, respuestas correctas y preguntas
+    // presentadas. Se conservan separados para que el historial pueda mostrar
+    // resultados como "3/5" y seguir funcionando si cambia el banco de preguntas.
     public event System.Action<int, int> QuizCompleted;
 
     [System.Serializable]
@@ -69,6 +80,9 @@ public class QuizManager : MonoBehaviour
 
     public void BeginQuiz()
     {
+        // Cada intento parte de cero y reutiliza la interfaz ya creada. Esto
+        // permite volver a jugar sin duplicar objetos UI ni conservar el puntaje
+        // del intento anterior antes de emitir un nuevo evento de finalizacion.
         if (!uiInitialized)
         {
             SetupUI();

@@ -5,6 +5,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
+/// <summary>
+/// Coordina la experiencia desde la deteccion del marcador QR hasta el cierre
+/// del cuestionario. Su integracion con <see cref="ChildProgressManager"/>
+/// garantiza que la actividad se inicie solo despues de seleccionar un perfil
+/// y que el resultado final se guarde al recibir el evento del cuestionario.
+/// De este modo, el flujo de realidad aumentada permanece separado de la logica
+/// de almacenamiento, pero ambos pasos quedan conectados de forma consistente.
+/// </summary>
 public class StoryFlowController : MonoBehaviour
 {
     [Header("References")]
@@ -47,6 +55,10 @@ public class StoryFlowController : MonoBehaviour
 
     private void Awake()
     {
+        // Las referencias pueden asignarse desde el Inspector o localizarse en
+        // tiempo de ejecucion. Si el gestor de progreso aun no existe, se agrega
+        // al mismo objeto para que la funcionalidad de perfiles e historial este
+        // disponible incluso en escenas configuradas antes de esta caracteristica.
         if (quizManager == null)
         {
             quizManager = FindAnyObjectByType<QuizManager>();
@@ -109,6 +121,9 @@ public class StoryFlowController : MonoBehaviour
             return;
         }
 
+        // El temporizador y el registro pertenecen al perfil activo. Detener el
+        // flujo aqui impide iniciar un relato que despues no podria guardarse en
+        // el historial de ningun nino.
         if (progressManager != null && !progressManager.TryBeginActivity())
         {
             ShowScanningState("Selecciona un perfil", "Abre Perfil / Historial y selecciona o crea el perfil del nino.");
@@ -202,6 +217,9 @@ public class StoryFlowController : MonoBehaviour
 
     private void OnQuizCompleted(int score, int totalQuestions)
     {
+        // QuizManager emite este evento una sola vez al mostrar el resultado.
+        // Se delega el guardado al gestor para conservar fecha, puntaje, total
+        // de preguntas y duracion sin acoplar el cuestionario a PlayerPrefs.
         if (progressManager != null)
         {
             progressManager.CompleteActivity(score, totalQuestions);
