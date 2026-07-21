@@ -4,7 +4,7 @@ import 'package:biblia_ar_flutter/features/teacher/validators/teacher_chart_vali
 import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Ajustes UI/UX del grafico de resumen docente BIAR-54/55, sin nuevas variables, 2026-07-20
+// kguanoluisa, Correccion de division por cero en grafico de resumen BIAR-54/55, sin nuevas variables, 2026-07-21
 class TeacherSummaryChart extends StatelessWidget {
   const TeacherSummaryChart({super.key, required this.v_datos});
 
@@ -19,6 +19,16 @@ class TeacherSummaryChart extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(BiarSpacing.md),
           child: Text(v_validador.errores.join('\n')),
+        ),
+      );
+    }
+
+    if (v_datos.v_totalIntentos == 0) {
+      return const Card(
+        margin: EdgeInsets.all(BiarSpacing.md),
+        child: Padding(
+          padding: EdgeInsets.all(BiarSpacing.md),
+          child: Text('Aun no hay intentos registrados para generar el grafico.'),
         ),
       );
     }
