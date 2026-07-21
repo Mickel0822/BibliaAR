@@ -4,7 +4,7 @@ import 'package:biblia_ar_flutter/features/teacher/validators/teacher_chart_vali
 import 'package:biblia_ar_flutter/shared/widgets/biar_section_header.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Correccion de division por cero en grafico de resumen BIAR-54/55, sin nuevas variables, 2026-07-21
+// kguanoluisa, Optimizacion de render del grafico de resumen BIAR-54/55, variable v_ratioCacheado, 2026-07-21
 class TeacherSummaryChart extends StatelessWidget {
   const TeacherSummaryChart({super.key, required this.v_datos});
 
@@ -34,7 +34,7 @@ class TeacherSummaryChart extends StatelessWidget {
     }
 
     final v_color = Theme.of(context).colorScheme.primary;
-    final v_ratio = (v_datos.v_porcentajeExito / 100).clamp(0.0, 1.0);
+    final v_ratioCacheado = (v_datos.v_porcentajeExito / 100).clamp(0.0, 1.0);
 
     return Card(
       margin: const EdgeInsets.all(BiarSpacing.md),
@@ -49,9 +49,11 @@ class TeacherSummaryChart extends StatelessWidget {
               vIcono: Icons.insights,
             ),
             const SizedBox(height: BiarSpacing.sm),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(BiarRadius.sm),
-              child: LinearProgressIndicator(value: v_ratio, color: v_color, minHeight: 14),
+            RepaintBoundary(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(BiarRadius.sm),
+                child: LinearProgressIndicator(value: v_ratioCacheado, color: v_color, minHeight: 14),
+              ),
             ),
             const SizedBox(height: BiarSpacing.sm),
             Text('${v_datos.v_porcentajeExito.toStringAsFixed(1)}% de aciertos',
