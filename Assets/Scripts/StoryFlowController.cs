@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
+// kguanoluisa, Controlador del flujo narrativo AR: escaneo QR, subtitulos y quiz del Buen Samaritano, sin nuevas variables, 2026-07-21
 public class StoryFlowController : MonoBehaviour
 {
     [Header("References")]
@@ -58,6 +59,7 @@ public class StoryFlowController : MonoBehaviour
 
     private void OnEnable()
     {
+        // kguanoluisa, Suscribe eventos de deteccion QR y cierre del quiz para coordinar la experiencia, sin nuevas variables, 2026-07-21
         ImageTrackingController.ImageDetected += OnQrDetected;
         ImageTrackingController.ImageLost += OnQrLost;
 
@@ -145,6 +147,7 @@ public class StoryFlowController : MonoBehaviour
         ShowScanningState("Manten el QR visible", "Acerca el marcador y evita reflejos o movimiento brusco.");
     }
 
+    // kguanoluisa, Restablece la pantalla inicial cuando el usuario cierra el quiz, sin nuevas variables, 2026-07-21
     private void OnQuizClosed()
     {
         qrDetected = false;
@@ -171,6 +174,7 @@ public class StoryFlowController : MonoBehaviour
         ShowInitialState();
     }
 
+    // kguanoluisa, Inicia la narracion con subtitulos sincronizados y luego lanza el quiz, sin nuevas variables, 2026-07-21
     private IEnumerator StoryRoutine()
     {
         storyStarted = true;
@@ -229,6 +233,7 @@ public class StoryFlowController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Muestra confirmacion de QR detectado antes de habilitar los controles de reproduccion, sin nuevas variables, 2026-07-21
     private IEnumerator ShowQrDetectedThenControls()
     {
         SetScanVisible(false);
