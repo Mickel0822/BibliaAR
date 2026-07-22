@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 using TMPro;
 using Action = System.Action;
 
+// kguanoluisa, Gestor del quiz interactivo sobre la parabola del Buen Samaritano con UI generada en runtime, sin nuevas variables, 2026-07-22
+// nayarbP, Gestor del quiz interactivo sobre la parabola del Buen Samaritano con UI generada en runtime, sin nuevas variables, 2026-07-22
 public class QuizManager : MonoBehaviour
 {
     public event Action QuizClosed;
@@ -66,6 +68,8 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Inicia el quiz seleccionando 3 preguntas aleatorias del banco de 6, sin nuevas variables, 2026-07-22
+    // nayarbP, Inicia el quiz seleccionando 3 preguntas aleatorias del banco de 6, sin nuevas variables, 2026-07-22
     public void BeginQuiz()
     {
         if (!uiInitialized)
@@ -122,6 +126,8 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Carga el banco de preguntas sobre la parabola del Buen Samaritano, sin nuevas variables, 2026-07-22
+    // nayarbP, Carga el banco de preguntas sobre la parabola del Buen Samaritano, sin nuevas variables, 2026-07-22
     private void InitializeQuestions()
     {
         // Question 1
@@ -410,6 +416,8 @@ public class QuizManager : MonoBehaviour
         return textComponent;
     }
 
+    // kguanoluisa, Construye la interfaz del quiz con canvas, botones y panel de resultados, sin nuevas variables, 2026-07-22
+    // nayarbP, Construye la interfaz del quiz con canvas, botones y panel de resultados, sin nuevas variables, 2026-07-22
     private void SetupUI()
     {
         // 1. Ensure EventSystem exists and is compatible with the active Input System
@@ -751,6 +759,8 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Muestra la pantalla final con estrellas y mensaje segun la puntuacion obtenida, sin nuevas variables, 2026-07-22
+    // nayarbP, Muestra la pantalla final con estrellas y mensaje segun la puntuacion obtenida, sin nuevas variables, 2026-07-22
     private void ShowResultScreen()
     {
         ClearConfetti();
