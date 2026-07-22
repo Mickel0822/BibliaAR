@@ -13,6 +13,7 @@ import 'package:biblia_ar_flutter/features/splash/splash_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/new_lesson_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/teacher_screen.dart';
 import 'package:biblia_ar_flutter/features/profiles/historial_actividades_screen.dart';
+import 'package:biblia_ar_flutter/features/dev/biar50_closure_page.dart';
 import 'package:biblia_ar_flutter/features/dev/usage_alert_verification_page.dart';
 import 'package:biblia_ar_flutter/spike/persistencia_local/persistencia_benchmark_page.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,11 @@ class AppRouter {
       case RouteNames.usageAlertVerification:
         return RouteTransitions.fadeSlide(
           const UsageAlertVerificationPage(),
+          settings,
+        );
+      case RouteNames.biar50Closure:
+        return RouteTransitions.fadeSlide(
+          const Biar50ClosurePage(),
           settings,
         );
       default:
