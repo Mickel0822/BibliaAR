@@ -11,6 +11,7 @@ import 'package:biblia_ar_flutter/features/teacher/lesson_detail_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/views/student_activity_view.dart';
 import 'package:biblia_ar_flutter/features/teacher/views/student_profile_view.dart';
 import 'package:biblia_ar_flutter/features/teacher/models/teacher_summary_data.dart';
+import 'package:biblia_ar_flutter/features/teacher/models/teacher_summary_builder.dart';
 import 'package:biblia_ar_flutter/features/teacher/widgets/teacher_subtask_panel.dart';
 import 'package:biblia_ar_flutter/features/teacher/widgets/teacher_summary_chart.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_empty_view.dart';
@@ -178,11 +179,11 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
     );
   }
 
+  static const TeacherSummaryBuilder _vResumenBuilder = TeacherSummaryBuilder();
+
   TeacherSummaryData _buildResumenData() {
-    final v_correctos = vResultados.where((r) => r.resultado == 'correcto').length;
-    return TeacherSummaryData(
-      v_totalCorrectos: v_correctos,
-      v_totalIntentos: vResultados.length,
+    return _vResumenBuilder.fromResultados(
+      v_resultados: vResultados,
       v_totalEstudiantes: vPerfilesNinos.length,
     );
   }
