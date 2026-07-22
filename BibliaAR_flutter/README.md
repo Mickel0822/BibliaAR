@@ -18,3 +18,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Documentación del Proyecto
 - [Manual Docente](docs/manual_docente.md)
+- [Manual de Usuario](docs/manual_usuario.md)
