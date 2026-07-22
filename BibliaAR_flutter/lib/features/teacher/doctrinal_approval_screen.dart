@@ -1,3 +1,4 @@
+// Sal-B: integrar el cierre del flujo de aprobación doctrinal y la documentación técnica con el resto del módulo - 22/07/2026
 // Sal-B: implementar lógica principal del cierre del flujo de aprobación doctrinal y la documentación técnica - 22/07/2026
 // Sal-B: crear estructura base del cierre del flujo de aprobación doctrinal y la documentación técnica - 22/07/2026
 // Sal-B: refactorizar código del flujo de aprobación doctrinal en revisión de código - 21/07/2026
