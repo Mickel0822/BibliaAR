@@ -143,6 +143,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.task_alt),
+              title: const Text('Cierre BIAR-50'),
+              subtitle: const Text('Paso a columna Listo en Jira'),
+              onTap: () => Navigator.of(context).pushNamed(
+                RouteNames.biar50Closure,
+              ),
+            ),
+          ),
         ],
       ),
     );
