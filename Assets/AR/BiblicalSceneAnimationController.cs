@@ -6,6 +6,8 @@ using UnityEngine;
 /// The controller keeps the AR content anchored to the tracked image while giving the characters
 /// a visible 10-second motion sequence that can be restarted every time the marker is found again.
 /// </summary>
+// kguanoluisa, Coordina la animacion de 10 segundos de la escena biblica anclada al marcador QR, sin nuevas variables, 2026-07-23
+// nayarbP, Coordina la animacion de 10 segundos de la escena biblica anclada al marcador QR, sin nuevas variables, 2026-07-23
 public class BiblicalSceneAnimationController : MonoBehaviour
 {
     [Header("Timing")]
@@ -95,6 +97,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         animationRoutine = null;
     }
 
+    // kguanoluisa, Ejecuta el ciclo de animacion con movimiento de balanceo y caminar de personajes, sin nuevas variables, 2026-07-23
+    // nayarbP, Ejecuta el ciclo de animacion con movimiento de balanceo y caminar de personajes, sin nuevas variables, 2026-07-23
     private IEnumerator PlayTenSecondPass()
     {
         float elapsed = 0f;
@@ -120,6 +124,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
     }
 
+    // kguanoluisa, Alterna entre animacion Idle y Walk en todos los personajes de la escena, sin nuevas variables, 2026-07-23
+    // nayarbP, Alterna entre animacion Idle y Walk en todos los personajes de la escena, sin nuevas variables, 2026-07-23
     private void SetCharactersWalking(bool isWalking)
     {
         if (characters == null)
