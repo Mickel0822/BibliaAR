@@ -14,6 +14,9 @@ class Biar50ClosureService {
 
   /// Genera el informe de cierre evaluando verificación y criterios.
   Biar50ClosureReport generarInformeCierre() {
+    if (AppConstants.usageAlertMinutes <= 0) {
+      throw ArgumentError('usageAlertMinutes debe ser positivo');
+    }
     final verificacion = UsageAlertVerifier(_timer).run();
     final criterios = <Biar50AcceptanceCriterion>[
       Biar50AcceptanceCriterion(

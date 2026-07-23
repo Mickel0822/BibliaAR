@@ -17,11 +17,20 @@ class Biar50ClosurePage extends StatefulWidget {
 
 class _Biar50ClosurePageState extends State<Biar50ClosurePage> {
   Biar50ClosureReport? _informe;
+  String? _error;
 
   void _generarInforme() {
-    final timer = context.read<UsageTimerService>();
-    final service = Biar50ClosureService(timer);
-    setState(() => _informe = service.generarInformeCierre());
+    setState(() {
+      _error = null;
+      _informe = null;
+    });
+    try {
+      final timer = context.read<UsageTimerService>();
+      final service = Biar50ClosureService(timer);
+      setState(() => _informe = service.generarInformeCierre());
+    } catch (error) {
+      setState(() => _error = error.toString());
+    }
   }
 
   @override
@@ -44,6 +53,8 @@ class _Biar50ClosurePageState extends State<Biar50ClosurePage> {
               label: const Text('Generar informe de cierre'),
             ),
             const SizedBox(height: 24),
+            if (_error != null)
+              Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             if (_informe != null) _buildInforme(_informe!),
           ],
         ),
