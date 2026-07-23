@@ -10,6 +10,7 @@ using UnityEngine;
 /// - Motion state: "Walk"
 /// - Bool parameter: "IsWalking"
 /// </summary>
+// kguanoluisa, Expone comandos Idle/Walk para sincronizar animaciones de personajes AR, sin nuevas variables, 2026-07-23
 [RequireComponent(typeof(Animator))]
 public class CharacterAnimationController : MonoBehaviour
 {
@@ -56,6 +57,7 @@ public class CharacterAnimationController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Verifica si el Animator tiene el parametro bool IsWalking configurado, sin nuevas variables, 2026-07-23
     private static bool HasBoolParameter(Animator targetAnimator, int parameterHash)
     {
         if (targetAnimator == null)
