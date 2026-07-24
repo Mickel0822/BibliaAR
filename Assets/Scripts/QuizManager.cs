@@ -9,6 +9,7 @@ using Action = System.Action;
 public class QuizManager : MonoBehaviour
 {
     public event Action QuizClosed;
+    public event System.Action<int, int> QuizCompleted;
 
     [System.Serializable]
     public class Question
@@ -756,6 +757,7 @@ public class QuizManager : MonoBehaviour
         ClearConfetti();
         quizPanel.gameObject.SetActive(false);
         resultPanel.gameObject.SetActive(true);
+        QuizCompleted?.Invoke(score, questions.Count);
 
         // Dynamically update congratulatory text based on the user's score
         if (score == questions.Count)

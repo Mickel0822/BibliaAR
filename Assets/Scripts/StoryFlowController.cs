@@ -10,6 +10,7 @@ public class StoryFlowController : MonoBehaviour
     [Header("References")]
     [SerializeField] private QuizManager quizManager;
     [SerializeField] private AudioSource narrationAudio;
+    [SerializeField] private ChildProgressManager progressManager;
 
     [Header("AR Flow")]
     [SerializeField] private bool waitForQrDetection = true;
@@ -51,6 +52,16 @@ public class StoryFlowController : MonoBehaviour
             quizManager = FindAnyObjectByType<QuizManager>();
         }
 
+        if (progressManager == null)
+        {
+            progressManager = FindAnyObjectByType<ChildProgressManager>();
+        }
+
+        if (progressManager == null)
+        {
+            progressManager = gameObject.AddComponent<ChildProgressManager>();
+        }
+
         EnsureEventSystem();
         BuildUi();
         ShowInitialState();
@@ -64,6 +75,12 @@ public class StoryFlowController : MonoBehaviour
         if (quizManager != null)
         {
             quizManager.QuizClosed += OnQuizClosed;
+            quizManager.QuizCompleted += OnQuizCompleted;
+        }
+
+        if (progressManager != null)
+        {
+            progressManager.ProfileChanged += OnProfileChanged;
         }
     }
 
@@ -75,6 +92,12 @@ public class StoryFlowController : MonoBehaviour
         if (quizManager != null)
         {
             quizManager.QuizClosed -= OnQuizClosed;
+            quizManager.QuizCompleted -= OnQuizCompleted;
+        }
+
+        if (progressManager != null)
+        {
+            progressManager.ProfileChanged -= OnProfileChanged;
         }
     }
 
@@ -83,6 +106,12 @@ public class StoryFlowController : MonoBehaviour
         if (waitForQrDetection && !qrDetected)
         {
             ShowScanningState("Buscando codigo QR", "Apunta la camara al marcador para iniciar la experiencia.");
+            return;
+        }
+
+        if (progressManager != null && !progressManager.TryBeginActivity())
+        {
+            ShowScanningState("Selecciona un perfil", "Abre Perfil / Historial y selecciona o crea el perfil del nino.");
             return;
         }
 
@@ -169,6 +198,29 @@ public class StoryFlowController : MonoBehaviour
         }
 
         ShowInitialState();
+    }
+
+    private void OnQuizCompleted(int score, int totalQuestions)
+    {
+        if (progressManager != null)
+        {
+            progressManager.CompleteActivity(score, totalQuestions);
+        }
+    }
+
+    private void OnProfileChanged()
+    {
+        if (!qrDetected || storyStarted || quizStarted)
+        {
+            return;
+        }
+
+        if (progressManager != null && progressManager.HasSelectedProfile)
+        {
+            SetScanVisible(false);
+            SetSuccessVisible(false);
+            SetControlsVisible(true);
+        }
     }
 
     private IEnumerator StoryRoutine()
