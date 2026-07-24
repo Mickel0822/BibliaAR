@@ -18,6 +18,7 @@ public class ImageTrackingController : MonoBehaviour
     private ARTrackedImageManager trackedImageManager;
     private bool hasVisibleTrackedImage;
     private GameObject currentContent;
+    private BiblicalSceneAnimationController sceneAnimationController;
 
     private void Awake()
     {
@@ -87,6 +88,8 @@ public class ImageTrackingController : MonoBehaviour
             return;
         }
 
+        bool shouldStartAnimation = currentContent == null || !currentContent.activeSelf;
+
         if (currentContent == null)
         {
             if (arContentPrefab == null)
@@ -97,6 +100,7 @@ public class ImageTrackingController : MonoBehaviour
 
             currentContent = Instantiate(arContentPrefab);
             currentContent.name = $"{arContentPrefab.name}_Runtime";
+            sceneAnimationController = EnsureSceneAnimationController(currentContent);
             Log($"Instantiated AR content '{currentContent.name}'.");
         }
 
@@ -107,6 +111,47 @@ public class ImageTrackingController : MonoBehaviour
         contentTransform.localScale = arContentPrefab.transform.localScale;
 
         SetCurrentContentVisible(true);
+        if (shouldStartAnimation)
+        {
+            PlaySceneAnimation();
+        }
+    }
+
+    /// <summary>
+    /// Ensures the runtime AR content has the BIAR-24 scene animator. The prefab can stay focused
+    /// on visual assets while the tracking controller attaches the behavior needed for marker playback.
+    /// </summary>
+    private BiblicalSceneAnimationController EnsureSceneAnimationController(GameObject content)
+    {
+        BiblicalSceneAnimationController controller = content.GetComponent<BiblicalSceneAnimationController>();
+        if (controller == null)
+        {
+            controller = content.AddComponent<BiblicalSceneAnimationController>();
+        }
+
+        return controller;
+    }
+
+    /// <summary>
+    /// Starts or restarts the 10-second biblical scene animation when the marker is actively tracked.
+    /// </summary>
+    private void PlaySceneAnimation()
+    {
+        if (sceneAnimationController != null)
+        {
+            sceneAnimationController.PlayFromStart();
+        }
+    }
+
+    /// <summary>
+    /// Stops the biblical scene animation when AR tracking is limited, lost, or removed.
+    /// </summary>
+    private void StopSceneAnimation()
+    {
+        if (sceneAnimationController != null)
+        {
+            sceneAnimationController.StopSceneAnimation();
+        }
     }
 
     private void SetCurrentContentVisible(bool visible)
@@ -114,6 +159,11 @@ public class ImageTrackingController : MonoBehaviour
         if (currentContent == null)
         {
             return;
+        }
+
+        if (!visible)
+        {
+            StopSceneAnimation();
         }
 
         currentContent.SetActive(visible);

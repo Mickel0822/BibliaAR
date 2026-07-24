@@ -1,5 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+# BIAR-11 | Desarrollador: Tnte Bayas Cristian | Subtarea: Crear escena base AR (SampleScene.unity)
 --- !u!29 &1
 OcclusionCullingSettings:
   m_ObjectHideFlags: 0
