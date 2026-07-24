@@ -10,6 +10,7 @@ using UnityEngine;
 /// - Motion state: "Walk"
 /// - Bool parameter: "IsWalking"
 /// </summary>
+// kguanoluisa, Expone comandos Idle/Walk para sincronizar animaciones de personajes AR, sin nuevas variables, 2026-07-23
 [RequireComponent(typeof(Animator))]
 public class CharacterAnimationController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class CharacterAnimationController : MonoBehaviour
     private Animator animator;
     private bool hasWalkingParameter;
 
+    // kguanoluisa, Obtiene el Animator del personaje y valida el parametro IsWalking, sin nuevas variables, 2026-07-05
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -27,6 +29,7 @@ public class CharacterAnimationController : MonoBehaviour
     /// <summary>
     /// Returns the character to the idle pose used before and after the 10-second scene pass.
     /// </summary>
+    // kguanoluisa, Activa el estado Idle del personaje al finalizar la animacion de escena, sin nuevas variables, 2026-07-05
     public void PlayIdle()
     {
         if (animator == null)
@@ -43,6 +46,7 @@ public class CharacterAnimationController : MonoBehaviour
     /// <summary>
     /// Activates the movement state while the biblical scene animation is running.
     /// </summary>
+    // kguanoluisa, Activa la animacion Walk mientras la escena biblica esta en reproduccion, sin nuevas variables, 2026-07-17
     public void PlayWalk()
     {
         if (animator == null)
@@ -56,6 +60,7 @@ public class CharacterAnimationController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Verifica si el Animator tiene el parametro bool IsWalking configurado, sin nuevas variables, 2026-07-23
     private static bool HasBoolParameter(Animator targetAnimator, int parameterHash)
     {
         if (targetAnimator == null)

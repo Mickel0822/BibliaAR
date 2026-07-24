@@ -3,9 +3,11 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+// kguanoluisa, Controlador de seguimiento QR para la escena AR del Buen Samaritano, sin nuevas variables, 2026-07-20
 [RequireComponent(typeof(ARTrackedImageManager))]
 public class ImageTrackingController : MonoBehaviour
 {
+    // kguanoluisa, Eventos estaticos para notificar deteccion y perdida del marcador QR, sin nuevas variables, 2026-07-20
     public static event Action<ARTrackedImage> ImageDetected;
     public static event Action ImageLost;
 
@@ -22,6 +24,7 @@ public class ImageTrackingController : MonoBehaviour
 
     private void Awake()
     {
+        // kguanoluisa, Inicializa el manager de imagenes rastreadas y reutiliza el prefab del manager si no hay uno asignado, sin nuevas variables, 2026-07-20
         trackedImageManager = GetComponent<ARTrackedImageManager>();
 
         if (arContentPrefab == null && trackedImageManager.trackedImagePrefab != null)
@@ -31,16 +34,19 @@ public class ImageTrackingController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Registra el listener de cambios en imagenes rastreadas al activarse el componente, sin nuevas variables, 2026-07-03
     private void OnEnable()
     {
         trackedImageManager.trackablesChanged.AddListener(OnTrackedImagesChanged);
     }
 
+    // kguanoluisa, Elimina el listener de tracking al desactivarse el componente, sin nuevas variables, 2026-07-03
     private void OnDisable()
     {
         trackedImageManager.trackablesChanged.RemoveListener(OnTrackedImagesChanged);
     }
 
+    // kguanoluisa, Procesa imagenes QR agregadas, actualizadas o removidas para mostrar u ocultar la escena AR, sin nuevas variables, 2026-07-20
     private void OnTrackedImagesChanged(ARTrackablesChangedEventArgs<ARTrackedImage> args)
     {
         foreach (ARTrackedImage trackedImage in args.added)
@@ -81,6 +87,7 @@ public class ImageTrackingController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Instancia y ancla el contenido AR al marcador detectado, sin nuevas variables, 2026-07-20
     private void ShowContentFor(ARTrackedImage trackedImage)
     {
         if (trackedImage == null)
@@ -121,6 +128,7 @@ public class ImageTrackingController : MonoBehaviour
     /// Ensures the runtime AR content has the BIAR-24 scene animator. The prefab can stay focused
     /// on visual assets while the tracking controller attaches the behavior needed for marker playback.
     /// </summary>
+    // kguanoluisa, Adjunta el controlador de animacion BIAR-24 al contenido instanciado en runtime, sin nuevas variables, 2026-07-09
     private BiblicalSceneAnimationController EnsureSceneAnimationController(GameObject content)
     {
         BiblicalSceneAnimationController controller = content.GetComponent<BiblicalSceneAnimationController>();
@@ -154,6 +162,7 @@ public class ImageTrackingController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Detiene la animacion y oculta renderers cuando se pierde el tracking del QR, sin nuevas variables, 2026-07-09
     private void SetCurrentContentVisible(bool visible)
     {
         if (currentContent == null)
@@ -177,6 +186,7 @@ public class ImageTrackingController : MonoBehaviour
         Log($"AR content visible: {visible}. Renderers found: {renderers.Length}.");
     }
 
+    // kguanoluisa, Emite eventos estaticos cuando el marcador QR entra o sale del campo de vision, sin nuevas variables, 2026-07-15
     private void NotifyDetected(ARTrackedImage trackedImage)
     {
         hasVisibleTrackedImage = true;
@@ -194,6 +204,7 @@ public class ImageTrackingController : MonoBehaviour
         ImageLost?.Invoke();
     }
 
+    // kguanoluisa, Registra mensajes de depuracion del tracking QR en consola Unity, sin nuevas variables, 2026-07-15
     private void Log(string message)
     {
         if (logDebugInfo)

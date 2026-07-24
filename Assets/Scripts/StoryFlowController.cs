@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
+// kguanoluisa, Controlador del flujo narrativo AR: escaneo QR, subtitulos y quiz del Buen Samaritano, sin nuevas variables, 2026-07-21
 public class StoryFlowController : MonoBehaviour
 {
     [Header("References")]
@@ -44,6 +45,7 @@ public class StoryFlowController : MonoBehaviour
     private bool storyStarted;
     private bool quizStarted;
 
+    // kguanoluisa, Prepara referencias, UI y estado inicial del flujo narrativo AR, sin nuevas variables, 2026-07-01
     private void Awake()
     {
         if (quizManager == null)
@@ -58,6 +60,7 @@ public class StoryFlowController : MonoBehaviour
 
     private void OnEnable()
     {
+        // kguanoluisa, Suscribe eventos de deteccion QR y cierre del quiz para coordinar la experiencia, sin nuevas variables, 2026-07-21
         ImageTrackingController.ImageDetected += OnQrDetected;
         ImageTrackingController.ImageLost += OnQrLost;
 
@@ -78,6 +81,7 @@ public class StoryFlowController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Valida deteccion QR antes de iniciar la corrutina del relato biblico, sin nuevas variables, 2026-07-01
     public void PlayStory()
     {
         if (waitForQrDetection && !qrDetected)
@@ -105,6 +109,7 @@ public class StoryFlowController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Reacciona al evento de deteccion QR para iniciar la transicion a controles, sin nuevas variables, 2026-07-10
     private void OnQrDetected(ARTrackedImage trackedImage)
     {
         if (qrDetected && !storyStarted && !quizStarted)
@@ -145,6 +150,7 @@ public class StoryFlowController : MonoBehaviour
         ShowScanningState("Manten el QR visible", "Acerca el marcador y evita reflejos o movimiento brusco.");
     }
 
+    // kguanoluisa, Restablece la pantalla inicial cuando el usuario cierra el quiz, sin nuevas variables, 2026-07-21
     private void OnQuizClosed()
     {
         qrDetected = false;
@@ -171,6 +177,7 @@ public class StoryFlowController : MonoBehaviour
         ShowInitialState();
     }
 
+    // kguanoluisa, Inicia la narracion con subtitulos sincronizados y luego lanza el quiz, sin nuevas variables, 2026-07-21
     private IEnumerator StoryRoutine()
     {
         storyStarted = true;
@@ -212,6 +219,7 @@ public class StoryFlowController : MonoBehaviour
         storyRoutine = null;
     }
 
+    // kguanoluisa, Transiciona del relato al quiz ocultando paneles de la experiencia AR, sin nuevas variables, 2026-07-14
     private void StartQuiz()
     {
         quizStarted = true;
@@ -229,6 +237,7 @@ public class StoryFlowController : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Muestra confirmacion de QR detectado antes de habilitar los controles de reproduccion, sin nuevas variables, 2026-07-21
     private IEnumerator ShowQrDetectedThenControls()
     {
         SetScanVisible(false);
@@ -268,6 +277,7 @@ public class StoryFlowController : MonoBehaviour
         SetSubtitleVisible(false);
     }
 
+    // kguanoluisa, Calcula la duracion total de narracion segun el audio o subtitulos configurados, sin nuevas variables, 2026-07-14
     private float GetNarrationDuration(int lineCount)
     {
         if (narrationAudio != null && narrationAudio.clip != null)
@@ -278,6 +288,7 @@ public class StoryFlowController : MonoBehaviour
         return Mathf.Max(lineCount * fallbackSecondsPerSubtitle, 1f);
     }
 
+    // kguanoluisa, Construye dinamicamente los paneles de escaneo, controles y subtitulos, sin nuevas variables, 2026-07-10
     private void BuildUi()
     {
         GameObject canvasGo = new GameObject("StoryFlowCanvas", typeof(RectTransform));

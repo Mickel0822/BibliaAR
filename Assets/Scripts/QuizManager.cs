@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using Action = System.Action;
 
+// kguanoluisa, Gestor del quiz interactivo sobre la parabola del Buen Samaritano con UI generada en runtime, sin nuevas variables, 2026-07-22
 public class QuizManager : MonoBehaviour
 {
     public event Action QuizClosed;
@@ -57,6 +58,7 @@ public class QuizManager : MonoBehaviour
     private Color colorError = new Color32(239, 68, 68, 255);           // Rose Red (#EF4444)
     private Color colorButtonNormal = new Color32(45, 45, 58, 255);     // Card Button Slate (#2D2D3A)
 
+    // kguanoluisa, Inicializa el banco de preguntas al cargar el componente del quiz, sin nuevas variables, 2026-07-02
     private void Awake()
     {
         InitializeQuestions();
@@ -66,6 +68,7 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Inicia el quiz seleccionando 3 preguntas aleatorias del banco de 6, sin nuevas variables, 2026-07-22
     public void BeginQuiz()
     {
         if (!uiInitialized)
@@ -90,6 +93,7 @@ public class QuizManager : MonoBehaviour
         ShowQuestion(0);
     }
 
+    // kguanoluisa, Oculta el canvas del quiz y limpia efectos visuales activos, sin nuevas variables, 2026-07-02
     public void HideQuiz()
     {
         ClearConfetti();
@@ -122,6 +126,7 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Carga el banco de preguntas sobre la parabola del Buen Samaritano, sin nuevas variables, 2026-07-22
     private void InitializeQuestions()
     {
         // Question 1
@@ -194,6 +199,7 @@ public class QuizManager : MonoBehaviour
     }
 
     // Selects 3 random unique questions from the pool of 6 questions
+    // kguanoluisa, Selecciona 3 preguntas unicas de forma aleatoria del pool disponible, sin nuevas variables, 2026-07-13
     private void SelectRandomQuestions()
     {
         questions.Clear();
@@ -410,6 +416,7 @@ public class QuizManager : MonoBehaviour
         return textComponent;
     }
 
+    // kguanoluisa, Construye la interfaz del quiz con canvas, botones y panel de resultados, sin nuevas variables, 2026-07-22
     private void SetupUI()
     {
         // 1. Ensure EventSystem exists and is compatible with the active Input System
@@ -751,6 +758,7 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    // kguanoluisa, Muestra la pantalla final con estrellas y mensaje segun la puntuacion obtenida, sin nuevas variables, 2026-07-22
     private void ShowResultScreen()
     {
         ClearConfetti();
@@ -784,6 +792,7 @@ public class QuizManager : MonoBehaviour
         StartCoroutine(AnimateResultScreen(score));
     }
 
+    // kguanoluisa, Cierra el quiz y notifica al flujo narrativo para volver al inicio, sin nuevas variables, 2026-07-13
     private void CloseQuiz()
     {
         HideQuiz();
@@ -1074,6 +1083,7 @@ public class QuizManager : MonoBehaviour
 }
 
 // Helper class for Premium UI interactions
+// kguanoluisa, Efectos visuales de hover y click para botones premium del quiz, sin nuevas variables, 2026-07-17
 public class QuizButtonEffects : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Color normalColor;
