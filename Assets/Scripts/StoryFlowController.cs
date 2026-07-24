@@ -1,3 +1,4 @@
+// Autor: TNTE BAYAS CRISTIAN
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class StoryFlowController : MonoBehaviour
     [Header("References")]
     [SerializeField] private QuizManager quizManager;
     [SerializeField] private AudioSource narrationAudio;
+    [SerializeField] private SessionManager sessionManager;
+    [SerializeField] private BiblicalSceneAnimationController sceneAnimationController;
 
     [Header("AR Flow")]
     [SerializeField] private bool waitForQrDetection = true;
@@ -51,6 +54,23 @@ public class StoryFlowController : MonoBehaviour
             quizManager = FindAnyObjectByType<QuizManager>();
         }
 
+        // Auto-detectar SessionManager si no fue asignado en el Inspector
+        if (sessionManager == null)
+        {
+            sessionManager = FindAnyObjectByType<SessionManager>();
+            if (sessionManager == null)
+            {
+                sessionManager = gameObject.AddComponent<SessionManager>();
+                Debug.Log("[StoryFlowController] SessionManager creado autom\u00e1ticamente.");
+            }
+        }
+
+        // Auto-detectar BiblicalSceneAnimationController si no fue asignado
+        if (sceneAnimationController == null)
+        {
+            sceneAnimationController = FindAnyObjectByType<BiblicalSceneAnimationController>();
+        }
+
         EnsureEventSystem();
         BuildUi();
         ShowInitialState();
@@ -65,6 +85,11 @@ public class StoryFlowController : MonoBehaviour
         {
             quizManager.QuizClosed += OnQuizClosed;
         }
+
+        if (sessionManager != null)
+        {
+            sessionManager.OnSessionExit += OnSessionExitRequested;
+        }
     }
 
     private void OnDisable()
@@ -75,6 +100,11 @@ public class StoryFlowController : MonoBehaviour
         if (quizManager != null)
         {
             quizManager.QuizClosed -= OnQuizClosed;
+        }
+
+        if (sessionManager != null)
+        {
+            sessionManager.OnSessionExit -= OnSessionExitRequested;
         }
     }
 
@@ -89,6 +119,12 @@ public class StoryFlowController : MonoBehaviour
         if (storyRoutine != null)
         {
             StopCoroutine(storyRoutine);
+        }
+
+        // Notificar al SessionManager que el usuario comenzó la sesión activa
+        if (sessionManager != null)
+        {
+            sessionManager.BeginSession();
         }
 
         storyRoutine = StartCoroutine(StoryRoutine());
@@ -147,9 +183,9 @@ public class StoryFlowController : MonoBehaviour
 
     private void OnQuizClosed()
     {
-        qrDetected = false;
+        qrDetected   = false;
         storyStarted = false;
-        quizStarted = false;
+        quizStarted  = false;
 
         if (successRoutine != null)
         {
@@ -168,6 +204,51 @@ public class StoryFlowController : MonoBehaviour
             narrationAudio.Stop();
         }
 
+        // Registrar duración de sesión y reiniciar el contador
+        if (sessionManager != null)
+        {
+            sessionManager.ResetSession();
+        }
+
+        ShowInitialState();
+    }
+
+    /// <summary>
+    /// Responde al evento OnSessionExit del SessionManager cuando el usuario
+    /// elige "Salir" en la alerta de 20 minutos. Cierra el quiz y vuelve a la pantalla inicial.
+    /// </summary>
+    private void OnSessionExitRequested()
+    {
+        // Forzar cierre inmediato del quiz si está activo
+        if (quizManager != null)
+        {
+            quizManager.HideQuiz();
+        }
+
+        // Detener la narración si estuviese sonando
+        if (narrationAudio != null)
+        {
+            narrationAudio.Stop();
+        }
+
+        // Detener corrutinas activas
+        if (storyRoutine != null)
+        {
+            StopCoroutine(storyRoutine);
+            storyRoutine = null;
+        }
+
+        if (successRoutine != null)
+        {
+            StopCoroutine(successRoutine);
+            successRoutine = null;
+        }
+
+        // Resetear estado y volver a pantalla inicial
+        qrDetected   = false;
+        storyStarted = false;
+        quizStarted  = false;
+
         ShowInitialState();
     }
 
@@ -184,9 +265,9 @@ public class StoryFlowController : MonoBehaviour
             narrationAudio.Play();
         }
 
-        int lineCount = subtitles != null ? subtitles.Length : 0;
+        int   lineCount     = subtitles != null ? subtitles.Length : 0;
         float totalDuration = GetNarrationDuration(lineCount);
-        float lineDuration = lineCount > 0 ? totalDuration / lineCount : totalDuration;
+        float lineDuration  = lineCount > 0 ? totalDuration / lineCount : totalDuration;
 
         for (int i = 0; i < lineCount; i++)
         {
@@ -194,6 +275,13 @@ public class StoryFlowController : MonoBehaviour
             {
                 subtitleText.text = subtitles[i];
                 SetSubtitleVisible(true);
+            }
+
+            // Sincronizar animación de la escena con la fase narrativa actual
+            if (sceneAnimationController != null)
+            {
+                sceneAnimationController.PlayNarrativePhase(i, lineDuration);
+                Debug.Log($"[StoryFlow] Fase narrativa {i} iniciada: {(subtitles != null && i < subtitles.Length ? subtitles[i] : string.Empty)}");
             }
 
             yield return new WaitForSeconds(lineDuration);

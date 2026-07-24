@@ -1,3 +1,4 @@
+// Autor: TNTE BAYAS CRISTIAN
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,7 @@ using UnityEngine;
 public class CharacterAnimationController : MonoBehaviour
 {
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
+    private static readonly int IsHurtHash    = Animator.StringToHash("IsHurt");
 
     private Animator animator;
     private bool hasWalkingParameter;
@@ -53,6 +55,43 @@ public class CharacterAnimationController : MonoBehaviour
         if (hasWalkingParameter)
         {
             animator.SetBool(IsWalkingHash, true);
+        }
+    }
+
+    /// <summary>
+    /// Dispara un trigger en el Animator por nombre (p.ej. "Hurt", "Help").
+    /// Si el trigger no existe en el controller, la llamada se ignora de forma segura.
+    /// </summary>
+    public void PlayEmote(string triggerName)
+    {
+        if (animator == null || string.IsNullOrEmpty(triggerName)) return;
+
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Trigger &&
+                param.name  == triggerName)
+            {
+                animator.SetTrigger(triggerName);
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Activa o desactiva el estado "herido" si el Animator tiene el bool <c>IsHurt</c>.
+    /// </summary>
+    public void SetHurt(bool hurt)
+    {
+        if (animator == null) return;
+
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.type     == AnimatorControllerParameterType.Bool &&
+                param.nameHash == IsHurtHash)
+            {
+                animator.SetBool(IsHurtHash, hurt);
+                return;
+            }
         }
     }
 
