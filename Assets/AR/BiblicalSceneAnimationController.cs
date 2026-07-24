@@ -6,6 +6,8 @@ using UnityEngine;
 /// The controller keeps the AR content anchored to the tracked image while giving the characters
 /// a visible 10-second motion sequence that can be restarted every time the marker is found again.
 /// </summary>
+// kguanoluisa, Coordina la animacion de 10 segundos de la escena biblica anclada al marcador QR, sin nuevas variables, 2026-07-23
+// nayarbP, Coordina la animacion de 10 segundos de la escena biblica anclada al marcador QR, sin nuevas variables, 2026-07-23
 public class BiblicalSceneAnimationController : MonoBehaviour
 {
     [Header("Timing")]
@@ -22,6 +24,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     private Vector3 initialLocalPosition;
     private Quaternion initialLocalRotation;
 
+    // kguanoluisa, Cachea referencias de personajes y guarda la pose inicial de la escena, sin nuevas variables, 2026-07-04
+    // nayarbP, Cachea referencias de personajes y guarda la pose inicial de la escena, sin nuevas variables, 2026-07-04
     private void Awake()
     {
         CacheSceneReferences();
@@ -37,6 +41,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     /// Starts the biblical scene from the beginning. If a previous pass is still running,
     /// it is stopped first so the marker can restart the same synchronized 10-second loop.
     /// </summary>
+    // kguanoluisa, Reinicia la animacion sincronizada al detectar nuevamente el marcador QR, sin nuevas variables, 2026-07-04
+    // nayarbP, Reinicia la animacion sincronizada al detectar nuevamente el marcador QR, sin nuevas variables, 2026-07-04
     public void PlayFromStart()
     {
         if (!isActiveAndEnabled)
@@ -54,6 +60,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     /// Stops the running sequence, returns the root content to its tracked-image pose,
     /// and places every character back into its idle state.
     /// </summary>
+    // kguanoluisa, Detiene corrutinas y restaura pose al perder visibilidad del marcador, sin nuevas variables, 2026-07-16
+    // nayarbP, Detiene corrutinas y restaura pose al perder visibilidad del marcador, sin nuevas variables, 2026-07-16
     public void StopSceneAnimation()
     {
         if (animationRoutine != null)
@@ -66,6 +74,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         ResetScenePose();
     }
 
+    // kguanoluisa, Obtiene controladores de animacion y Animators de los hijos de la escena, sin nuevas variables, 2026-07-16
+    // nayarbP, Obtiene controladores de animacion y Animators de los hijos de la escena, sin nuevas variables, 2026-07-16
     private void CacheSceneReferences()
     {
         characters = GetComponentsInChildren<CharacterAnimationController>(true);
@@ -84,6 +94,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         transform.localRotation = initialLocalRotation;
     }
 
+    // kguanoluisa, Ejecuta el bucle principal de la animacion de escena con duracion minima configurable, sin nuevas variables, 2026-07-16
+    // nayarbP, Ejecuta el bucle principal de la animacion de escena con duracion minima configurable, sin nuevas variables, 2026-07-16
     private IEnumerator SceneAnimationRoutine()
     {
         do
@@ -95,6 +107,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         animationRoutine = null;
     }
 
+    // kguanoluisa, Ejecuta el ciclo de animacion con movimiento de balanceo y caminar de personajes, sin nuevas variables, 2026-07-23
+    // nayarbP, Ejecuta el ciclo de animacion con movimiento de balanceo y caminar de personajes, sin nuevas variables, 2026-07-23
     private IEnumerator PlayTenSecondPass()
     {
         float elapsed = 0f;
@@ -120,6 +134,8 @@ public class BiblicalSceneAnimationController : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
     }
 
+    // kguanoluisa, Alterna entre animacion Idle y Walk en todos los personajes de la escena, sin nuevas variables, 2026-07-23
+    // nayarbP, Alterna entre animacion Idle y Walk en todos los personajes de la escena, sin nuevas variables, 2026-07-23
     private void SetCharactersWalking(bool isWalking)
     {
         if (characters == null)

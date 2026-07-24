@@ -63,6 +63,8 @@ public class ARSceneSetupTool : EditorWindow
         }
     }
 
+    // kguanoluisa, Aplica la configuracion AR sobre el XR Origin seleccionado en el editor, sin nuevas variables, 2026-07-07
+    // nayarbP, Aplica la configuracion AR sobre el XR Origin seleccionado en el editor, sin nuevas variables, 2026-07-07
     private void Apply(GameObject target)
     {
         // 1) Asegurar AR Session.
