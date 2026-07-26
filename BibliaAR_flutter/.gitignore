@@ -1,0 +1,183 @@
+# =============================================================================
+# Biblia AR Flutter — .gitignore
+# =============================================================================
+
+# --- Sistema operativo -------------------------------------------------------
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# --- IDEs y editores ---------------------------------------------------------
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+# Cursor
+.cursor/
+
+# Visual Studio (apps de escritorio Windows)
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.[Cc]ache
+!*.[Cc]ache/
+
+# Otros editores
+*.swp
+*.swo
+.atom/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# --- Flutter / Dart / Pub ----------------------------------------------------
+
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+
+# Plugins y dependencias generadas
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Symbolication y ofuscación
+app.*.symbols
+app.*.map.json
+
+# FVM (Flutter Version Management)
+.fvm/
+.fvm/flutter_sdk
+
+# --- Android -----------------------------------------------------------------
+
+**/android/**/gradle-wrapper.jar
+**/android/.gradle/
+**/android/captures/
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/.cxx/
+**/android/**/key.properties
+**/*.keystore
+**/*.jks
+
+# Artefactos de compilación Android
+/android/app/debug
+/android/app/profile
+/android/app/release
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# --- iOS / macOS -------------------------------------------------------------
+
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/Generated.xcconfig
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/**/DerivedData/
+**/ios/**/xcuserdata/
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Pods/
+
+# --- Web ---------------------------------------------------------------------
+
+# --- Windows / Linux (Flutter desktop) ---------------------------------------
+
+**/windows/flutter/ephemeral/
+**/linux/flutter/ephemeral/
+**/macos/Flutter/ephemeral/
+
+# --- Secretos y configuración local ------------------------------------------
+
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+secrets/
+credentials.json
+**/google-services.json
+**/GoogleService-Info.plist
+firebase_options.dart
+
+# --- Logs y temporales -------------------------------------------------------
+
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+*.class
+*.pyc
+
+# --- Herramientas de desarrollo ----------------------------------------------
+
+# Melos (monorepos)
+.melos_tool/
+
+# Mason (generadores de código)
+.mason/
+
+# --- Archivos compilados / generados (build_runner) --------------------------
+# Descomenta si usas build_runner y NO quieres versionar el código generado:
+# *.g.dart
+# *.freezed.dart
+# *.mocks.dart
+# *.config.dart
+
+# --- Recursos grandes / caché local (Biblia AR) ------------------------------
+# Descomenta si se descargan paquetes offline fuera del repo:
+# assets/offline_cache/
+# *.unitypackage
