@@ -1,0 +1,32 @@
+[
+  {
+    "tipo": "completar",
+    "titulo": "Completa la historia",
+    "pregunta": "¿Quién ayudó al hombre herido?",
+    "opciones": ["Un sacerdote", "Un levita", "Un samaritano", "Un soldado"],
+    "respuestaCorrecta": 2
+  },
+  {
+    "tipo": "ordenar",
+    "titulo": "Ordena la historia",
+    "instruccion": "Arrastra los eventos en el orden correcto",
+    "elementos": [
+      "El hombre es herido en el camino",
+      "Pasa un sacerdote sin ayudar",
+      "Un samaritano lo auxilia",
+      "Lo lleva a un hospedaje"
+    ],
+    "ordenCorrecto": [0, 1, 2, 3]
+  },
+  {
+    "tipo": "identificar",
+    "titulo": "Identifica al personaje",
+    "instruccion": "Selecciona quién mostró compasión",
+    "opciones": [
+      {"id": "sacerdote", "nombre": "Sacerdote", "icono": "person"},
+      {"id": "samaritano", "nombre": "Samaritano", "icono": "favorite"},
+      {"id": "levita", "nombre": "Levita", "icono": "person_outline"}
+    ],
+    "respuestaCorrecta": "samaritano"
+  }
+]
