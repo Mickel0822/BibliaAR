@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using BibliaAR.Core;
+using BibliaAR.Data;
 
 public class StoryFlowController : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class StoryFlowController : MonoBehaviour
     [SerializeField] private AudioSource narrationAudio;
     [SerializeField] private SessionManager sessionManager;
     [SerializeField] private BiblicalSceneAnimationController sceneAnimationController;
+    [SerializeField] private SceneDataLoader sceneDataLoader;
 
     [Header("AR Flow")]
     [SerializeField] private bool waitForQrDetection = true;
@@ -69,6 +72,11 @@ public class StoryFlowController : MonoBehaviour
         if (sceneAnimationController == null)
         {
             sceneAnimationController = FindAnyObjectByType<BiblicalSceneAnimationController>();
+        }
+
+        if (sceneDataLoader == null)
+        {
+            sceneDataLoader = FindAnyObjectByType<SceneDataLoader>();
         }
 
         EnsureEventSystem();
@@ -259,6 +267,75 @@ public class StoryFlowController : MonoBehaviour
         SetSuccessVisible(false);
         SetControlsVisible(false);
 
+        bool useDynamicData = (sceneDataLoader != null && sceneDataLoader.sceneData != null && sceneDataLoader.sceneData.phases.Count > 0);
+
+        if (useDynamicData)
+        {
+            yield return StartCoroutine(DynamicStoryRoutine());
+        }
+        else
+        {
+            yield return StartCoroutine(LegacyStoryRoutine());
+        }
+
+        SetSubtitleVisible(false);
+        StartQuiz();
+        storyRoutine = null;
+    }
+
+    private IEnumerator DynamicStoryRoutine()
+    {
+        BiblicalSceneData data = sceneDataLoader.sceneData;
+
+        // Play full audio if it exists
+        if (data.fullNarrationAudio != null && narrationAudio != null)
+        {
+            narrationAudio.clip = data.fullNarrationAudio;
+            narrationAudio.Stop();
+            narrationAudio.Play();
+        }
+
+        for (int i = 0; i < data.phases.Count; i++)
+        {
+            var phase = data.phases[i];
+
+            if (showSubtitles)
+            {
+                subtitleText.text = phase.subtitleText;
+                SetSubtitleVisible(true);
+            }
+
+            if (sceneAnimationController != null && !string.IsNullOrEmpty(phase.animationStateName))
+            {
+                sceneAnimationController.PlayDynamicPhase(phase.animationStateName, phase.duration);
+                Debug.Log($"[StoryFlow] Fase dinámica {i} iniciada: {phase.animationStateName}");
+            }
+            else if (sceneAnimationController != null)
+            {
+                sceneAnimationController.PlayNarrativePhase(i, phase.duration);
+            }
+
+            if (phase.phaseAudio != null && narrationAudio != null)
+            {
+                narrationAudio.clip = phase.phaseAudio;
+                narrationAudio.Stop();
+                narrationAudio.Play();
+            }
+
+            yield return new WaitForSeconds(phase.duration);
+        }
+
+        if (narrationAudio != null && narrationAudio.isPlaying)
+        {
+            while (narrationAudio.isPlaying)
+            {
+                yield return null;
+            }
+        }
+    }
+
+    private IEnumerator LegacyStoryRoutine()
+    {
         if (narrationAudio != null && narrationAudio.clip != null)
         {
             narrationAudio.Stop();
@@ -294,10 +371,6 @@ public class StoryFlowController : MonoBehaviour
                 yield return null;
             }
         }
-
-        SetSubtitleVisible(false);
-        StartQuiz();
-        storyRoutine = null;
     }
 
     private void StartQuiz()
