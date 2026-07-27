@@ -1,0 +1,26 @@
+{
+  "leccionId": 2,
+  "fragmentos": [
+    {
+      "id": 1,
+      "texto": "Puedes solicitar el certificado de residencia en la municipalidad.",
+      "inicioMs": 0,
+      "finMs": 4000,
+      "pictogramas": ["tramite", "municipio"]
+    },
+    {
+      "id": 2,
+      "texto": "Necesitas cédula y comprobante de domicilio.",
+      "inicioMs": 4000,
+      "finMs": 9000,
+      "pictogramas": ["cedula", "documento"]
+    },
+    {
+      "id": 3,
+      "texto": "Entrega los documentos y recibe tu certificado.",
+      "inicioMs": 9000,
+      "finMs": 14000,
+      "pictogramas": ["entrega", "certificado"]
+    }
+  ]
+}
