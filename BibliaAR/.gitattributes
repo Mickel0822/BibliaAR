@@ -1,4 +1,3 @@
-# kguanoluisa, .gitattributes raíz para LFS y merges Unity del monorepo, sin nuevas variables, 2026-07-26
 # Unity .gitattributes Template
 # Source: https://github.com/gitattributes/gitattributes/blob/master/Unity.gitattributes
 # Last synced: 2026-02-04
@@ -7,12 +6,8 @@
 # This template is maintained from the gitattributes/gitattributes repository
 # and distributed under MIT License.
 
-# Define macros (only works in top-level gitattributes files)
-[attr]lfs               filter=lfs diff=lfs merge=lfs -text
-[attr]unity-json        eol=lf linguist-language=json
-[attr]unity-yaml        merge=unityyamlmerge eol=lf linguist-language=yaml
-# Optionally collapse Unity YAML files on GitHub diffs
-# [attr]unity-yaml        merge=unityyamlmerge text linguist-language=yaml linguist-generated
+# kguanoluisa, Quitados macros [attr] (solo válidos en .gitattributes raíz), sin nuevas variables, 2026-07-26
+# Los macros lfs/unity-json/unity-yaml se definen en /.gitattributes del monorepo.
 # Unity source files
 *.cginc                 text
 *.compute               text linguist-language=hlsl
@@ -61,8 +56,6 @@
 *.physicMaterial        unity-yaml
 *.physicsMaterial2D     unity-yaml
 # Exclude from GitHub stats and diffs: third-party plugins, packages lock file
-BibliaAR/Assets/Plugins/**           linguist-generated
-BibliaAR/Packages/packages-lock.json linguist-generated
 Assets/Plugins/**           linguist-generated
 Packages/packages-lock.json linguist-generated
 # Unity LFS
