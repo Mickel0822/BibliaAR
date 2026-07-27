@@ -3,138 +3,159 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-// Amb-AS: Optimizar rendimiento de la optimización de modelos 3D (poly-count 2GB RAM) - 29/06/2026
 public class ProjectOptimizer
 {
     [MenuItem("Tools/AR Samaritano/Optimizar Assets")]
     public static void OptimizeAssets()
     {
-        if (!EditorUtility.DisplayDialog("Optimizar Assets", "¿Desea iniciar la optimización de modelos 3D y texturas para Android (poly-count 2GB RAM)?", "Sí", "No"))
-        {
-            return;
-        }
-
         string targetDir = Path.Combine(Application.dataPath, "Models/Scena1_Parabola");
         if (!Directory.Exists(targetDir))
         {
-            EditorUtility.DisplayDialog("Error", $"Directorio no encontrado: {targetDir}", "OK");
+            Debug.LogWarning($"[ProjectOptimizer] El directorio no existe: {targetDir}");
             return;
         }
 
-        try
+        string[] files = Directory.GetFiles(targetDir, "*.*", SearchOption.AllDirectories);
+        foreach (string file in files)
         {
-            string[] files = Directory.GetFiles(targetDir, "*.*", SearchOption.AllDirectories);
-            int total = files.Length;
-            for (int i = 0; i < total; i++)
+            string relativePath = "Assets" + file.Substring(Application.dataPath.Length).Replace('\\', '/');
+            string ext = Path.GetExtension(file).ToLower();
+
+            if (ext == ".fbx")
             {
-                string file = files[i];
-                EditorUtility.DisplayProgressBar("Optimizando Assets", $"Procesando {Path.GetFileName(file)}...", (float)i / total);
-
-                string relativePath = "Assets" + file.Substring(Application.dataPath.Length).Replace('\\', '/');
-                string ext = Path.GetExtension(file).ToLower();
-
-                if (ext == ".fbx")
+                ModelImporter importer = AssetImporter.GetAtPath(relativePath) as ModelImporter;
+                if (importer != null)
                 {
-                    ModelImporter importer = AssetImporter.GetAtPath(relativePath) as ModelImporter;
-                    if (importer != null)
+                    bool changed = false;
+                    if (importer.meshCompression != ModelImporterMeshCompression.High)
                     {
-                        bool changed = false;
-                        if (importer.meshCompression != ModelImporterMeshCompression.High)
-                        {
-                            importer.meshCompression = ModelImporterMeshCompression.High;
-                            changed = true;
-                        }
-                        if (!importer.optimizeGameObjects)
-                        {
-                            importer.optimizeGameObjects = true;
-                            changed = true;
-                        }
-
-                        if (changed)
-                        {
-                            importer.SaveAndReimport();
-                        }
+                        importer.meshCompression = ModelImporterMeshCompression.High;
+                        changed = true;
                     }
-                }
-                else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
-                {
-                    TextureImporter importer = AssetImporter.GetAtPath(relativePath) as TextureImporter;
-                    if (importer != null)
+                    if (!importer.optimizeGameObjects)
                     {
-                        bool changed = false;
-                        TextureImporterType targetType = relativePath.ToLower().Contains("normal") ? TextureImporterType.NormalMap : TextureImporterType.Default;
-                        if (importer.textureType != targetType)
-                        {
-                            importer.textureType = targetType;
-                            changed = true;
-                        }
+                        importer.optimizeGameObjects = true;
+                        changed = true;
+                    }
 
-                        TextureImporterPlatformSettings androidSettings = importer.GetPlatformTextureSettings("Android");
-                        if (androidSettings == null || !androidSettings.overridden || androidSettings.maxTextureSize != 1024 || androidSettings.textureCompression != TextureImporterCompression.Compressed)
-                        {
-                            androidSettings = new TextureImporterPlatformSettings
-                            {
-                                name = "Android",
-                                overridden = true,
-                                maxTextureSize = 1024,
-                                textureCompression = TextureImporterCompression.Compressed,
-                                compressionQuality = (int)TextureCompressionQuality.Normal
-                            };
-                            importer.SetPlatformTextureSettings(androidSettings);
-                            changed = true;
-                        }
-
-                        if (changed)
-                        {
-                            importer.SaveAndReimport();
-                        }
+                    if (changed)
+                    {
+                        Debug.Log($"[ProjectOptimizer] Optimizando modelo FBX: {relativePath}");
+                        importer.SaveAndReimport();
                     }
                 }
             }
-            AssetDatabase.SaveAssets();
-            EditorUtility.DisplayDialog("Éxito", "Optimización completada correctamente.", "OK");
+            else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+            {
+                TextureImporter importer = AssetImporter.GetAtPath(relativePath) as TextureImporter;
+                if (importer != null)
+                {
+                    bool changed = false;
+                    
+                    // Configurar tipo de textura
+                    if (relativePath.ToLower().Contains("normal"))
+                    {
+                        if (importer.textureType != TextureImporterType.NormalMap)
+                        {
+                            importer.textureType = TextureImporterType.NormalMap;
+                            changed = true;
+                        }
+                    }
+                    else
+                    {
+                        if (importer.textureType != TextureImporterType.Default)
+                        {
+                            importer.textureType = TextureImporterType.Default;
+                            changed = true;
+                        }
+                    }
+
+                    // Obtener settings de Android
+                    TextureImporterPlatformSettings androidSettings = importer.GetPlatformTextureSettings("Android");
+                    if (androidSettings == null || !androidSettings.overridden || androidSettings.maxTextureSize != 1024 || androidSettings.textureCompression != TextureImporterCompression.Compressed)
+                    {
+                        androidSettings = new TextureImporterPlatformSettings();
+                        androidSettings.name = "Android";
+                        androidSettings.overridden = true;
+                        androidSettings.maxTextureSize = 1024;
+                        androidSettings.textureCompression = TextureImporterCompression.Compressed;
+                        androidSettings.compressionQuality = (int)TextureCompressionQuality.Normal;
+                        importer.SetPlatformTextureSettings(androidSettings);
+                        changed = true;
+                    }
+
+                    if (changed)
+                    {
+                        Debug.Log($"[ProjectOptimizer] Optimizando textura: {relativePath}");
+                        importer.SaveAndReimport();
+                    }
+                }
+            }
         }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"[ProjectOptimizer] Error al optimizar assets: {ex.Message}");
-        }
-        finally
-        {
-            EditorUtility.ClearProgressBar();
-        }
+        
+        AssetDatabase.SaveAssets();
     }
 
     [MenuItem("Tools/AR Samaritano/Optimizar y Compilar APK")]
     public static void BuildAndroid()
     {
-        try
+        Debug.Log("[ProjectOptimizer] Iniciando optimización de assets...");
+        OptimizeAssets();
+        Debug.Log("[ProjectOptimizer] Optimización finalizada.");
+        
+        Debug.Log("[ProjectOptimizer] Configurando compilación de Android...");
+        // Asegurar que la plataforma de compilación es Android
+        if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
         {
-            OptimizeAssets();
-            
-            string buildDirectory = "Builds";
-            if (!Directory.Exists(buildDirectory)) Directory.CreateDirectory(buildDirectory);
+            Debug.Log("[ProjectOptimizer] Cambiando plataforma activa a Android...");
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+        }
 
-            string apkPath = Path.Combine(buildDirectory, "BibliaAR_v1.0.apk");
-            
-            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-            buildPlayerOptions.scenes = new string[] { "Assets/Scenes/SampleScene.unity" };
-            buildPlayerOptions.locationPathName = apkPath;
-            buildPlayerOptions.target = BuildTarget.Android;
-            buildPlayerOptions.options = BuildOptions.None;
-
-            var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-            if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
+        // Obtener escenas activas
+        var scenesList = new System.Collections.Generic.List<string>();
+        foreach (var scene in EditorBuildSettings.scenes)
+        {
+            if (scene.enabled)
             {
-                EditorUtility.DisplayDialog("Build Completado", "Compilación exitosa.", "OK");
-            }
-            else
-            {
-                EditorUtility.DisplayDialog("Build Fallido", "La compilación no tuvo éxito.", "OK");
+                scenesList.Add(scene.path);
             }
         }
-        catch (System.Exception ex)
+
+        if (scenesList.Count == 0)
         {
-            Debug.LogError($"[ProjectOptimizer] Error durante compilación: {ex.Message}");
+            Debug.LogError("[ProjectOptimizer] No hay escenas activas en el Build Settings!");
+            if (Application.isBatchMode) EditorApplication.Exit(1);
+            return;
+        }
+
+        // Crear directorio de Builds
+        string buildDirectory = "Builds";
+        if (!Directory.Exists(buildDirectory))
+        {
+            Directory.CreateDirectory(buildDirectory);
+        }
+
+        string apkPath = Path.Combine(buildDirectory, "BibliaAR_v1.0.apk");
+        Debug.Log($"[ProjectOptimizer] Compilando APK en: {apkPath}");
+
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+        buildPlayerOptions.scenes = scenesList.ToArray();
+        buildPlayerOptions.locationPathName = apkPath;
+        buildPlayerOptions.target = BuildTarget.Android;
+        buildPlayerOptions.options = BuildOptions.None;
+
+        var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+        var summary = report.summary;
+
+        if (summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
+        {
+            Debug.Log($"[ProjectOptimizer] Compilación exitosa! Tamaño: {summary.totalSize} bytes");
+            EditorApplication.Exit(0);
+        }
+        else
+        {
+            Debug.LogError($"[ProjectOptimizer] Compilación fallida! Resultado: {summary.result}");
+            EditorApplication.Exit(1);
         }
     }
 }

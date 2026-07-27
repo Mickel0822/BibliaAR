@@ -101,6 +101,55 @@ public class BiblicalSceneAnimationController : MonoBehaviour
     }
 
     /// <summary>
+    /// Ejecuta una animación dinámica basándose en el nombre del estado o trigger (animationStateName).
+    /// </summary>
+    public void PlayDynamicPhase(string animationStateName, float duration)
+    {
+        if (!isActiveAndEnabled) return;
+
+        CacheSceneReferences();
+
+        if (animationRoutine != null)
+        {
+            StopCoroutine(animationRoutine);
+        }
+
+        animationRoutine = StartCoroutine(DynamicPhaseRoutine(animationStateName, duration));
+    }
+
+    private IEnumerator DynamicPhaseRoutine(string animationStateName, float duration)
+    {
+        RestartAnimatorStates();
+
+        if (animators != null)
+        {
+            foreach (var anim in animators)
+            {
+                if (anim != null && !string.IsNullOrEmpty(animationStateName))
+                {
+                    anim.SetTrigger(animationStateName);
+                }
+            }
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            
+            float t = Mathf.Clamp01(elapsed / duration);
+            float wave = Mathf.Sin(t * Mathf.PI * 2f);
+            transform.localPosition = initialLocalPosition + Vector3.up * (wave * verticalBobAmplitude * 0.5f);
+            transform.localRotation = initialLocalRotation * Quaternion.Euler(0f, wave * rotationAmplitudeDegrees * 0.5f, 0f);
+
+            yield return null;
+        }
+
+        ResetScenePose();
+        animationRoutine = null;
+    }
+
+    /// <summary>
     /// Detiene la secuencia, devuelve la escena a su pose inicial y
     /// coloca a todos los personajes en idle.
     /// </summary>
