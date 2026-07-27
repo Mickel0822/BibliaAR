@@ -1,0 +1,39 @@
+name: biblia_ar_flutter
+description: "Aplicacion movil de Realidad Aumentada para la ensenanza interactiva e inclusiva de la Biblia"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.5
+  sqflite: ^2.4.2
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  video_player: ^2.10.0
+  just_audio: ^0.10.4
+  shared_preferences: ^2.5.3
+  camera: ^0.11.2
+  permission_handler: ^12.0.1
+  lottie: ^3.3.1
+  file_picker: ^11.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  sqflite_common_ffi: ^2.3.6
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/lessons/buen_samaritano/
+    - assets/activities/buen_samaritano/
+    - assets/illustrations/buen_samaritano/
+    - assets/illustrations/ar_overlay/
+    - assets/lottie/
+    - assets/sfx/

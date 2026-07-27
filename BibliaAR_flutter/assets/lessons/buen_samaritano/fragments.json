@@ -1,0 +1,43 @@
+{
+  "leccionId": 1,
+  "titulo": "El Buen Samaritano",
+  "referenciaBiblica": "Lucas 10:25-37",
+  "fragmentos": [
+    {
+      "id": 1,
+      "titulo": "El camino",
+      "descripcion": "Un hombre viaja de Jerusalén a Jericó.",
+      "ilustracionAsset": "assets/illustrations/buen_samaritano/fragment_1.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 4000
+    },
+    {
+      "id": 2,
+      "titulo": "El encuentro",
+      "descripcion": "Ladrones lo golpean y lo dejan herido en el camino.",
+      "ilustracionAsset": "assets/illustrations/buen_samaritano/fragment_2.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    },
+    {
+      "id": 3,
+      "titulo": "La compasión",
+      "descripcion": "Un samaritano lo ve y decide ayudarlo.",
+      "ilustracionAsset": "assets/illustrations/buen_samaritano/fragment_3.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    },
+    {
+      "id": 4,
+      "titulo": "La ayuda",
+      "descripcion": "Le cura las heridas y lo lleva a un hospedaje.",
+      "ilustracionAsset": "assets/illustrations/buen_samaritano/fragment_4.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 6000
+    }
+  ]
+}
