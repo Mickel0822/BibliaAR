@@ -1,0 +1,34 @@
+{
+  "leccionId": 2,
+  "titulo": "Certificado de residencia",
+  "referenciaBiblica": "Trámite municipal demo",
+  "fragmentos": [
+    {
+      "id": 1,
+      "titulo": "Inicio del trámite",
+      "descripcion": "Solicita el certificado en la oficina municipal o en línea.",
+      "ilustracionAsset": "assets/illustrations/tramites/tramite_1.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 4000
+    },
+    {
+      "id": 2,
+      "titulo": "Documentos",
+      "descripcion": "Prepara tu cédula y un comprobante de domicilio.",
+      "ilustracionAsset": "assets/illustrations/tramites/tramite_2.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    },
+    {
+      "id": 3,
+      "titulo": "Entrega",
+      "descripcion": "Presenta la documentación y recibe tu certificado.",
+      "ilustracionAsset": "assets/illustrations/tramites/tramite_3.png",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    }
+  ]
+}

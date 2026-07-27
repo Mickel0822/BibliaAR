@@ -1,0 +1,216 @@
+using System;
+using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+
+// Sal-B: crear estructura base de la detección de marcador ARCore y activación 3D - 25/06/2026
+[RequireComponent(typeof(ARTrackedImageManager))]
+public class ImageTrackingController : MonoBehaviour
+{
+    public static event Action<ARTrackedImage> ImageDetected;
+    public static event Action ImageLost;
+
+    [Tooltip("If true, QR tracking state changes are printed in the console.")]
+    [SerializeField] private bool logDebugInfo = true;
+
+    [Tooltip("Prefab with the biblical AR scene. If empty, the ARTrackedImageManager tracked image prefab is reused as visual content.")]
+    [SerializeField] private GameObject arContentPrefab;
+
+    private ARTrackedImageManager trackedImageManager;
+    private bool hasVisibleTrackedImage;
+    private GameObject currentContent;
+    private BiblicalSceneAnimationController sceneAnimationController;
+
+    private void Awake()
+    {
+        // Sal-B: implementar lógica principal de la detección de marcador ARCore y activación 3D - 25/06/2026
+        trackedImageManager = GetComponent<ARTrackedImageManager>();
+
+        if (arContentPrefab == null && trackedImageManager.trackedImagePrefab != null)
+        {
+            arContentPrefab = trackedImageManager.trackedImagePrefab;
+            trackedImageManager.trackedImagePrefab = null;
+        }
+    }
+
+    private void OnEnable()
+    {
+        // Sal-B: integrar la detección de marcador ARCore y activación 3D con el resto del módulo - 25/06/2026
+        trackedImageManager.trackablesChanged.AddListener(OnTrackedImagesChanged);
+    }
+
+    private void OnDisable()
+    {
+        trackedImageManager.trackablesChanged.RemoveListener(OnTrackedImagesChanged);
+    }
+
+    private void OnTrackedImagesChanged(ARTrackablesChangedEventArgs<ARTrackedImage> args)
+    {
+        // Sal-B: agregar validaciones y manejo de errores en la detección de marcador ARCore y activación 3D - 26/06/2026
+        foreach (ARTrackedImage trackedImage in args.added)
+        {
+            ShowContentFor(trackedImage);
+            NotifyDetected(trackedImage);
+            Log($"QR detected: '{trackedImage.referenceImage.name}'. Showing AR scene.");
+        }
+
+        foreach (ARTrackedImage trackedImage in args.updated)
+        {
+            bool isVisible = trackedImage.trackingState == TrackingState.Tracking;
+
+            if (isVisible)
+            {
+                ShowContentFor(trackedImage);
+                NotifyDetected(trackedImage);
+            }
+            else
+            {
+                SetCurrentContentVisible(false);
+                NotifyLost();
+                Log($"QR '{trackedImage.referenceImage.name}' tracking is limited or lost. Hiding AR scene.");
+            }
+        }
+
+        foreach (var removedImage in args.removed)
+        {
+            ARTrackedImage trackedImage = removedImage.Value;
+            if (trackedImage == null)
+            {
+                continue;
+            }
+
+            SetCurrentContentVisible(false);
+            NotifyLost();
+            Log($"QR '{trackedImage.referenceImage.name}' removed. AR scene hidden.");
+        }
+    }
+
+    private void ShowContentFor(ARTrackedImage trackedImage)
+    {
+        // Sal-B: ajustar UI/UX de la detección de marcador ARCore y activación 3D - 26/06/2026
+        if (trackedImage == null)
+        {
+            return;
+        }
+
+        bool shouldStartAnimation = currentContent == null || !currentContent.activeSelf;
+
+        if (currentContent == null)
+        {
+            if (arContentPrefab == null)
+            {
+                Log("No AR content prefab is assigned.");
+                return;
+            }
+
+            currentContent = Instantiate(arContentPrefab);
+            currentContent.name = $"{arContentPrefab.name}_Runtime";
+            sceneAnimationController = EnsureSceneAnimationController(currentContent);
+            Log($"Instantiated AR content '{currentContent.name}'.");
+        }
+
+        Transform contentTransform = currentContent.transform;
+        contentTransform.SetParent(trackedImage.transform, false);
+        contentTransform.localPosition = Vector3.zero;
+        contentTransform.localRotation = Quaternion.identity;
+        contentTransform.localScale = arContentPrefab.transform.localScale;
+
+        SetCurrentContentVisible(true);
+        if (shouldStartAnimation)
+        {
+            PlaySceneAnimation();
+        }
+    }
+
+    /// <summary>
+    /// Ensures the runtime AR content has the BIAR-24 scene animator. The prefab can stay focused
+    /// on visual assets while the tracking controller attaches the behavior needed for marker playback.
+    /// </summary>
+    private BiblicalSceneAnimationController EnsureSceneAnimationController(GameObject content)
+    {
+        // Sal-B: corregir bug detectado en pruebas de la detección de marcador ARCore y activación 3D - 29/06/2026
+        BiblicalSceneAnimationController controller = content.GetComponent<BiblicalSceneAnimationController>();
+        if (controller == null)
+        {
+            controller = content.AddComponent<BiblicalSceneAnimationController>();
+        }
+
+        return controller;
+    }
+
+    /// <summary>
+    /// Starts or restarts the 10-second biblical scene animation when the marker is actively tracked.
+    /// </summary>
+    private void PlaySceneAnimation()
+    {
+        // Sal-B: optimizar rendimiento de la detección de marcador ARCore y activación 3D - 29/06/2026
+        if (sceneAnimationController != null)
+        {
+            sceneAnimationController.PlayFromStart();
+        }
+    }
+
+    /// <summary>
+    /// Stops the biblical scene animation when AR tracking is limited, lost, or removed.
+    /// </summary>
+    private void StopSceneAnimation()
+    {
+        // Sal-B: aplicar comentarios de revisión cruzada en la detección de marcador ARCore y activación 3D - 29/06/2026
+        if (sceneAnimationController != null)
+        {
+            sceneAnimationController.StopSceneAnimation();
+        }
+    }
+
+    private void SetCurrentContentVisible(bool visible)
+    {
+        // Sal-B: refactorizar código de la detección de marcador ARCore y activación 3D - 30/06/2026
+        if (currentContent == null)
+        {
+            return;
+        }
+
+        if (!visible)
+        {
+            StopSceneAnimation();
+        }
+
+        currentContent.SetActive(visible);
+
+        Renderer[] renderers = currentContent.GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = visible;
+        }
+
+        Log($"AR content visible: {visible}. Renderers found: {renderers.Length}.");
+    }
+
+    private void NotifyDetected(ARTrackedImage trackedImage)
+    {
+        // Sal-B: ajustar configuración de la detección de marcador ARCore y activación 3D tras pruebas en dispositivo - 30/06/2026
+        hasVisibleTrackedImage = true;
+        ImageDetected?.Invoke(trackedImage);
+    }
+
+    private void NotifyLost()
+    {
+        // Sal-B: implementar lógica principal de la detección de marcador ARCore y activación 3D - 01/07/2026
+        if (!hasVisibleTrackedImage)
+        {
+            return;
+        }
+
+        hasVisibleTrackedImage = false;
+        ImageLost?.Invoke();
+    }
+
+    private void Log(string message)
+    {
+        // Sal-B: integrar la detección de marcador ARCore y activación 3D con el resto del módulo - 01/07/2026
+        if (logDebugInfo)
+        {
+            Debug.Log($"[ImageTrackingController] {message}");
+        }
+    }
+}

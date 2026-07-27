@@ -1,0 +1,33 @@
+{
+  "leccionId": 1,
+  "fragmentos": [
+    {
+      "id": 1,
+      "texto": "Un hombre bajaba de Jerusalén a Jericó.",
+      "inicioMs": 0,
+      "finMs": 4000,
+      "pictogramas": ["camino"]
+    },
+    {
+      "id": 2,
+      "texto": "En el camino, unos ladrones lo golpearon y lo dejaron herido.",
+      "inicioMs": 4000,
+      "finMs": 9000,
+      "pictogramas": ["herido", "camino"]
+    },
+    {
+      "id": 3,
+      "texto": "Un samaritano lo vio y tuvo compasión de él.",
+      "inicioMs": 9000,
+      "finMs": 14000,
+      "pictogramas": ["samaritano", "ayudar"]
+    },
+    {
+      "id": 4,
+      "texto": "Le vendó las heridas y lo llevó a un hospedaje para cuidarlo.",
+      "inicioMs": 14000,
+      "finMs": 20000,
+      "pictogramas": ["ayudar", "herido"]
+    }
+  ]
+}
