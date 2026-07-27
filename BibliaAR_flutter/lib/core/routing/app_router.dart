@@ -4,18 +4,22 @@ import 'package:biblia_ar_flutter/features/activities/activities_hub_screen.dart
 import 'package:biblia_ar_flutter/features/ar_simulation/ar_preview_args.dart';
 import 'package:biblia_ar_flutter/features/ar_simulation/ar_preview_screen.dart';
 import 'package:biblia_ar_flutter/features/auth/login_screen.dart';
+import 'package:biblia_ar_flutter/features/dev/biar50_closure_page.dart';
+import 'package:biblia_ar_flutter/features/dev/usage_alert_verification_page.dart';
 import 'package:biblia_ar_flutter/features/egov/tramites_upload_screen.dart';
 import 'package:biblia_ar_flutter/features/home/home_screen.dart';
 import 'package:biblia_ar_flutter/features/lesson/lesson_player_screen.dart';
+import 'package:biblia_ar_flutter/features/profiles/historial_actividades_screen.dart';
 import 'package:biblia_ar_flutter/features/progress/progress_screen.dart';
 import 'package:biblia_ar_flutter/features/settings/settings_screen.dart';
 import 'package:biblia_ar_flutter/features/splash/splash_screen.dart';
+import 'package:biblia_ar_flutter/features/teacher/doctrinal_approval_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/new_lesson_screen.dart';
 import 'package:biblia_ar_flutter/features/teacher/teacher_screen.dart';
-import 'package:biblia_ar_flutter/features/teacher/doctrinal_approval_screen.dart';
+import 'package:biblia_ar_flutter/spike/persistencia_local/persistencia_benchmark_page.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Enrutador central con ruta de tramites simplificada a subida de documentos, sin nuevas variables, 2026-07-23
+// kguanoluisa, Enrutador central con rutas de módulos BIAR, spike, historial y alerta BIAR-50
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -54,6 +58,26 @@ class AppRouter {
         return RouteTransitions.fadeSlide(const DoctrinalApprovalScreen(), settings);
       case RouteNames.teacherNewLesson:
         return RouteTransitions.fadeSlide(const NewLessonScreen(), settings);
+      case RouteNames.persistenciaBenchmark:
+        return RouteTransitions.fadeSlide(
+          const PersistenciaBenchmarkPage(),
+          settings,
+        );
+      case RouteNames.historialActividades:
+        return RouteTransitions.fadeSlide(
+          const HistorialActividadesScreen(),
+          settings,
+        );
+      case RouteNames.usageAlertVerification:
+        return RouteTransitions.fadeSlide(
+          const UsageAlertVerificationPage(),
+          settings,
+        );
+      case RouteNames.biar50Closure:
+        return RouteTransitions.fadeSlide(
+          const Biar50ClosurePage(),
+          settings,
+        );
       default:
         return RouteTransitions.fadeSlide(const SplashScreen(), settings);
     }

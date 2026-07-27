@@ -14,4 +14,12 @@ class RouteNames {
   static const String teacher = '/teacher';
   static const String teacherNewLesson = '/teacher/lesson/new';
   static const String doctrinalApproval = '/teacher/doctrinal-approval';
+  /// Ruta del spike técnico sqflite vs Hive (Sprint 2).
+  static const String persistenciaBenchmark = '/dev/persistencia-benchmark';
+  /// Historial de actividades del perfil activo (BIAR-44).
+  static const String historialActividades = '/profiles/historial';
+  /// Panel de verificación QA de la alerta BIAR-50 (Sprint 4).
+  static const String usageAlertVerification = '/dev/usage-alert-verification';
+  /// Informe de cierre BIAR-50 y paso a columna Listo (Extensión).
+  static const String biar50Closure = '/dev/biar50-closure';
 }

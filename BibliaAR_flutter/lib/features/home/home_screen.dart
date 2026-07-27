@@ -186,6 +186,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       onTap: () => Navigator.pushNamed(context, RouteNames.progress),
                     ),
                     BiarMenuCard(
+                      vTitulo: 'Historial',
+                      vSubtitulo: 'Actividades realizadas',
+                      vIcono: Icons.history,
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        RouteNames.historialActividades,
+                      ),
+                    ),
+                    BiarMenuCard(
                       vTitulo: 'Accesibilidad',
                       vSubtitulo: 'LSE, audio, subtítulos',
                       vIcono: BiarModuleIcons.accesibilidad,
