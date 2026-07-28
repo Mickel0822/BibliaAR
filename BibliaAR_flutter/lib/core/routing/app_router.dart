@@ -6,6 +6,8 @@ import 'package:biblia_ar_flutter/features/ar_simulation/ar_preview_screen.dart'
 import 'package:biblia_ar_flutter/features/auth/login_screen.dart';
 import 'package:biblia_ar_flutter/features/dev/biar50_closure_page.dart';
 import 'package:biblia_ar_flutter/features/dev/usage_alert_verification_page.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/conadis_resultado_args.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/conadis_resultado_screen.dart';
 import 'package:biblia_ar_flutter/features/egov/tramites_upload_screen.dart';
 import 'package:biblia_ar_flutter/features/home/home_screen.dart';
 import 'package:biblia_ar_flutter/features/lesson/lesson_player_screen.dart';
@@ -42,6 +44,12 @@ class AppRouter {
         final args = settings.arguments as ArPreviewArgs?;
         return RouteTransitions.fadeSlide(
           ArPreviewScreen(vArgs: args ?? const ArPreviewArgs(vTitulo: 'Vista AR', vOverlayAsset: '')),
+          settings,
+        );
+      case RouteNames.conadisResultado:
+        final args = settings.arguments as ConadisResultadoArgs?;
+        return RouteTransitions.fadeSlide(
+          ConadisResultadoScreen(vArgs: args!),
           settings,
         );
       case RouteNames.tramites:
