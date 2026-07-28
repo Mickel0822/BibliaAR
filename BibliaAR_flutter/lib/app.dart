@@ -5,6 +5,7 @@ import 'package:biblia_ar_flutter/core/routing/app_router.dart';
 import 'package:biblia_ar_flutter/core/routing/route_names.dart';
 import 'package:biblia_ar_flutter/core/session/usage_timer_service.dart';
 import 'package:biblia_ar_flutter/features/auth/auth_provider.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/conadis_provider.dart';
 import 'package:biblia_ar_flutter/features/activities/actividad_provider.dart';
 import 'package:biblia_ar_flutter/features/lesson/leccion_provider.dart';
 import 'package:biblia_ar_flutter/features/lesson/lesson_player_provider.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-// kguanoluisa, Aplicacion BIAR con MultiProvider, tema accesible y repositorios SQLite, sin nuevas variables, 2026-07-23
+// kguanoluisa, Aplicacion BIAR con ConadisProvider para validacion de formato integrada al modulo, sin nuevas variables, 2026-07-27
 class BiarApp extends StatelessWidget {
   const BiarApp({super.key, RepositoryProvider? repositoryProvider})
       : _repositoryProvider = repositoryProvider;
@@ -40,6 +41,7 @@ class BiarApp extends StatelessWidget {
     return [
       Provider<RepositoryProvider>.value(value: repos),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ChangeNotifierProvider(create: (_) => ConadisProvider()),
       ChangeNotifierProvider(
         create: (_) => PerfilProvider(
           perfilRepository: repos.perfilRepository,
@@ -52,9 +54,7 @@ class BiarApp extends StatelessWidget {
         ),
       ),
       ChangeNotifierProvider(
-        create: (_) => LeccionProvider(
-          leccionRepository: repos.leccionRepository,
-        ),
+        create: (_) => LeccionProvider(leccionRepository: repos.leccionRepository),
       ),
       ChangeNotifierProvider(
         create: (_) => LessonPlayerProvider(
@@ -63,9 +63,7 @@ class BiarApp extends StatelessWidget {
         ),
       ),
       ChangeNotifierProvider(
-        create: (_) => ActividadProvider(
-          actividadRepository: repos.actividadRepository,
-        ),
+        create: (_) => ActividadProvider(actividadRepository: repos.actividadRepository),
       ),
       ChangeNotifierProvider(create: (_) => UsageTimerService()),
     ];
