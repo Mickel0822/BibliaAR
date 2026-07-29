@@ -1,0 +1,16 @@
+{
+  "leccionId": 0,
+  "titulo": "Ayuda ingreso CONADIS",
+  "referenciaBiblica": "Simulación educativa",
+  "fragmentos": [
+    {
+      "id": 1,
+      "titulo": "Número de certificado",
+      "descripcion": "Escribe el número que aparece en el certificado CONADIS de tu hijo.",
+      "ilustracionAsset": "",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 4000
+    }
+  ]
+}

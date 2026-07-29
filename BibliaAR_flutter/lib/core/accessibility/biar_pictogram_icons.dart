@@ -1,7 +1,7 @@
 import 'package:biblia_ar_flutter/core/accessibility/biar_design_tokens.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Mapa centralizado de pictogramas a iconos para lecciones y barras visuales, sin nuevas variables, 2026-07-23
+// kguanoluisa, Mapa centralizado de pictogramas incluyendo tipos de discapacidad CONADIS, sin nuevas variables, 2026-07-29
 class BiarPictogramIcons {
   static const List<String> opcionesDocente = [
     'historias',
@@ -35,6 +35,18 @@ class BiarPictogramIcons {
         return Icons.outbox;
       case 'certificado':
         return Icons.verified;
+      case 'auditiva':
+        return Icons.hearing;
+      case 'visual':
+        return Icons.visibility;
+      case 'motriz':
+        return Icons.accessible;
+      case 'intelectual':
+        return Icons.psychology;
+      case 'multiple':
+        return Icons.groups;
+      case 'conadis':
+        return Icons.health_and_safety;
       default:
         return Icons.auto_stories;
     }
@@ -52,6 +64,26 @@ class BiarPictogramIcons {
         return 'Ayudar';
       case 'camino':
         return 'Camino';
+      case 'auditiva':
+        return 'Auditiva';
+      case 'visual':
+        return 'Visual';
+      case 'motriz':
+        return 'Motriz';
+      case 'intelectual':
+        return 'Intelectual';
+      case 'multiple':
+        return 'Múltiple';
+      case 'conadis':
+        return 'CONADIS';
+      case 'certificado':
+        return 'Certificado';
+      case 'tramite':
+        return 'Trámite';
+      case 'documento':
+        return 'Documento';
+      case 'municipio':
+        return 'Municipio';
       default:
         return pictograma;
     }

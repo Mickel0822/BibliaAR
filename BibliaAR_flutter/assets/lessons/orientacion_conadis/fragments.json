@@ -1,0 +1,43 @@
+{
+  "leccionId": 0,
+  "titulo": "Orientación Ciudadana CONADIS",
+  "referenciaBiblica": "Trámite oficial",
+  "fragmentos": [
+    {
+      "id": 1,
+      "titulo": "¿Qué es el certificado CONADIS?",
+      "descripcion": "Es un documento oficial que certifica el tipo y porcentaje de discapacidad de una persona.",
+      "ilustracionAsset": "",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    },
+    {
+      "id": 2,
+      "titulo": "Documentos necesarios",
+      "descripcion": "Necesitas cédula de identidad, informes médicos y formulario de solicitud.",
+      "ilustracionAsset": "",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    },
+    {
+      "id": 3,
+      "titulo": "Dónde acudir",
+      "descripcion": "Puedes iniciar el trámite en las oficinas del CONADIS o en puntos de atención municipal.",
+      "ilustracionAsset": "",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    },
+    {
+      "id": 4,
+      "titulo": "Pasos del trámite",
+      "descripcion": "Presenta los documentos, realiza la evaluación médica y espera la emisión del certificado.",
+      "ilustracionAsset": "",
+      "videoLseAsset": "",
+      "audioAsset": "",
+      "duracionMs": 5000
+    }
+  ]
+}
