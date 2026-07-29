@@ -28,7 +28,14 @@ class _ConadisResultadoScreenState extends State<ConadisResultadoScreen> {
     vFragmentos = ConadisFragmentBuilder.construirFragmentosResultado(
       certificado: widget.vArgs.certificado,
     );
-    
+    WidgetsBinding.instance.addPostFrameCallback((_) => _cargarConfiguracion());
+  }
+
+  Future<void> _cargarConfiguracion() async {
+    final perfil = context.read<PerfilProvider>().vPerfilActivo;
+    if (perfil?.id != null) {
+      await context.read<ConfiguracionProvider>().cargar(perfil!.id!);
+    }
   }
 
   FragmentoNarrativo get _fragmentoActual => vFragmentos[vIndiceFragmento];
