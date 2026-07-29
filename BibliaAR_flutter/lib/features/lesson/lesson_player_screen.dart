@@ -51,16 +51,23 @@ class _LessonPlayerScreenState extends State<LessonPlayerScreen> {
   }
 
   void _abrirArPreview() {
-    final fragmento = context.read<LessonPlayerProvider>().fragmentoActual;
+    final provider = context.read<LessonPlayerProvider>();
+    final fragmento = provider.fragmentoActual;
     if (fragmento == null) return;
+    
+    // Pausar reproducción automática si está activa para evitar traslapes de sonido
+    if (provider.vReproduciendo) {
+      provider.alternarReproduccion();
+    }
+
+    final assetPath = 'assets/illustrations/ar_overlay/fragment_${fragmento.id}.png';
     Navigator.pushNamed(
       context,
       RouteNames.arPreview,
       arguments: ArPreviewArgs(
         vTitulo: fragmento.titulo,
-        vOverlayAsset: fragmento.ilustracionAsset.isNotEmpty
-            ? fragmento.ilustracionAsset
-            : 'assets/illustrations/ar_overlay/samaritano.png',
+        vOverlayAsset: assetPath,
+        vNarration: fragmento.textoSubtitulo,
       ),
     );
   }
