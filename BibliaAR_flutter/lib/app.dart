@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-// kguanoluisa, Aplicacion BIAR con ConadisProvider para validacion de formato integrada al modulo, sin nuevas variables, 2026-07-27
+// kguanoluisa, Aplicacion BIAR con MultiProvider incluyendo ConadisProvider para consulta offline, sin nuevas variables, 2026-07-29
 class BiarApp extends StatelessWidget {
   const BiarApp({super.key, RepositoryProvider? repositoryProvider})
       : _repositoryProvider = repositoryProvider;
@@ -41,7 +41,11 @@ class BiarApp extends StatelessWidget {
     return [
       Provider<RepositoryProvider>.value(value: repos),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
-      ChangeNotifierProvider(create: (_) => ConadisProvider()),
+      ChangeNotifierProvider(
+        create: (_) => ConadisProvider(
+          conadisRepository: repos.conadisRepository,
+        ),
+      ),
       ChangeNotifierProvider(
         create: (_) => PerfilProvider(
           perfilRepository: repos.perfilRepository,
@@ -54,7 +58,9 @@ class BiarApp extends StatelessWidget {
         ),
       ),
       ChangeNotifierProvider(
-        create: (_) => LeccionProvider(leccionRepository: repos.leccionRepository),
+        create: (_) => LeccionProvider(
+          leccionRepository: repos.leccionRepository,
+        ),
       ),
       ChangeNotifierProvider(
         create: (_) => LessonPlayerProvider(
@@ -63,7 +69,9 @@ class BiarApp extends StatelessWidget {
         ),
       ),
       ChangeNotifierProvider(
-        create: (_) => ActividadProvider(actividadRepository: repos.actividadRepository),
+        create: (_) => ActividadProvider(
+          actividadRepository: repos.actividadRepository,
+        ),
       ),
       ChangeNotifierProvider(create: (_) => UsageTimerService()),
     ];
