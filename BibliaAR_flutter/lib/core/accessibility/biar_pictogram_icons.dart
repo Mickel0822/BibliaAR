@@ -16,39 +16,39 @@ class BiarPictogramIcons {
       case 'historias':
         return BiarModuleIcons.historias;
       case 'herido':
-        return Icons.healing;
+        return Icons.healing_rounded;
       case 'samaritano':
-        return Icons.favorite;
+        return Icons.favorite_rounded;
       case 'ayudar':
-        return Icons.volunteer_activism;
+        return Icons.volunteer_activism_rounded;
       case 'camino':
-        return Icons.route;
+        return Icons.route_rounded;
       case 'tramite':
-        return Icons.assignment;
+        return Icons.assignment_rounded;
       case 'municipio':
-        return Icons.account_balance;
+        return Icons.account_balance_rounded;
       case 'cedula':
-        return Icons.badge;
+        return Icons.badge_rounded;
       case 'documento':
-        return Icons.description;
+        return Icons.description_rounded;
       case 'entrega':
-        return Icons.outbox;
+        return Icons.outbox_rounded;
       case 'certificado':
-        return Icons.verified;
+        return Icons.verified_rounded;
       case 'auditiva':
-        return Icons.hearing;
+        return Icons.hearing_rounded;
       case 'visual':
-        return Icons.visibility;
+        return Icons.visibility_rounded;
       case 'motriz':
-        return Icons.accessible;
+        return Icons.accessible_rounded;
       case 'intelectual':
-        return Icons.psychology;
+        return Icons.psychology_rounded;
       case 'multiple':
-        return Icons.groups;
+        return Icons.groups_rounded;
       case 'conadis':
-        return Icons.health_and_safety;
+        return Icons.health_and_safety_rounded;
       default:
-        return Icons.auto_stories;
+        return Icons.auto_stories_rounded;
     }
   }
 

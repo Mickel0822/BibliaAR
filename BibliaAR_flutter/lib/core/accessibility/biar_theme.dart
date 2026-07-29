@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 
 // kguanoluisa, Tema accesible BIAR extendido con tokens semanticos y estilos de formulario, sin nuevas variables, 2026-07-23
 class BiarTheme {
-  static const Color primaryColor = Color(0xFF1B4D8E);
-  static const Color secondaryColor = Color(0xFFF4A024);
-  static const Color backgroundColor = Color(0xFFF7F9FC);
+  static const Color primaryColor = Color(0xFF6366F1); // Indigo premium
+  static const Color secondaryColor = Color(0xFFFF7A00); // Naranja cálido
+  static const Color backgroundColor = Color(0xFFF8FAFC); // Slate 50
   static const Color surfaceColor = Colors.white;
-  static const Color textPrimary = Color(0xFF1A1A1A);
-  static const Color textSecondary = Color(0xFF4A4A4A);
-  static const Color successColor = Color(0xFF2E7D32);
-  static const Color infoColor = Color(0xFF0277BD);
-  static const Color warningColor = Color(0xFFF57C00);
+  static const Color textPrimary = Color(0xFF0F172A); // Slate 900
+  static const Color textSecondary = Color(0xFF475569); // Slate 600
+  static const Color successColor = Color(0xFF10B981); // Emerald
+  static const Color infoColor = Color(0xFF3B82F6); // Blue
+  static const Color warningColor = Color(0xFFF59E0B); // Amber
 
   static ThemeData light() {
     final colorScheme = ColorScheme.fromSeed(
@@ -62,12 +62,15 @@ class BiarTheme {
           minimumSize: const Size.fromHeight(AccessibilitySizes.buttonMinHeight),
           textStyle: const TextStyle(
             fontSize: AccessibilitySizes.minFontSize,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.5,
           ),
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
+          elevation: 2,
+          shadowColor: primaryColor.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(BiarRadius.lg),
           ),
         ),
       ),
@@ -80,13 +83,30 @@ class BiarTheme {
       ),
       cardTheme: CardThemeData(
         color: surfaceColor,
-        elevation: 2,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(BiarRadius.lg),
+          side: const BorderSide(
+            color: Color(0xFFE2E8F0), // Borde sutil gris Slate
+            width: 1.5,
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(BiarRadius.md)),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(BiarRadius.md),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(BiarRadius.md),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(BiarRadius.md),
+          borderSide: const BorderSide(color: primaryColor, width: 2.0),
+        ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: BiarSpacing.md,
           vertical: BiarSpacing.sm,
