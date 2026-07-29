@@ -21,6 +21,7 @@ dependencies:
   permission_handler: ^12.0.1
   lottie: ^3.3.1
   file_picker: ^11.0.2
+  flutter_tts: ^4.2.5
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +37,7 @@ flutter:
     - assets/lessons/orientacion_conadis/
     - assets/activities/buen_samaritano/
     - assets/illustrations/buen_samaritano/
+    - assets/illustrations/orientacion_conadis/
     - assets/illustrations/ar_overlay/
     - assets/lottie/
     - assets/sfx/
