@@ -15,25 +15,34 @@ class UsageAlertListener extends StatefulWidget {
 }
 
 class _UsageAlertListenerState extends State<UsageAlertListener> {
+  late final UsageTimerService _timerService;
+
   @override
   void initState() {
     super.initState();
-    context.read<UsageTimerService>().addListener(_evaluarAlerta);
+    _timerService = context.read<UsageTimerService>();
+    _timerService.addListener(_evaluarAlerta);
   }
 
   @override
   void dispose() {
-    context.read<UsageTimerService>().removeListener(_evaluarAlerta);
+    _timerService.removeListener(_evaluarAlerta);
     super.dispose();
   }
 
   void _evaluarAlerta() {
-    final timer = context.read<UsageTimerService>();
-    if (!timer.shouldShowAlert || !mounted) {
+    if (!mounted) return;
+    if (!_timerService.shouldShowAlert) {
       return;
     }
-    timer.markAlertShown();
-    _mostrarDialogo();
+    // kguanoluisa, Evitar recursión y bloqueo difiriendo el cambio de estado de la alerta a la siguiente fase de renderizado, 2026-07-29
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (_timerService.shouldShowAlert) {
+        _timerService.markAlertShown();
+        _mostrarDialogo();
+      }
+    });
   }
 
   Future<void> _mostrarDialogo() async {
@@ -50,6 +59,7 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
           actions: [
             TextButton(
               onPressed: () {
+                _timerService.reset();
                 Navigator.pop(context);
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -61,7 +71,7 @@ class _UsageAlertListenerState extends State<UsageAlertListener> {
             ),
             FilledButton(
               onPressed: () {
-                context.read<UsageTimerService>().reset();
+                _timerService.reset();
                 Navigator.pop(context);
               },
               child: const Text('Continuar'),

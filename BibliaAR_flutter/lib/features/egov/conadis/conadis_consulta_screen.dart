@@ -105,73 +105,70 @@ class _ConadisConsultaScreenState extends State<ConadisConsultaScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Verificar certificado CONADIS')),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.all(BiarSpacing.md),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(BiarSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (fragmento != null && (configuracion?.lseActivo ?? true))
+              FloatingLsePlayer(
+                vTitulo: fragmento.titulo,
+                vDescripcion: fragmento.descripcion,
+                vVideoAsset: fragmento.videoLseAsset,
+                vInline: true,
+              ),
+            Row(
               children: [
-                Row(
-                  children: [
-                    Icon(BiarPictogramIcons.iconoPara('certificado'), size: 32),
-                    const SizedBox(width: BiarSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        'Número de certificado',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                  ],
-                ),
-                if (configuracion?.pictogramasActivos ?? true) ...[
-                  const SizedBox(height: BiarSpacing.sm),
-                  const PictogramBar(vPictogramas: ['certificado', 'conadis']),
-                ],
-                const SizedBox(height: BiarSpacing.sm),
-                TextField(
-                  controller: vNumeroController,
-                  decoration: InputDecoration(
-                    hintText: 'CON-2024-000001',
-                    helperText: 'Formato: CON-AAAA-NNNNNN',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(BiarRadius.sm),
-                    ),
-                    suffixIcon: vFormatoValido
-                        ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
-                        : null,
+                Icon(BiarPictogramIcons.iconoPara('certificado'), size: 32),
+                const SizedBox(width: BiarSpacing.sm),
+                Expanded(
+                  child: Text(
+                    'Número de certificado',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  textCapitalization: TextCapitalization.characters,
-                  style: const TextStyle(fontSize: AccessibilitySizes.minFontSize),
                 ),
-                if (fragmento != null && (configuracion?.subtitulosActivos ?? true)) ...[
-                  const SizedBox(height: BiarSpacing.sm),
-                  SubtitleOverlay(vTexto: fragmento.textoSubtitulo),
-                ],
-                const SizedBox(height: BiarSpacing.lg),
-                BiarButton(
-                  label: consultando ? 'Consultando...' : 'Consultar',
-                  icon: Icons.search,
-                  onPressed: vFormatoValido && !consultando ? _consultar : null,
-                ),
-                const SizedBox(height: BiarSpacing.sm),
-                BiarButton(
-                  label: 'Orientación Ciudadana',
-                  icon: Icons.help_outline,
-                  expanded: false,
-                  onPressed: () => Navigator.pushNamed(context, RouteNames.orientacionCiudadana),
-                ),
-                const SizedBox(height: 80),
               ],
             ),
-          ),
-          if (fragmento != null && (configuracion?.lseActivo ?? true))
-            FloatingLsePlayer(
-              vTitulo: fragmento.titulo,
-              vDescripcion: fragmento.descripcion,
-              vVideoAsset: fragmento.videoLseAsset,
+            if (configuracion?.pictogramasActivos ?? true) ...[
+              const SizedBox(height: BiarSpacing.sm),
+              const PictogramBar(vPictogramas: ['certificado', 'conadis']),
+            ],
+            const SizedBox(height: BiarSpacing.sm),
+            TextField(
+              controller: vNumeroController,
+              decoration: InputDecoration(
+                hintText: 'CON-2024-000001',
+                helperText: 'Formato: CON-AAAA-NNNNNN',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(BiarRadius.sm),
+                ),
+                suffixIcon: vFormatoValido
+                    ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+                    : null,
+              ),
+              textCapitalization: TextCapitalization.characters,
+              style: const TextStyle(fontSize: AccessibilitySizes.minFontSize),
             ),
-        ],
+            if (fragmento != null && (configuracion?.subtitulosActivos ?? true)) ...[
+              const SizedBox(height: BiarSpacing.sm),
+              SubtitleOverlay(vTexto: fragmento.textoSubtitulo),
+            ],
+            const SizedBox(height: BiarSpacing.lg),
+            BiarButton(
+              label: consultando ? 'Consultando...' : 'Consultar',
+              icon: Icons.search,
+              onPressed: vFormatoValido && !consultando ? _consultar : null,
+            ),
+            const SizedBox(height: BiarSpacing.sm),
+            BiarButton(
+              label: 'Orientación Ciudadana',
+              icon: Icons.help_outline,
+              expanded: false,
+              onPressed: () => Navigator.pushNamed(context, RouteNames.orientacionCiudadana),
+            ),
+            const SizedBox(height: 80),
+          ],
+        ),
       ),
     );
   }

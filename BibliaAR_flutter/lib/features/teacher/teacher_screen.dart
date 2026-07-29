@@ -136,7 +136,7 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
     return ListView.separated(
       padding: const EdgeInsets.all(BiarSpacing.md),
       itemCount: leccionProvider.vLeccionesBiblicas.length,
-      separatorBuilder: (_, __) => const SizedBox(height: BiarSpacing.sm),
+      separatorBuilder: (_, _) => const SizedBox(height: BiarSpacing.sm),
       itemBuilder: (context, index) {
         final leccion = leccionProvider.vLeccionesBiblicas[index];
         return LessonCard(
@@ -199,7 +199,7 @@ class _TeacherScreenState extends State<TeacherScreen> with SingleTickerProvider
     return ListView.separated(
       padding: const EdgeInsets.all(BiarSpacing.md),
       itemCount: vPerfilesNinos.length,
-      separatorBuilder: (_, __) => const SizedBox(height: BiarSpacing.sm),
+      separatorBuilder: (_, _) => const SizedBox(height: BiarSpacing.sm),
       itemBuilder: (context, index) {
         final perfil = vPerfilesNinos[index];
         final seleccionado = vPerfilSeleccionado?.id == perfil.id;
