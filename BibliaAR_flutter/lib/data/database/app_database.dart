@@ -9,7 +9,7 @@ import 'package:biblia_ar_flutter/data/models/leccion_categoria.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
-// kguanoluisa, Base de datos SQLite integrada con migracion v4 y seed inicial del dataset CONADIS simulado, variable v_database, 2026-07-29
+// kguanoluisa, Base de datos SQLite con dataset CONADIS ampliado tras pruebas de configuracion, variable v_database, 2026-07-30
 class AppDatabase implements DatabaseAccess {
   AppDatabase._();
 
@@ -78,37 +78,41 @@ class AppDatabase implements DatabaseAccess {
       'sync_status': 'local',
     });
 
-    await db.insert('actividades', {
-      'leccion_id': 1,
-      'tipo': 'completar',
-      'payload_json': jsonEncode({
-        'titulo': 'Completa la historia',
-        'pregunta': '¿Quién ayudó al hombre herido?',
-        'opciones': ['Un sacerdote', 'Un levita', 'Un samaritano', 'Un soldado'],
-        'respuestaCorrecta': 2,
-      }),
-      'updated_at': now,
-      'sync_status': 'local',
-    });
+    for (final actividad in [
+      {
+        'leccion_id': 1,
+        'tipo': 'completar',
+        'payload_json': jsonEncode({
+          'titulo': 'Completa la historia',
+          'pregunta': '¿Quién ayudó al hombre herido?',
+          'opciones': ['Un sacerdote', 'Un levita', 'Un samaritano', 'Un soldado'],
+          'respuestaCorrecta': 2,
+        }),
+        'updated_at': now,
+        'sync_status': 'local',
+      },
+    ]) {
+      await db.insert('actividades', actividad);
+    }
 
     await _seedConadisData(db);
   }
 
-  // kguanoluisa, Seed inicial con dos certificados CONADIS simulados para pruebas de integracion, sin nuevas variables, 2026-07-29
+  // kguanoluisa, Seed ampliado de certificados CONADIS simulados con casos variados tras pruebas, sin nuevas variables, 2026-07-30
   Future<void> _seedConadisData(Database db) async {
     final certificadosSeed = [
-      {
-        'numero_certificado': 'CON-2024-000001',
-        'tipo_discapacidad': 'auditiva',
-        'porcentaje': 85,
-        'nombre_titular': 'María López',
-      },
-      {
-        'numero_certificado': 'CON-2024-000002',
-        'tipo_discapacidad': 'auditiva',
-        'porcentaje': 45,
-        'nombre_titular': 'Carlos Mendoza',
-      },
+      {'numero_certificado': 'CON-2024-000001', 'tipo_discapacidad': 'auditiva', 'porcentaje': 85, 'nombre_titular': 'María López'},
+      {'numero_certificado': 'CON-2024-000002', 'tipo_discapacidad': 'auditiva', 'porcentaje': 45, 'nombre_titular': 'Carlos Mendoza'},
+      {'numero_certificado': 'CON-2023-000015', 'tipo_discapacidad': 'visual', 'porcentaje': 60, 'nombre_titular': 'Ana Torres'},
+      {'numero_certificado': 'CON-2022-000088', 'tipo_discapacidad': 'motriz', 'porcentaje': 70, 'nombre_titular': 'Pedro Ramírez'},
+      {'numero_certificado': 'CON-2021-000050', 'tipo_discapacidad': 'intelectual', 'porcentaje': 55, 'nombre_titular': 'Lucía Vega'},
+      {'numero_certificado': 'CON-2024-000010', 'tipo_discapacidad': 'multiple', 'porcentaje': 90, 'nombre_titular': 'Diego Salazar'},
+      {'numero_certificado': 'CON-2024-000003', 'tipo_discapacidad': 'auditiva', 'porcentaje': 30, 'nombre_titular': 'Sofía Herrera'},
+      {'numero_certificado': 'CON-2023-000022', 'tipo_discapacidad': 'visual', 'porcentaje': 40, 'nombre_titular': 'Jorge Pérez'},
+      {'numero_certificado': 'CON-2022-000099', 'tipo_discapacidad': 'motriz', 'porcentaje': 50, 'nombre_titular': 'Elena Castro'},
+      {'numero_certificado': 'CON-2024-000011', 'tipo_discapacidad': 'multiple', 'porcentaje': 75, 'nombre_titular': 'Mateo Ruiz'},
+      {'numero_certificado': 'CON-2023-000030', 'tipo_discapacidad': 'auditiva', 'porcentaje': 65, 'nombre_titular': 'Valentina Morales'},
+      {'numero_certificado': 'CON-2021-000077', 'tipo_discapacidad': 'intelectual', 'porcentaje': 35, 'nombre_titular': 'Andrés Guzmán'},
     ];
 
     for (final certificado in certificadosSeed) {
