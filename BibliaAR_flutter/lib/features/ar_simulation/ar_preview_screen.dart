@@ -1,8 +1,8 @@
 import 'package:biblia_ar_flutter/core/accessibility/biar_design_tokens.dart';
+import 'package:biblia_ar_flutter/core/feedback/tts_service.dart';
 import 'package:biblia_ar_flutter/core/platform/camera_permission_service.dart';
 import 'package:biblia_ar_flutter/features/ar_simulation/ar_overlay_controller.dart';
 import 'package:biblia_ar_flutter/features/ar_simulation/ar_preview_args.dart';
-import 'package:biblia_ar_flutter/features/ar_simulation/widgets/ar_disclaimer_banner.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_button.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_error_view.dart';
 import 'package:biblia_ar_flutter/shared/widgets/biar_loading_view.dart';
@@ -20,7 +20,7 @@ class ArPreviewScreen extends StatefulWidget {
   State<ArPreviewScreen> createState() => _ArPreviewScreenState();
 }
 
-class _ArPreviewScreenState extends State<ArPreviewScreen> {
+class _ArPreviewScreenState extends State<ArPreviewScreen> with SingleTickerProviderStateMixin {
   final CameraPermissionService _permissionService = CameraPermissionService();
   final ArOverlayController _overlayController = ArOverlayController();
   CameraController? vCameraController;
@@ -28,10 +28,22 @@ class _ArPreviewScreenState extends State<ArPreviewScreen> {
   bool vInicializando = true;
   String? vError;
   double _escalaBase = 1.0;
+  late final AnimationController _hoverController;
 
   @override
   void initState() {
     super.initState();
+    // Animación lenta y continua de vaivén para el holograma AR
+    _hoverController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..repeat(reverse: true);
+    
+    // Narrar el texto de la escena al abrir la vista previa
+    if (widget.vArgs.vNarration.isNotEmpty) {
+      TtsService.instance.speak(widget.vArgs.vNarration);
+    }
+    
     WidgetsBinding.instance.addPostFrameCallback((_) => _inicializarCamara());
   }
 
@@ -80,8 +92,10 @@ class _ArPreviewScreenState extends State<ArPreviewScreen> {
 
   @override
   void dispose() {
+    TtsService.instance.stop(); // Detener narración al salir de la pantalla
     vCameraController?.dispose();
     _overlayController.dispose();
+    _hoverController.dispose();
     super.dispose();
   }
 
@@ -97,7 +111,6 @@ class _ArPreviewScreenState extends State<ArPreviewScreen> {
         ),
         body: Column(
           children: [
-            const ArDisclaimerBanner(),
             Expanded(child: _buildBody()),
             Padding(
               padding: const EdgeInsets.all(BiarSpacing.md),
@@ -150,27 +163,65 @@ class _ArPreviewScreenState extends State<ArPreviewScreen> {
                           controller.actualizarOffset(details.focalPointDelta);
                           controller.actualizarEscalaDirecta(_escalaBase * details.scale);
                         },
-                        child: Container(
-                          width: 180,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(BiarRadius.lg),
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(BiarRadius.lg),
-                            child: Image.asset(
-                              widget.vArgs.vOverlayAsset,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => ColoredBox(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                child: const Icon(
-                                  Icons.person,
-                                  size: 80,
-                                  color: Colors.white,
+                        child: SizedBox(
+                          width: 260,
+                          height: 260,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // Pedestal holográfico brillante de AR en el suelo/base
+                              Positioned(
+                                bottom: 15,
+                                child: AnimatedBuilder(
+                                  animation: _hoverController,
+                                  builder: (context, child) {
+                                    final glowSpread = _hoverController.value * 4.0;
+                                    final blurRadius = 8.0 + _hoverController.value * 6.0;
+                                    return Container(
+                                      width: 160,
+                                      height: 24,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(Radius.elliptical(80, 12)),
+                                        border: Border.all(
+                                          color: Colors.cyanAccent.withValues(alpha: 0.9),
+                                          width: 2.5,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.cyanAccent.withValues(alpha: 0.65),
+                                            blurRadius: blurRadius,
+                                            spreadRadius: 1.5 + glowSpread,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
+                              // Personaje o escena en realidad aumentada sin fondo cuadrado
+                              Positioned.fill(
+                                bottom: 30,
+                                child: AnimatedBuilder(
+                                  animation: _hoverController,
+                                  builder: (context, child) {
+                                    // Vaivén vertical de 0 a 14 píxeles para simular flotabilidad
+                                    final floatOffset = _hoverController.value * -14.0;
+                                    return Transform.translate(
+                                      offset: Offset(0, floatOffset),
+                                      child: Image.asset(
+                                        widget.vArgs.vOverlayAsset,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, _, _) => const Icon(
+                                          Icons.person,
+                                          size: 140,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

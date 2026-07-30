@@ -10,8 +10,8 @@ $env:GIT_AUTHOR_EMAIL = "sorialuwis@gmail.com"
 $env:GIT_COMMITTER_NAME = "L-S16"
 $env:GIT_COMMITTER_EMAIL = "sorialuwis@gmail.com"
 
-function Commit-Dated {
-    param([string]$Date, [string]$Message)
+function Invoke-DatedCommit {
+        param([string]$Date, [string]$Message)
     $env:GIT_AUTHOR_DATE = $Date
     $env:GIT_COMMITTER_DATE = $Date
     git add -A
@@ -20,8 +20,8 @@ function Commit-Dated {
     Remove-Item Env:GIT_COMMITTER_DATE -ErrorAction SilentlyContinue
 }
 
-function Merge-Dated {
-    param([string]$Branch, [string]$Date, [string]$Message)
+function Invoke-DatedMerge {
+        param([string]$Branch, [string]$Date, [string]$Message)
     git checkout dev
     $env:GIT_AUTHOR_DATE = $Date
     $env:GIT_COMMITTER_DATE = $Date
@@ -70,7 +70,7 @@ MonoImporter:
   assetBundleVariant: 
 '@ | Set-Content "$Unity/Assets/Editor/ProjectOptimizer.cs.meta" -NoNewline
 
-Commit-Dated "2026-06-25 10:00:00 -0500" "BIAR-23: crear estructura base de la optimización de modelos 3D (poly-count 2GB RAM)"
+Invoke-DatedCommit "2026-06-25 10:00:00 -0500" "BIAR-23: crear estructura base de la optimización de modelos 3D (poly-count 2GB RAM)"
 
 # Commit 2: implementar lógica principal
 @'
@@ -111,7 +111,7 @@ public class ProjectOptimizer
 #endif
 '@ | Set-Content "$Unity/Assets/Editor/ProjectOptimizer.cs"
 
-Commit-Dated "2026-06-25 12:00:00 -0500" "BIAR-23: implementar lógica principal de la optimización de modelos 3D (poly-count 2GB RAM)"
+Invoke-DatedCommit "2026-06-25 12:00:00 -0500" "BIAR-23: implementar lógica principal de la optimización de modelos 3D (poly-count 2GB RAM)"
 
 # Commit 3: integrar con el resto del módulo
 @'
@@ -186,7 +186,7 @@ $replaceArTool = @"
 $arTool = $arTool -replace $targetArTool, $replaceArTool
 Set-Content "$Unity/Assets/Editor/ARSceneSetupTool.cs" $arTool -NoNewline
 
-Commit-Dated "2026-06-25 14:00:00 -0500" "BIAR-23: integrar la optimización de modelos 3D (poly-count 2GB RAM) con el resto del módulo"
+Invoke-DatedCommit "2026-06-25 14:00:00 -0500" "BIAR-23: integrar la optimización de modelos 3D (poly-count 2GB RAM) con el resto del módulo"
 
 # Commit 4: agregar validaciones y manejo de errores
 @'
@@ -272,7 +272,7 @@ public class ProjectOptimizer
 #endif
 '@ | Set-Content "$Unity/Assets/Editor/ProjectOptimizer.cs"
 
-Commit-Dated "2026-06-26 10:00:00 -0500" "BIAR-23: agregar validaciones y manejo de errores en la optimización de modelos 3D (poly-count 2GB RAM)"
+Invoke-DatedCommit "2026-06-26 10:00:00 -0500" "BIAR-23: agregar validaciones y manejo de errores en la optimización de modelos 3D (poly-count 2GB RAM)"
 
 # Commit 5: ajustar UI/UX
 @'
@@ -372,7 +372,7 @@ public class ProjectOptimizer
 #endif
 '@ | Set-Content "$Unity/Assets/Editor/ProjectOptimizer.cs"
 
-Commit-Dated "2026-06-26 14:00:00 -0500" "BIAR-23: ajustar UI/UX de la optimización de modelos 3D (poly-count 2GB RAM)"
+Invoke-DatedCommit "2026-06-26 14:00:00 -0500" "BIAR-23: ajustar UI/UX de la optimización de modelos 3D (poly-count 2GB RAM)"
 
 # Commit 6: corregir bug detectado en pruebas
 @'
@@ -496,7 +496,7 @@ public class ProjectOptimizer
 #endif
 '@ | Set-Content "$Unity/Assets/Editor/ProjectOptimizer.cs"
 
-Commit-Dated "2026-06-29 10:00:00 -0500" "BIAR-23: corregir bug detectado en pruebas de la optimización de modelos 3D (poly-count 2GB RAM)"
+Invoke-DatedCommit "2026-06-29 10:00:00 -0500" "BIAR-23: corregir bug detectado en pruebas de la optimización de modelos 3D (poly-count 2GB RAM)"
 
 # Commit 7: optimizar rendimiento
 @'
@@ -643,10 +643,10 @@ public class ProjectOptimizer
 #endif
 '@ | Set-Content "$Unity/Assets/Editor/ProjectOptimizer.cs"
 
-Commit-Dated "2026-06-29 12:00:00 -0500" "BIAR-23: optimizar rendimiento de la optimización de modelos 3D (poly-count 2GB RAM)"
+Invoke-DatedCommit "2026-06-29 12:00:00 -0500" "BIAR-23: optimizar rendimiento de la optimización de modelos 3D (poly-count 2GB RAM)"
 
 # Commit 8: merge a develop (dev)
-Merge-Dated "Amb-AS/feature/optimizacion-3d" "2026-06-29 16:00:00 -0500" "BIAR-23: merge a develop tras aprobación de PR"
+Invoke-DatedMerge "Amb-AS/feature/optimizacion-3d" "2026-06-29 16:00:00 -0500" "BIAR-23: merge a develop tras aprobación de PR"
 
 
 # ============================================================================
@@ -693,7 +693,7 @@ MonoImporter:
   assetBundleVariant: 
 '@ | Set-Content "$Unity/Assets/Scripts/MultimodalFeedbackManager.cs.meta" -NoNewline
 
-Commit-Dated "2026-06-30 10:00:00 -0500" "Crear estructura base del sistema de feedback multimodal (vibración, sonido, animación)"
+Invoke-DatedCommit "2026-06-30 10:00:00 -0500" "Crear estructura base del sistema de feedback multimodal (vibración, sonido, animación)"
 
 # Commit 2: implementar lógica principal
 @'
@@ -757,7 +757,7 @@ public class MultimodalFeedbackManager : MonoBehaviour
 }
 '@ | Set-Content "$Unity/Assets/Scripts/MultimodalFeedbackManager.cs"
 
-Commit-Dated "2026-06-30 12:00:00 -0500" "Implementar lógica principal del sistema de feedback multimodal (vibración, sonido, animación)"
+Invoke-DatedCommit "2026-06-30 12:00:00 -0500" "Implementar lógica principal del sistema de feedback multimodal (vibración, sonido, animación)"
 
 # Commit 3: integrar con el resto del módulo
 $quiz = Get-Content "$Unity/Assets/Scripts/QuizManager.cs" -Raw
@@ -799,7 +799,7 @@ lseWindowController.Mostrar(v_tituloLse, v_tituloLse);
 $story = $story -replace $targetStory, $replaceStory
 Set-Content "$Unity/Assets/Scripts/StoryFlowController.cs" $story -NoNewline
 
-Commit-Dated "2026-06-30 14:00:00 -0500" "Integrar el sistema de feedback multimodal (vibración, sonido, animación) con el resto del módulo"
+Invoke-DatedCommit "2026-06-30 14:00:00 -0500" "Integrar el sistema de feedback multimodal (vibración, sonido, animación) con el resto del módulo"
 
 # Commit 4: agregar validaciones y manejo de errores
 @'
@@ -896,7 +896,7 @@ public class MultimodalFeedbackManager : MonoBehaviour
 }
 '@ | Set-Content "$Unity/Assets/Scripts/MultimodalFeedbackManager.cs"
 
-Commit-Dated "2026-07-01 10:00:00 -0500" "Agregar validaciones y manejo de errores en el sistema de feedback multimodal (vibración, sonido, animación)"
+Invoke-DatedCommit "2026-07-01 10:00:00 -0500" "Agregar validaciones y manejo de errores en el sistema de feedback multimodal (vibración, sonido, animación)"
 
 # Commit 5: ajustar UI/UX
 @'
@@ -988,7 +988,7 @@ public class MultimodalFeedbackManager : MonoBehaviour
 }
 '@ | Set-Content "$Unity/Assets/Scripts/MultimodalFeedbackManager.cs"
 
-Commit-Dated "2026-07-01 14:00:00 -0500" "Ajustar UI/UX del sistema de feedback multimodal (vibración, sonido, animación)"
+Invoke-DatedCommit "2026-07-01 14:00:00 -0500" "Ajustar UI/UX del sistema de feedback multimodal (vibración, sonido, animación)"
 
 # Commit 6: corregir bug detectado en pruebas
 @'
@@ -1090,7 +1090,7 @@ public class MultimodalFeedbackManager : MonoBehaviour
 }
 '@ | Set-Content "$Unity/Assets/Scripts/MultimodalFeedbackManager.cs"
 
-Commit-Dated "2026-07-02 10:00:00 -0500" "Corregir bug detectado en pruebas del sistema de feedback multimodal (vibración, sonido, animación)"
+Invoke-DatedCommit "2026-07-02 10:00:00 -0500" "Corregir bug detectado en pruebas del sistema de feedback multimodal (vibración, sonido, animación)"
 
 # Commit 7: optimizar rendimiento
 @'
@@ -1198,10 +1198,10 @@ public class MultimodalFeedbackManager : MonoBehaviour
 }
 '@ | Set-Content "$Unity/Assets/Scripts/MultimodalFeedbackManager.cs"
 
-Commit-Dated "2026-07-02 12:00:00 -0500" "Optimizar rendimiento del sistema de feedback multimodal (vibración, sonido, animación)"
+Invoke-DatedCommit "2026-07-02 12:00:00 -0500" "Optimizar rendimiento del sistema de feedback multimodal (vibración, sonido, animación)"
 
 # Commit 8: merge a develop (dev)
-Merge-Dated "Amb-AS/feature/feedback-multimodal" "2026-07-02 16:00:00 -0500" "Merge a develop tras aprobación de PR"
+Invoke-DatedMerge "Amb-AS/feature/feedback-multimodal" "2026-07-02 16:00:00 -0500" "Merge a develop tras aprobación de PR"
 
 
 # ============================================================================
@@ -1222,7 +1222,7 @@ Este manual tiene como objetivo guiar al docente en el uso del panel de administ
 3. Gestión de Alumnos
 '@ | Set-Content "$Flutter/docs/manual_docente.md"
 
-Commit-Dated "2026-07-20 10:00:00 -0500" "Crear estructura base del avance de la documentación final y el manual docente"
+Invoke-DatedCommit "2026-07-20 10:00:00 -0500" "Crear estructura base del avance de la documentación final y el manual docente"
 
 # Commit 2: implementar lógica principal
 @'
@@ -1236,7 +1236,7 @@ Este manual tiene como objetivo guiar al docente en el uso del panel de administ
 - **Base de Datos:** Sincronización automática de resultados mediante Firebase.
 '@ | Set-Content "$Flutter/docs/manual_docente.md"
 
-Commit-Dated "2026-07-20 12:00:00 -0500" "Implementar lógica principal del avance de la documentación final y el manual docente"
+Invoke-DatedCommit "2026-07-20 12:00:00 -0500" "Implementar lógica principal del avance de la documentación final y el manual docente"
 
 # Commit 3: integrar con el resto del módulo
 $readmeFlutter = Get-Content "$Flutter/README.md" -Raw
@@ -1248,7 +1248,7 @@ $insertDoc = @"
 $readmeFlutter = $readmeFlutter + $insertDoc
 Set-Content "$Flutter/README.md" $readmeFlutter -NoNewline
 
-Commit-Dated "2026-07-20 14:00:00 -0500" "Integrar el avance de la documentación final y el manual docente con el resto del módulo"
+Invoke-DatedCommit "2026-07-20 14:00:00 -0500" "Integrar el avance de la documentación final y el manual docente con el resto del módulo"
 
 # Commit 4: agregar validaciones y manejo de errores
 @'
@@ -1265,10 +1265,10 @@ Este manual tiene como objetivo guiar al docente en el uso del panel de administ
 - **Base de Datos:** Sincronización automática de resultados mediante Firebase.
 '@ | Set-Content "$Flutter/docs/manual_docente.md"
 
-Commit-Dated "2026-07-21 10:00:00 -0500" "Agregar validaciones y manejo de errores en el avance de la documentación final y el manual docente"
+Invoke-DatedCommit "2026-07-21 10:00:00 -0500" "Agregar validaciones y manejo de errores en el avance de la documentación final y el manual docente"
 
 # Commit 5: merge a develop (dev)
-Merge-Dated "Amb-AS/docs/manual-docente" "2026-07-21 16:00:00 -0500" "Merge a develop tras aprobación de PR"
+Invoke-DatedMerge "Amb-AS/docs/manual-docente" "2026-07-21 16:00:00 -0500" "Merge a develop tras aprobación de PR"
 
 
 # ============================================================================
@@ -1288,7 +1288,7 @@ Manual de usuario final para interactuar con la aplicación BibliaAR.
 3. Resolución del Quiz
 '@ | Set-Content "$Flutter/docs/manual_usuario.md"
 
-Commit-Dated "2026-07-22 10:00:00 -0500" "Crear estructura base de la redacción y cierre del manual de usuario"
+Invoke-DatedCommit "2026-07-22 10:00:00 -0500" "Crear estructura base de la redacción y cierre del manual de usuario"
 
 # Commit 2: implementar lógica principal
 @'
@@ -1303,14 +1303,14 @@ Manual de usuario final para interactuar con la aplicación BibliaAR.
 - **Quiz:** Responda la trivia final al terminar la narración del relato.
 '@ | Set-Content "$Flutter/docs/manual_usuario.md"
 
-Commit-Dated "2026-07-22 12:00:00 -0500" "Implementar lógica principal de la redacción y cierre del manual de usuario"
+Invoke-DatedCommit "2026-07-22 12:00:00 -0500" "Implementar lógica principal de la redacción y cierre del manual de usuario"
 
 # Commit 3: integrar con el resto del módulo
 $readmeFlutter = Get-Content "$Flutter/README.md" -Raw
 $readmeFlutter = $readmeFlutter + "`n- [Manual de Usuario](docs/manual_usuario.md)"
 Set-Content "$Flutter/README.md" $readmeFlutter -NoNewline
 
-Commit-Dated "2026-07-22 14:00:00 -0500" "Integrar la redacción y cierre del manual de usuario con el resto del módulo"
+Invoke-DatedCommit "2026-07-22 14:00:00 -0500" "Integrar la redacción y cierre del manual de usuario con el resto del módulo"
 
 # Commit 4: agregar validaciones y manejo de errores
 @'
@@ -1328,9 +1328,10 @@ Manual de usuario final para interactuar con la aplicación BibliaAR.
 - **Quiz:** Responda la trivia final al terminar la narración del relato.
 '@ | Set-Content "$Flutter/docs/manual_usuario.md"
 
-Commit-Dated "2026-07-23 10:00:00 -0500" "Agregar validaciones y manejo de errores en la redacción y cierre del manual de usuario"
+Invoke-DatedCommit "2026-07-23 10:00:00 -0500" "Agregar validaciones y manejo de errores en la redacción y cierre del manual de usuario"
 
 # Commit 5: merge a develop (dev)
-Merge-Dated "Amb-AS/docs/manual-usuario" "2026-07-23 16:00:00 -0500" "Merge a develop tras aprobación de PR"
+Invoke-DatedMerge "Amb-AS/docs/manual-usuario" "2026-07-23 16:00:00 -0500" "Merge a develop tras aprobación de PR"
 
 Write-Host "Replay completado con éxito."
+

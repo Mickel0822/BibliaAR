@@ -68,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _cerrarSesion() async {
+    context.read<UsageTimerService>().reset();
     await context.read<PerfilProvider>().cerrarSesionPerfil();
     if (!mounted) return;
     await context.read<AuthProvider>().cerrarSesion();
@@ -132,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: leccionProvider.vLeccionesBiblicas.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: BiarSpacing.sm),
+                    separatorBuilder: (_, _) => const SizedBox(width: BiarSpacing.sm),
                     itemBuilder: (context, index) {
                       final leccion = leccionProvider.vLeccionesBiblicas[index];
                       final estado = perfil?.id != null
@@ -173,11 +174,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       onTap: () => Navigator.pushNamed(context, RouteNames.activities),
                     ),
                     BiarMenuCard(
-                      vTitulo: 'Trámites',
-                      vSubtitulo: 'Sube tus documentos',
+                      vTitulo: 'CONADIS',
+                      vSubtitulo: 'Verifica certificado',
                       vIcono: BiarModuleIcons.tramites,
                       vColor: BiarTheme.infoColor,
-                      onTap: () => Navigator.pushNamed(context, RouteNames.tramites),
+                      onTap: () => Navigator.pushNamed(context, RouteNames.conadis),
                     ),
                     BiarMenuCard(
                       vTitulo: 'Progreso',

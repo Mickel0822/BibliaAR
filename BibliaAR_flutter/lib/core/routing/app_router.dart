@@ -6,6 +6,10 @@ import 'package:biblia_ar_flutter/features/ar_simulation/ar_preview_screen.dart'
 import 'package:biblia_ar_flutter/features/auth/login_screen.dart';
 import 'package:biblia_ar_flutter/features/dev/biar50_closure_page.dart';
 import 'package:biblia_ar_flutter/features/dev/usage_alert_verification_page.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/conadis_consulta_screen.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/conadis_resultado_args.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/conadis_resultado_screen.dart';
+import 'package:biblia_ar_flutter/features/egov/conadis/orientacion_ciudadana_screen.dart';
 import 'package:biblia_ar_flutter/features/egov/tramites_upload_screen.dart';
 import 'package:biblia_ar_flutter/features/home/home_screen.dart';
 import 'package:biblia_ar_flutter/features/lesson/lesson_player_screen.dart';
@@ -19,7 +23,7 @@ import 'package:biblia_ar_flutter/features/teacher/teacher_screen.dart';
 import 'package:biblia_ar_flutter/spike/persistencia_local/persistencia_benchmark_page.dart';
 import 'package:flutter/material.dart';
 
-// kguanoluisa, Enrutador central con rutas de módulos BIAR, spike, historial y alerta BIAR-50
+// kguanoluisa, Enrutador central con rutas CONADIS, BIAR, spike, historial y alerta BIAR-50
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -46,6 +50,16 @@ class AppRouter {
         );
       case RouteNames.tramites:
         return RouteTransitions.fadeSlide(const TramitesUploadScreen(), settings);
+      case RouteNames.conadis:
+        return RouteTransitions.fadeSlide(const ConadisConsultaScreen(), settings);
+      case RouteNames.conadisResultado:
+        final args = settings.arguments as ConadisResultadoArgs?;
+        return RouteTransitions.fadeSlide(
+          ConadisResultadoScreen(vArgs: args!),
+          settings,
+        );
+      case RouteNames.orientacionCiudadana:
+        return RouteTransitions.fadeSlide(const OrientacionCiudadanaScreen(), settings);
       case RouteNames.activities:
         return RouteTransitions.fadeSlide(const ActivitiesHubScreen(), settings);
       case RouteNames.settings:

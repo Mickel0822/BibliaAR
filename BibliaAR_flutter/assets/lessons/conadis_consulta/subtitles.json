@@ -1,0 +1,10 @@
+{
+  "leccionId": 0,
+  "fragmentos": [
+    {
+      "id": 1,
+      "texto": "Escribe el número del certificado CONADIS. Usa el formato CON-AAAA-NNNNNN.",
+      "pictogramas": ["certificado", "conadis"]
+    }
+  ]
+}

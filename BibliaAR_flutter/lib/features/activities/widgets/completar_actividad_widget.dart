@@ -34,14 +34,19 @@ class _CompletarActividadWidgetState extends State<CompletarActividadWidget> {
         const SizedBox(height: 8),
         Text(widget.payload['pregunta'] as String),
         const SizedBox(height: 12),
-        ...List.generate(opciones.length, (index) {
-          return RadioListTile<int>(
-            title: Text(opciones[index]),
-            value: index,
-            groupValue: vSeleccion,
-            onChanged: (value) => setState(() => vSeleccion = value),
-          );
-        }),
+        RadioGroup<int>(
+          groupValue: vSeleccion,
+          onChanged: (value) => setState(() => vSeleccion = value),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: List.generate(opciones.length, (index) {
+              return RadioListTile<int>(
+                title: Text(opciones[index]),
+                value: index,
+              );
+            }),
+          ),
+        ),
         BiarButton(
           label: 'Comprobar',
           onPressed: vSeleccion == null

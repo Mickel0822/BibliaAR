@@ -56,7 +56,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           : ListView.separated(
               padding: const EdgeInsets.all(BiarSpacing.md),
               itemCount: vLecciones.length,
-              separatorBuilder: (_, __) => const SizedBox(height: BiarSpacing.sm),
+              separatorBuilder: (_, _) => const SizedBox(height: BiarSpacing.sm),
               itemBuilder: (context, index) {
                 final leccion = vLecciones[index];
                 final estado = LeccionEstadoHelper.resolverEstadoLeccion(
