@@ -1,0 +1,25 @@
+{
+  "leccionId": 0,
+  "fragmentos": [
+    {
+      "id": 1,
+      "texto": "El certificado CONADIS es un documento oficial sobre la discapacidad de una persona.",
+      "pictogramas": ["conadis", "certificado"]
+    },
+    {
+      "id": 2,
+      "texto": "Prepara tu cédula, informes médicos y el formulario de solicitud.",
+      "pictogramas": ["documento", "cedula"]
+    },
+    {
+      "id": 3,
+      "texto": "Acude a las oficinas del CONADIS o a un punto de atención municipal.",
+      "pictogramas": ["municipio", "tramite"]
+    },
+    {
+      "id": 4,
+      "texto": "Entrega documentos, haz la evaluación médica y recibe tu certificado.",
+      "pictogramas": ["tramite", "entrega"]
+    }
+  ]
+}

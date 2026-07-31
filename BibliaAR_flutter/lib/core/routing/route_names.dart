@@ -6,8 +6,9 @@ class RouteNames {
   static const String home = '/home';
   static const String lesson = '/lesson';
   static const String arPreview = '/ar-preview';
-  // kguanoluisa, Ruta del modulo de consulta CONADIS para validacion de certificado, sin nuevas variables, 2026-07-27
   static const String conadis = '/conadis';
+  static const String conadisResultado = '/conadis/resultado';
+  static const String orientacionCiudadana = '/orientacion-ciudadana';
   static const String activities = '/activities';
   static const String activityDetail = '/activities/detail';
   static const String settings = '/settings';
