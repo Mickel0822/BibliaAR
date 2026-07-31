@@ -2,7 +2,7 @@ import 'package:biblia_ar_flutter/data/database/database_access.dart';
 import 'package:biblia_ar_flutter/data/models/certificado_conadis.dart';
 import 'package:biblia_ar_flutter/data/repositories/interfaces/conadis_repository.dart';
 
-// Cristian Bayas, SQLite CONADIS consulta, cbayas0410@gmail.com, BIAR-65
+// Cristian Bayas, SQLite CONADIS consulta y guardado opt-in, cbayas0410@gmail.com, BIAR-65
 class SqliteConadisRepository implements ConadisRepository {
   SqliteConadisRepository(this._database);
 
@@ -28,6 +28,13 @@ class SqliteConadisRepository implements ConadisRepository {
     required int perfilId,
     required CertificadoConadis certificado,
   }) async {
-    throw UnimplementedError('guardarConsulta pendiente de integración');
+    final db = await _database.database;
+    await db.insert('consultas_conadis_guardadas', {
+      'perfil_id': perfilId,
+      'numero_certificado': certificado.numeroCertificado,
+      'tipo_discapacidad': certificado.tipoDiscapacidad,
+      'porcentaje': certificado.porcentaje,
+      'consultado_en': DateTime.now().toIso8601String(),
+    });
   }
 }

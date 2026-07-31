@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:biblia_ar_flutter/data/database/migrations/migration_v1.dart';
 import 'package:biblia_ar_flutter/data/database/migrations/migration_v2.dart';
 import 'package:biblia_ar_flutter/data/database/migrations/migration_v3.dart';
+import 'package:biblia_ar_flutter/data/database/migrations/migration_v4.dart';
 import 'package:biblia_ar_flutter/data/models/leccion_categoria.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
@@ -30,7 +31,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: MigrationV3.version,
+      version: MigrationV4.version,
       onCreate: (db, version) async {
         for (final statement in MigrationV1.statements) {
           await db.execute(statement);
