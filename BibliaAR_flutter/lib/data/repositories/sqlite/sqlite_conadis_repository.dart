@@ -2,7 +2,7 @@ import 'package:biblia_ar_flutter/data/database/database_access.dart';
 import 'package:biblia_ar_flutter/data/models/certificado_conadis.dart';
 import 'package:biblia_ar_flutter/data/repositories/interfaces/conadis_repository.dart';
 
-// kguanoluisa, Implementacion SQLite del repositorio CONADIS con consulta offline y guardado opt-in, sin nuevas variables, 2026-07-29
+// kguanoluisa, Consulta SQLite optimizada con limit 1 sobre clave primaria numero_certificado, sin nuevas variables, 2026-07-31
 class SqliteConadisRepository implements ConadisRepository {
   SqliteConadisRepository(this._database);
 
@@ -11,6 +11,7 @@ class SqliteConadisRepository implements ConadisRepository {
   @override
   Future<CertificadoConadis?> consultarPorNumero(String numeroCertificado) async {
     final db = await _database.database;
+    // kguanoluisa, Limit 1 evita escaneo completo al buscar por numero_certificado PRIMARY KEY, sin nuevas variables, 2026-07-31
     final rows = await db.query(
       'certificados_conadis',
       where: 'numero_certificado = ?',
