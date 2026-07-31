@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:biblia_ar_flutter/data/database/database_access.dart';
 import 'package:biblia_ar_flutter/data/database/migrations/migration_v1.dart';
@@ -9,7 +9,7 @@ import 'package:biblia_ar_flutter/data/models/leccion_categoria.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
-// kguanoluisa, Base de datos SQLite con dataset CONADIS ampliado tras pruebas de configuracion, variable v_database, 2026-07-30
+// kguanoluisa, Base de datos SQLite con migracion v4 de certificados CONADIS simulados, variable v_database, 2026-07-29
 class AppDatabase implements DatabaseAccess {
   AppDatabase._();
 
@@ -78,45 +78,144 @@ class AppDatabase implements DatabaseAccess {
       'sync_status': 'local',
     });
 
-    for (final actividad in [
+    final actividadesSeed = [
       {
         'leccion_id': 1,
         'tipo': 'completar',
         'payload_json': jsonEncode({
           'titulo': 'Completa la historia',
-          'pregunta': '¿Quién ayudó al hombre herido?',
+          'pregunta': 'Â¿QuiÃ©n ayudÃ³ al hombre herido?',
           'opciones': ['Un sacerdote', 'Un levita', 'Un samaritano', 'Un soldado'],
           'respuestaCorrecta': 2,
         }),
         'updated_at': now,
         'sync_status': 'local',
       },
-    ]) {
+      {
+        'leccion_id': 1,
+        'tipo': 'ordenar',
+        'payload_json': jsonEncode({
+          'titulo': 'Ordena la historia',
+          'instruccion': 'Arrastra los eventos en el orden correcto',
+          'elementos': [
+            'El hombre es herido en el camino',
+            'Pasa un sacerdote sin ayudar',
+            'Un samaritano lo auxilia',
+            'Lo lleva a un hospedaje',
+          ],
+          'ordenCorrecto': [0, 1, 2, 3],
+        }),
+        'updated_at': now,
+        'sync_status': 'local',
+      },
+      {
+        'leccion_id': 1,
+        'tipo': 'identificar',
+        'payload_json': jsonEncode({
+          'titulo': 'Identifica al personaje',
+          'instruccion': 'Selecciona quiÃ©n mostrÃ³ compasiÃ³n',
+          'opciones': [
+            {'id': 'sacerdote', 'nombre': 'Sacerdote'},
+            {'id': 'samaritano', 'nombre': 'Samaritano'},
+            {'id': 'levita', 'nombre': 'Levita'},
+          ],
+          'respuestaCorrecta': 'samaritano',
+        }),
+        'updated_at': now,
+        'sync_status': 'local',
+      },
+    ];
+
+    for (final actividad in actividadesSeed) {
       await db.insert('actividades', actividad);
     }
 
     await _seedConadisData(db);
   }
 
-  // kguanoluisa, Seed ampliado de certificados CONADIS simulados con casos variados tras pruebas, sin nuevas variables, 2026-07-30
+  // kguanoluisa, Correccion de duplicados en seed CONADIS usando ConflictAlgorithm.ignore en reinserciones, sin nuevas variables, 2026-07-31
   Future<void> _seedConadisData(Database db) async {
     final certificadosSeed = [
-      {'numero_certificado': 'CON-2024-000001', 'tipo_discapacidad': 'auditiva', 'porcentaje': 85, 'nombre_titular': 'María López'},
-      {'numero_certificado': 'CON-2024-000002', 'tipo_discapacidad': 'auditiva', 'porcentaje': 45, 'nombre_titular': 'Carlos Mendoza'},
-      {'numero_certificado': 'CON-2023-000015', 'tipo_discapacidad': 'visual', 'porcentaje': 60, 'nombre_titular': 'Ana Torres'},
-      {'numero_certificado': 'CON-2022-000088', 'tipo_discapacidad': 'motriz', 'porcentaje': 70, 'nombre_titular': 'Pedro Ramírez'},
-      {'numero_certificado': 'CON-2021-000050', 'tipo_discapacidad': 'intelectual', 'porcentaje': 55, 'nombre_titular': 'Lucía Vega'},
-      {'numero_certificado': 'CON-2024-000010', 'tipo_discapacidad': 'multiple', 'porcentaje': 90, 'nombre_titular': 'Diego Salazar'},
-      {'numero_certificado': 'CON-2024-000003', 'tipo_discapacidad': 'auditiva', 'porcentaje': 30, 'nombre_titular': 'Sofía Herrera'},
-      {'numero_certificado': 'CON-2023-000022', 'tipo_discapacidad': 'visual', 'porcentaje': 40, 'nombre_titular': 'Jorge Pérez'},
-      {'numero_certificado': 'CON-2022-000099', 'tipo_discapacidad': 'motriz', 'porcentaje': 50, 'nombre_titular': 'Elena Castro'},
-      {'numero_certificado': 'CON-2024-000011', 'tipo_discapacidad': 'multiple', 'porcentaje': 75, 'nombre_titular': 'Mateo Ruiz'},
-      {'numero_certificado': 'CON-2023-000030', 'tipo_discapacidad': 'auditiva', 'porcentaje': 65, 'nombre_titular': 'Valentina Morales'},
-      {'numero_certificado': 'CON-2021-000077', 'tipo_discapacidad': 'intelectual', 'porcentaje': 35, 'nombre_titular': 'Andrés Guzmán'},
+      {
+        'numero_certificado': 'CON-2024-000001',
+        'tipo_discapacidad': 'auditiva',
+        'porcentaje': 85,
+        'nombre_titular': 'MarÃ­a LÃ³pez',
+      },
+      {
+        'numero_certificado': 'CON-2024-000002',
+        'tipo_discapacidad': 'auditiva',
+        'porcentaje': 45,
+        'nombre_titular': 'Carlos Mendoza',
+      },
+      {
+        'numero_certificado': 'CON-2023-000015',
+        'tipo_discapacidad': 'visual',
+        'porcentaje': 60,
+        'nombre_titular': 'Ana Torres',
+      },
+      {
+        'numero_certificado': 'CON-2022-000088',
+        'tipo_discapacidad': 'motriz',
+        'porcentaje': 70,
+        'nombre_titular': 'Pedro RamÃ­rez',
+      },
+      {
+        'numero_certificado': 'CON-2021-000050',
+        'tipo_discapacidad': 'intelectual',
+        'porcentaje': 55,
+        'nombre_titular': 'LucÃ­a Vega',
+      },
+      {
+        'numero_certificado': 'CON-2024-000010',
+        'tipo_discapacidad': 'multiple',
+        'porcentaje': 90,
+        'nombre_titular': 'Diego Salazar',
+      },
+      {
+        'numero_certificado': 'CON-2024-000003',
+        'tipo_discapacidad': 'auditiva',
+        'porcentaje': 30,
+        'nombre_titular': 'SofÃ­a Herrera',
+      },
+      {
+        'numero_certificado': 'CON-2023-000022',
+        'tipo_discapacidad': 'visual',
+        'porcentaje': 40,
+        'nombre_titular': 'Jorge PÃ©rez',
+      },
+      {
+        'numero_certificado': 'CON-2022-000099',
+        'tipo_discapacidad': 'motriz',
+        'porcentaje': 50,
+        'nombre_titular': 'Elena Castro',
+      },
+      {
+        'numero_certificado': 'CON-2024-000011',
+        'tipo_discapacidad': 'multiple',
+        'porcentaje': 75,
+        'nombre_titular': 'Mateo Ruiz',
+      },
+      {
+        'numero_certificado': 'CON-2023-000030',
+        'tipo_discapacidad': 'auditiva',
+        'porcentaje': 65,
+        'nombre_titular': 'Valentina Morales',
+      },
+      {
+        'numero_certificado': 'CON-2021-000077',
+        'tipo_discapacidad': 'intelectual',
+        'porcentaje': 35,
+        'nombre_titular': 'AndrÃ©s GuzmÃ¡n',
+      },
     ];
 
     for (final certificado in certificadosSeed) {
-      await db.insert('certificados_conadis', certificado);
+      await db.insert(
+        'certificados_conadis',
+        certificado,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
     }
   }
 
@@ -127,3 +226,4 @@ class AppDatabase implements DatabaseAccess {
     }
   }
 }
+
