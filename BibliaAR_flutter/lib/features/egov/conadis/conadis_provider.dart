@@ -13,9 +13,11 @@ class ConadisProvider extends ChangeNotifier {
     required int perfilId,
     required CertificadoConadis certificado,
   }) async {
+    notifyListeners();
     await _conadisRepository.guardarConsulta(
       perfilId: perfilId,
       certificado: certificado,
     );
+    notifyListeners();
   }
 }
